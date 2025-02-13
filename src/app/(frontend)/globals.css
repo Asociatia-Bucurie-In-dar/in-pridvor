@@ -13,6 +13,23 @@
     font-weight: unset;
   }
 
+  body {
+    font-family: var(--font-inter);
+  }
+
+  h1, h2, h3 {
+    font-family: var(--font-playfair);
+  }
+
+  .article-content p:first-of-type:first-letter {
+    font-size: 4rem;
+    font-weight: bold;
+    font-family: var(--font-playfair);
+    float: left;
+    margin-right: 0.5rem;
+    line-height: 1;
+  }
+
   :root {
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
