@@ -16,21 +16,16 @@ import { themeLocalStorageKey } from './types'
 
 export const ThemeSelector: React.FC = () => {
   const { setTheme } = useTheme()
-  const [value, setValue] = useState('')
+  const [value, setValue] = useState('light')
 
-  const onThemeChange = (themeToSet: Theme & 'auto') => {
-    if (themeToSet === 'auto') {
-      setTheme(null)
-      setValue('auto')
-    } else {
-      setTheme(themeToSet)
-      setValue(themeToSet)
-    }
+  const onThemeChange = (themeToSet: Theme & 'light') => {
+    setTheme(themeToSet)
+    setValue(themeToSet)
   }
 
   React.useEffect(() => {
     const preference = window.localStorage.getItem(themeLocalStorageKey)
-    setValue(preference ?? 'auto')
+    setValue(preference ?? 'light')
   }, [])
 
   return (
@@ -42,7 +37,6 @@ export const ThemeSelector: React.FC = () => {
         <SelectValue placeholder="Theme" />
       </SelectTrigger>
       <SelectContent>
-        <SelectItem value="auto">Auto</SelectItem>
         <SelectItem value="light">Light</SelectItem>
         <SelectItem value="dark">Dark</SelectItem>
       </SelectContent>

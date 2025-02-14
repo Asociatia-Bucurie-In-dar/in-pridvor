@@ -29,6 +29,10 @@
     margin-right: 0.5rem;
     line-height: 1;
   }
+  
+  .font-playfair {
+    font-family: var(--font-playfair);
+  }
 
   :root {
     --background: 0 0% 100%;
