@@ -19,7 +19,7 @@ export const SeedButton: React.FC = () => {
   const [seeded, setSeeded] = useState(false)
   const [error, setError] = useState<null | string>(null)
 
-  const handleClick = useCallback(
+  const  handleClick = useCallback(
     async (e: React.MouseEvent<HTMLButtonElement>) => {
       e.preventDefault()
 
