@@ -19,12 +19,12 @@ export default async function Page({ searchParams: searchParamsPromise }: Args) 
 
   const posts = await payload.find({
     collection: 'search',
-    depth: 1,
+    depth: 3,
     limit: 12,
     select: {
       title: true,
       slug: true,
-      categories: true,
+      //categories: true,
       meta: true,
     },
     // pagination: false reduces overhead if you don't need totalDocs
