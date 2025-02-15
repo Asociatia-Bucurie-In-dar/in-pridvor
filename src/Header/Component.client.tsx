@@ -197,7 +197,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
           </a>
         </PopoverGroup>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-          <Button className="text-md/6">Log in</Button>
+          <Button className="btn btn-primary text-md/6">Donează</Button>
         </div>
       </nav>
       <Dialog open={mobileMenuOpen} onClose={setMobileMenuOpen} className="lg:hidden">
@@ -265,12 +265,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
                 </a>
               </div>
               <div className="py-6">
-                <a
-                  href="#"
-                  className="-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
-                >
-                  Log in
-                </a>
+                <button className="btn btn-primary">Log in</button>
               </div>
             </div>
           </div>

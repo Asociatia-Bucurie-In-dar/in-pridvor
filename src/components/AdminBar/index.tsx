@@ -11,6 +11,7 @@ import { useRouter } from 'next/navigation'
 import './index.scss'
 
 import { getClientSideURL } from '@/utilities/getURL'
+import { ArrowRight } from 'lucide-react'
 
 const baseClass = 'admin-bar'
 
@@ -29,7 +30,7 @@ const collectionLabels = {
   },
 }
 
-const Title: React.FC = () => <b>PANOU ADMIN</b>
+const Title: React.FC = () => <b>🧑🏻‍🎨 ADMIN</b>
 
 export const AdminBar: React.FC<{
   adminBarProps?: PayloadAdminBarProps
