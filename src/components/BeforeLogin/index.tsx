@@ -3,9 +3,7 @@ import React from 'react'
 const BeforeLogin: React.FC = () => {
   return (
     <div>
-      <p>
-        <b>Bun venit la panoul de administrare În Pridvor!</b>
-      </p>
+      <h3>Bun venit la panoul de administrare În Pridvor!</h3>
     </div>
   )
 }

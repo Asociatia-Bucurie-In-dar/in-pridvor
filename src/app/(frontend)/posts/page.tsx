@@ -7,6 +7,7 @@ import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import React from 'react'
 import PageClient from './page.client'
+import { websiteTitle } from '@/utilities/commonInfo'
 
 export const dynamic = 'force-static'
 export const revalidate = 600
@@ -32,7 +33,7 @@ export default async function Page() {
       <PageClient />
       <div className="container mb-16">
         <div className="prose dark:prose-invert max-w-none">
-          <h1>Posts</h1>
+          <h1>Articole | {websiteTitle}</h1>
         </div>
       </div>
 
@@ -58,6 +59,6 @@ export default async function Page() {
 
 export function generateMetadata(): Metadata {
   return {
-    title: `Payload Website Template Posts`,
+    title: websiteTitle + 'Posts',
   }
 }
