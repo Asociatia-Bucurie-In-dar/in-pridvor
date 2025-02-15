@@ -16,7 +16,7 @@ export const Logo = (props: Props) => {
 
   return (
     <Image
-      alt="Payload Logo"
+      alt="Logo"
       width={193}
       height={34}
       loading={loading}
