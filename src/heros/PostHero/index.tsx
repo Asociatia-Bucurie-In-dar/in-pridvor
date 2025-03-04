@@ -22,11 +22,8 @@ export const PostHero: React.FC<{
             {categories?.map((category, index) => {
               if (typeof category === 'object' && category !== null) {
                 const { title: categoryTitle } = category
-
                 const titleToUse = categoryTitle || 'Untitled category'
-
                 const isLast = index === categories.length - 1
-
                 return (
                   <React.Fragment key={index}>
                     {titleToUse}
