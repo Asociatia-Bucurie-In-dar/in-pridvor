@@ -1,21 +1,3 @@
-
-// export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
-//   /* Storing the value in a useState to avoid hydration errors */
-//
-//   const pathname = usePathname()
-
-//   return (
-//     <header className="container relative z-20   " {...(theme ? { 'data-theme': theme } : {})}>
-//       <div className="py-8 flex justify-between">
-//         <Link href="/">
-//           <Logo loading="eager" priority="high" className="invert dark:invert-0" />
-//         </Link>
-//         <HeaderNav data={data} />
-//       </div>
-//     </header>
-//   )
-// }
-
 "use client";
 
 import Link from "next/link";
@@ -28,7 +10,6 @@ import { capitalizeFirst } from "@/utilities/stringUtils";
 import type { Header } from '@/payload-types'
 
 import { Logo } from '@/components/Logo/Logo'
-import {SearchIcon} from "lucide-react";
 
 interface HeaderClientProps {
   data: Header
@@ -137,13 +118,8 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
 
             {/* Donate Button */}
             <div className="flex flex-1 justify-end">
-              {/*<button className="rounded-full "*/}
-              {/*        style={{backgroundColor: "#ffdd00", borderColor: "#ffdd00"}}>*/}
-              {/*  <HeartIcon aria-hidden="true" className="size-5 mr-0"/>*/}
-              {/*  Donează*/}
-              {/*</button>*/}
               <button type="button"
-                      className="flex items-center text-sm shadow-sm text-black bg-yellow-400 hover:bg-yellow-500 focus:outline-none focus:ring-4 focus:ring-yellow-300 font-medium rounded-full px-5 py-2.5 text-center me-2 mb-2">
+                      className="flex items-center text-sm shadow-sm text-black bg-yellow-400 hover:bg-yellow-500 focus:outline-none focus:ring-4 focus:ring-yellow-300 font-medium rounded-full px-5 py-2.5 text-center">
                 <HeartIcon aria-hidden="true" className="size-5 mr-1"/>
                 Donează
               </button>
