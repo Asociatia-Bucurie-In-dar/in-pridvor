@@ -24,11 +24,11 @@ import { motion } from "framer-motion";
 import { Dialog, DialogPanel, PopoverGroup } from "@headlessui/react";
 import { Bars3Icon, HeartIcon, MagnifyingGlassIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { capitalizeFirst } from "@/utilities/stringUtils";
-import Image from "next/image";
 
 import type { Header } from '@/payload-types'
 
 import { Logo } from '@/components/Logo/Logo'
+import {SearchIcon} from "lucide-react";
 
 interface HeaderClientProps {
   data: Header
@@ -39,9 +39,10 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
   const [isSticky, setIsSticky] = useState(false);
   const [headerHeight, setHeaderHeight] = useState(0);
   const headerRef = useRef<HTMLDivElement | null>(null);
-  const threshold = 0; // Buffer to prevent flickering
 
-  const navigation = data?.navItems || []
+  const navigation = data?.navItems || [];
+
+  console.log("HeaderClientProps", data);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -50,9 +51,9 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
       const scrollY = window.scrollY;
 
       // Only update state if change is greater than the threshold
-      if (!isSticky && scrollY > headerTop + threshold) {
+      if (!isSticky && scrollY > headerTop) {
         setIsSticky(true);
-      } else if (isSticky && scrollY < headerTop - threshold) {
+      } else if (isSticky && scrollY < headerTop) {
         setIsSticky(false);
       }
     };
@@ -73,6 +74,8 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
     };
   }, [isSticky]);
 
+  const coolDivider = <div className="w-px h-10 bg-gray-300 rotate-[20deg] mr-4"/>;
+
   return (
     <div className="z-20">
       {/* BIG Logo */}
@@ -88,7 +91,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
       <header ref={headerRef} className="relative">
         {/* Sticky Header (only sticks after scrolling past its original position) */}
         {/* we need a div the height of header, which becomes visible when header becomes sticky */}
-        <div style={{ height: isSticky ? (headerHeight) : 0 }} className="top-0 left-0 right-0 flex justify-center"></div>
+        <div style={{height: isSticky ? (headerHeight) : 0}} className="top-0 left-0 right-0 flex justify-center"></div>
         <div className={`w-full transition-all bg-white line shadow-sm ${isSticky ? "fixed top-0 left-0" : ""}`}>
           <nav
             className="mx-auto flex max-w-7xl items-center justify-between p-4 lg:px-8"
@@ -96,9 +99,9 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
           >
             {/* Small Logo (only visible when sticky) */}
             <motion.div
-              initial={{ opacity: 0, y: -25 }}
-              animate={{ opacity: isSticky ? 1 : 0, y: isSticky ? 0 : -25 }}
-              transition={{ duration: 0.5 }}
+              initial={{opacity: 0, y: -25}}
+              animate={{opacity: isSticky ? 1 : 0, y: isSticky ? 0 : -25}}
+              transition={{duration: 0.5}}
               className="flex lg:flex-1"
             >
               <Link href="/">
@@ -113,22 +116,21 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
             <PopoverGroup className="hidden lg:flex lg:gap-x-4">
               {navigation.map((item, index) => (
                 <div key={item.id} className="flex items-center">
-                  {index !== 0 && (
-                    <div className="w-px h-10 bg-gray-300 rotate-[20deg] mr-4"></div> )}
+                  {index !== 0 && (coolDivider)}
                   <Link href={(item.link.url) ? item.link.url : "/"}
                         className="text-md/6 text-gray-700 hover:text-gray-900 font-playfair">
                     {/*{capitalizeFirst(item.)}*/}
-                    {item.link.label}
+                    {capitalizeFirst(item.link.label)}
                   </Link>
                 </div>
               ))}
               {/* Extra links */}
               <div className="flex items-center">
-                <div className="w-px h-10 bg-gray-300 rotate-[20deg] mr-4"></div>
+                {coolDivider}
                 <Link
                   href={"/search"}
                   className="hover:text-gray-700">
-                  <MagnifyingGlassIcon aria-hidden="true" className="size-6" />
+                  <MagnifyingGlassIcon aria-hidden="true" className="size-6"/>
                 </Link>
               </div>
             </PopoverGroup>
@@ -155,7 +157,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
                 onClick={() => setMobileMenuOpen(true)}
                 className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700"
               >
-                <Bars3Icon aria-hidden="true" className="size-6" />
+                <Bars3Icon aria-hidden="true" className="size-6"/>
               </button>
             </div>
           </nav>
@@ -179,7 +181,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
                 onClick={() => setMobileMenuOpen(false)}
                 className="-m-2.5 rounded-md p-2.5 text-gray-700"
               >
-                <XMarkIcon aria-hidden="true" className="size-6" />
+                <XMarkIcon aria-hidden="true" className="size-6"/>
               </button>
             </div>
             <div className="mt-6 space-y-2">
