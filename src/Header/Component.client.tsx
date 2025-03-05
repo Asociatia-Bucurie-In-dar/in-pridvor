@@ -1,16 +1,3 @@
-'use client'
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import React, { useEffect, useState } from 'react'
-
-import type { Header } from '@/payload-types'
-
-import { Logo } from '@/components/Logo/Logo'
-import { HeaderNav } from './Nav'
-
-interface HeaderClientProps {
-  data: Header
-}
 
 // export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
 //   /* Storing the value in a useState to avoid hydration errors */
@@ -29,233 +16,189 @@ interface HeaderClientProps {
 //   )
 // }
 
-import {
-  Dialog,
-  DialogPanel,
-  Disclosure,
-  DisclosureButton,
-  DisclosurePanel,
-  Popover,
-  PopoverButton,
-  PopoverGroup,
-  PopoverPanel,
-} from '@headlessui/react'
-import {
-  Bars3Icon,
-  ChartPieIcon,
-  CursorArrowRaysIcon,
-  FingerPrintIcon,
-  SquaresPlusIcon,
-  XMarkIcon,
-} from '@heroicons/react/24/outline'
-import {
-  ChevronDownIcon,
-  PhoneIcon,
-  PlayCircleIcon,
-  RectangleGroupIcon,
-} from '@heroicons/react/20/solid'
-import { Button } from '@payloadcms/ui'
+"use client";
 
-const products = [
-  {
-    name: 'Analytics',
-    description: 'Get a better understanding where your traffic is coming from',
-    href: '#',
-    icon: ChartPieIcon,
-  },
-  {
-    name: 'Engagement',
-    description: 'Speak directly to your customers with our engagement tool',
-    href: '#',
-    icon: CursorArrowRaysIcon,
-  },
-  {
-    name: 'Security',
-    description: 'Your customers’ data will be safe and secure',
-    href: '#',
-    icon: FingerPrintIcon,
-  },
-  {
-    name: 'Integrations',
-    description: 'Your customers’ data will be safe and secure',
-    href: '#',
-    icon: SquaresPlusIcon,
-  },
-]
-const callsToAction = [
-  { name: 'Watch demo', href: '#', icon: PlayCircleIcon },
-  { name: 'Contact sales', href: '#', icon: PhoneIcon },
-  { name: 'View all products', href: '#', icon: RectangleGroupIcon },
-]
+import Link from "next/link";
+import { useEffect, useState, useRef } from "react";
+import { motion } from "framer-motion";
+import { Dialog, DialogPanel, PopoverGroup } from "@headlessui/react";
+import { Bars3Icon, HeartIcon, MagnifyingGlassIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { capitalizeFirst } from "@/utilities/stringUtils";
+import Image from "next/image";
+
+import type { Header } from '@/payload-types'
+
+import { Logo } from '@/components/Logo/Logo'
+
+interface HeaderClientProps {
+  data: Header
+}
 
 export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isSticky, setIsSticky] = useState(false);
+  const [headerHeight, setHeaderHeight] = useState(0);
+  const headerRef = useRef<HTMLDivElement | null>(null);
+  const threshold = 0; // Buffer to prevent flickering
+
+  const navigation = data?.navItems || []
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!headerRef.current) return;
+      const headerTop = headerRef.current.offsetTop;
+      const scrollY = window.scrollY;
+
+      // Only update state if change is greater than the threshold
+      if (!isSticky && scrollY > headerTop + threshold) {
+        setIsSticky(true);
+      } else if (isSticky && scrollY < headerTop - threshold) {
+        setIsSticky(false);
+      }
+    };
+
+    const updateHeaderHeight = () => {
+      if (headerRef.current) {
+        setHeaderHeight(headerRef.current.offsetHeight);
+      }
+    };
+
+    updateHeaderHeight(); // Set initial height
+    window.addEventListener("resize", updateHeaderHeight);
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("resize", updateHeaderHeight);
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [isSticky]);
 
   return (
-    <header
-      className="relative isolate z-10 bg-white
-      font-playfair font-weight-700"
-    >
-      {/* A div with just the logo img centered */}
-      <div className="flex justify-center py-6">
+    <div className="z-20">
+      {/* BIG Logo */}
+      <div className="flex justify-center mt-3 bg-white">
         <Link href="/">
-          <Logo loading="eager" priority="high" className="invert light:invert-0" />
+          <Logo
+            loading="eager"
+            priority="high"
+          />
         </Link>
       </div>
-      <nav
-        aria-label="Global"
-        className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8"
-      >
-        <div className="flex lg:flex-1">
-          <Link href="/">
-            <Logo loading="eager" priority="high" className="invert light:invert-0" />
-          </Link>
-        </div>
-        <div className="flex lg:hidden">
-          <button
-            type="button"
-            onClick={() => setMobileMenuOpen(true)}
-            className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700"
+
+      <header ref={headerRef} className="relative">
+        {/* Sticky Header (only sticks after scrolling past its original position) */}
+        {/* we need a div the height of header, which becomes visible when header becomes sticky */}
+        <div style={{ height: isSticky ? (headerHeight) : 0 }} className="top-0 left-0 right-0 flex justify-center"></div>
+        <div className={`w-full transition-all bg-white line shadow-sm ${isSticky ? "fixed top-0 left-0" : ""}`}>
+          <nav
+            className="mx-auto flex max-w-7xl items-center justify-between p-4 lg:px-8"
+            aria-label="Global"
           >
-            <span className="sr-only">Open main menu</span>
-            <Bars3Icon aria-hidden="true" className="size-6" />
-          </button>
-        </div>
-        <PopoverGroup className="hidden lg:flex lg:gap-x-12">
-          <Popover>
-            <PopoverButton className="flex items-center gap-x-1 text-md/6 text-gray-700">
-              Product
-              <ChevronDownIcon aria-hidden="true" className="size-5 flex-none text-gray-400" />
-            </PopoverButton>
-
-            <PopoverPanel
-              transition
-              className="absolute inset-x-0 top-0 -z-10 bg-white pt-14 ring-1 shadow-lg ring-gray-900/5 transition data-closed:-translate-y-1 data-closed:opacity-0 data-enter:duration-200 data-enter:ease-out data-leave:duration-150 data-leave:ease-in"
+            {/* Small Logo (only visible when sticky) */}
+            <motion.div
+              initial={{ opacity: 0, y: -25 }}
+              animate={{ opacity: isSticky ? 1 : 0, y: isSticky ? 0 : -25 }}
+              transition={{ duration: 0.5 }}
+              className="flex lg:flex-1"
             >
-              <div className="mx-auto grid max-w-7xl grid-cols-4 gap-x-4 px-6 py-10 lg:px-8 xl:gap-x-8">
-                {products.map((item) => (
-                  <div
-                    key={item.name}
-                    className="group relative rounded-lg p-6 text-sm/6 hover:bg-gray-50"
-                  >
-                    <div className="flex size-11 items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white">
-                      <item.icon
-                        aria-hidden="true"
-                        className="size-6 text-gray-600 group-hover:text-indigo-600"
-                      />
-                    </div>
-                    <a href={item.href} className="mt-6 block font-semibold text-gray-900">
-                      {item.name}
-                      <span className="absolute inset-0" />
-                    </a>
-                    <p className="mt-1 text-gray-600">{item.description}</p>
-                  </div>
-                ))}
-              </div>
-              <div className="bg-gray-50">
-                <div className="mx-auto max-w-7xl px-6 lg:px-8">
-                  <div className="grid grid-cols-3 divide-x divide-gray-900/5 border-x border-gray-900/5">
-                    {callsToAction.map((item) => (
-                      <a
-                        key={item.name}
-                        href={item.href}
-                        className="flex items-center justify-center gap-x-2.5 p-3 text-sm/6 font-semibold text-gray-900 hover:bg-gray-100"
-                      >
-                        <item.icon aria-hidden="true" className="size-5 flex-none text-gray-400" />
-                        {item.name}
-                      </a>
-                    ))}
-                  </div>
+              <Link href="/">
+                <Logo
+                  loading="eager"
+                  priority="high"
+                />
+              </Link>
+            </motion.div>
+
+            {/* Desktop Menu */}
+            <PopoverGroup className="hidden lg:flex lg:gap-x-4">
+              {navigation.map((item, index) => (
+                <div key={item.id} className="flex items-center">
+                  {index !== 0 && (
+                    <div className="w-px h-10 bg-gray-300 rotate-[20deg] mr-4"></div> )}
+                  <Link href={(item.link.url) ? item.link.url : "/"}
+                        className="text-md/6 text-gray-700 hover:text-gray-900 font-playfair">
+                    {/*{capitalizeFirst(item.)}*/}
+                    {item.link.label}
+                  </Link>
                 </div>
+              ))}
+              {/* Extra links */}
+              <div className="flex items-center">
+                <div className="w-px h-10 bg-gray-300 rotate-[20deg] mr-4"></div>
+                <Link
+                  href={"/search"}
+                  className="hover:text-gray-700">
+                  <MagnifyingGlassIcon aria-hidden="true" className="size-6" />
+                </Link>
               </div>
-            </PopoverPanel>
-          </Popover>
+            </PopoverGroup>
 
-          <a href="#" className="text-md/6 text-gray-700">
-            Features
-          </a>
-          <a href="#" className="text-md/6 text-gray-700">
-            Marketplace
-          </a>
-          <a href="#" className="text-md/6 text-gray-700">
-            Company
-          </a>
-        </PopoverGroup>
-        <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-          <Button className="btn btn-primary text-md/6">Donează</Button>
-        </div>
-      </nav>
-      <Dialog open={mobileMenuOpen} onClose={setMobileMenuOpen} className="lg:hidden">
-        <div className="fixed inset-0 z-10" />
-        <DialogPanel className="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
-          <div className="flex items-center justify-between">
-            <a href="#" className="-m-1.5 p-1.5">
-              <span className="sr-only">Your Company</span>
-              <img
-                alt=""
-                src="https://tailwindui.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600"
-                className="h-8 w-auto"
-              />
-            </a>
-            <button
-              type="button"
-              onClick={() => setMobileMenuOpen(false)}
-              className="-m-2.5 rounded-md p-2.5 text-gray-700"
-            >
-              <span className="sr-only">Close menu</span>
-              <XMarkIcon aria-hidden="true" className="size-6" />
-            </button>
-          </div>
-          <div className="mt-6 flow-root">
-            <div className="-my-6 divide-y divide-gray-500/10">
-              <div className="space-y-2 py-6">
-                <Disclosure as="div" className="-mx-3">
-                  <DisclosureButton className="group flex w-full items-center justify-between rounded-lg py-2 pr-3.5 pl-3 text-base/7 font-semibold text-gray-900 hover:bg-gray-50">
-                    Product
-                    <ChevronDownIcon
-                      aria-hidden="true"
-                      className="size-5 flex-none group-data-open:rotate-180"
-                    />
-                  </DisclosureButton>
-                  <DisclosurePanel className="mt-2 space-y-2">
-                    {[...products, ...callsToAction].map((item) => (
-                      <DisclosureButton
-                        key={item.name}
-                        as="a"
-                        href={item.href}
-                        className="block rounded-lg py-2 pr-3 pl-6 text-sm/7 font-semibold text-gray-900 hover:bg-gray-50"
-                      >
-                        {item.name}
-                      </DisclosureButton>
-                    ))}
-                  </DisclosurePanel>
-                </Disclosure>
-                <a
-                  href="#"
-                  className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
-                >
-                  Features
-                </a>
-                <a
-                  href="#"
-                  className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
-                >
-                  Marketplace
-                </a>
-                <a
-                  href="#"
-                  className="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
-                >
-                  Company
-                </a>
-              </div>
-              <div className="py-6">
-                <button className="btn btn-primary">Log in</button>
-              </div>
+            {/* Donate Button */}
+            <div className="flex flex-1 justify-end">
+              {/*<button className="rounded-full "*/}
+              {/*        style={{backgroundColor: "#ffdd00", borderColor: "#ffdd00"}}>*/}
+              {/*  <HeartIcon aria-hidden="true" className="size-5 mr-0"/>*/}
+              {/*  Donează*/}
+              {/*</button>*/}
+              <button type="button"
+                      className="flex items-center text-sm shadow-sm text-black bg-yellow-400 hover:bg-yellow-500 focus:outline-none focus:ring-4 focus:ring-yellow-300 font-medium rounded-full px-5 py-2.5 text-center me-2 mb-2">
+                <HeartIcon aria-hidden="true" className="size-5 mr-1"/>
+                Donează
+              </button>
+              <div className="lg:hidden mr-4"></div>
             </div>
-          </div>
-        </DialogPanel>
-      </Dialog>
-    </header>
-  )
+
+            {/* Mobile Menu Button */}
+            <div className="flex lg:hidden">
+              <button
+                type="button"
+                onClick={() => setMobileMenuOpen(true)}
+                className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700"
+              >
+                <Bars3Icon aria-hidden="true" className="size-6" />
+              </button>
+            </div>
+          </nav>
+
+        </div>
+
+        {/* Mobile Menu */}
+        <Dialog open={mobileMenuOpen} onClose={setMobileMenuOpen} className="lg:hidden">
+          <DialogPanel className="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm">
+            <div className="flex items-center justify-between">
+              {/* Mobile Logo */}
+              <Link href="/" onClick={() => setMobileMenuOpen(false)}>
+                <Logo
+                  loading="eager"
+                  priority="high"
+                />
+              </Link>
+              {/* Close Button */}
+              <button
+                type="button"
+                onClick={() => setMobileMenuOpen(false)}
+                className="-m-2.5 rounded-md p-2.5 text-gray-700"
+              >
+                <XMarkIcon aria-hidden="true" className="size-6" />
+              </button>
+            </div>
+            <div className="mt-6 space-y-2">
+              {navigation.map((item) => (
+                <Link
+                  key={item.id}
+                  href={item.link.url || "/"}
+                  className="block rounded-lg px-3 py-2 text-base font-semibold text-gray-900 hover:bg-gray-50 font-playfair"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  {item.link.label}
+                </Link>
+              ))}
+            </div>
+          </DialogPanel>
+        </Dialog>
+      </header>
+    </div>
+  );
 }
+
+
