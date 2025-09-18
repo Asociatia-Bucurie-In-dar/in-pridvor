@@ -20,7 +20,7 @@ import { getServerSideURL } from '@/utilities/getURL'
 const FairPlay = Playfair_Display({
   subsets: ['latin'],
   variable: '--font-playfair',
-  weight: ['400', '700'],
+  weight: ['400', '500', '700'],
 })
 
 const InterVar = Inter({

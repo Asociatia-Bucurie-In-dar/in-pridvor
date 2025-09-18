@@ -48,9 +48,9 @@ export default async function Page({ params: paramsPromise }: Args) {
   const { slug = 'home' } = await paramsPromise
   const url = '/' + slug
 
-  const page = await queryPageBySlug({
+  const page = (await queryPageBySlug({
     slug,
-  }) as RequiredDataFromCollectionSlug<'pages'> | null
+  })) as RequiredDataFromCollectionSlug<'pages'> | null
 
   if (!page) {
     return <PayloadRedirects url={url} />

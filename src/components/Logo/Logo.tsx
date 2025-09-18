@@ -6,10 +6,14 @@ interface Props {
   className?: string
   loading?: 'lazy' | 'eager'
   priority?: 'auto' | 'high' | 'low'
+  width?: number
+  height?: number
 }
 
 export const Logo = (props: Props) => {
   const { loading: loadingFromProps, priority: priorityFromProps, className } = props
+  const width = props.width || 193
+  const height = props.height || 34
 
   const loading = loadingFromProps || 'lazy'
   const priority = priorityFromProps || 'low'
@@ -17,13 +21,12 @@ export const Logo = (props: Props) => {
   return (
     <Image
       alt="Logo"
-      width={193}
-      height={34}
+      width={width}
+      height={height}
       loading={loading}
       fetchPriority={priority}
       decoding="async"
-      className={clsx('max-w-[9.375rem] w-full h-[34px]', className)}
-      src="https://raw.githubusercontent.com/payloadcms/payload/main/packages/ui/src/assets/payload-logo-dark.svg"
+      src="/logo-in-pridvor-1.jpg"
     />
   )
 }
