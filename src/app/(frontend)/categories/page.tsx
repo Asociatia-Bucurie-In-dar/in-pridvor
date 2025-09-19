@@ -32,7 +32,7 @@ export default async function Page() {
       <PageClient />
       <div className="container mb-16">
         <div className="prose dark:prose-invert max-w-none">
-          <h1> Toate Rubricile - {websiteTitle}</h1>
+          <h1>Toate Rubricile - {websiteTitle}</h1>
         </div>
       </div>
 
