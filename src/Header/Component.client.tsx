@@ -3,8 +3,21 @@
 import Link from 'next/link'
 import { useEffect, useState, useRef } from 'react'
 import { motion } from 'framer-motion'
-import { Dialog, DialogPanel, PopoverGroup } from '@headlessui/react'
-import { Bars3Icon, HeartIcon, MagnifyingGlassIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import {
+  Dialog,
+  DialogPanel,
+  Popover,
+  PopoverButton,
+  PopoverGroup,
+  PopoverPanel,
+} from '@headlessui/react'
+import {
+  Bars3Icon,
+  ChevronDownIcon,
+  HeartIcon,
+  MagnifyingGlassIcon,
+  XMarkIcon,
+} from '@heroicons/react/24/outline'
 import { capitalizeFirst } from '@/utilities/stringUtils'
 
 import type { Header } from '@/payload-types'
@@ -53,7 +66,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
     }
   }, [isSticky])
 
-  const coolDivider = <div className="w-px h-10 bg-gray-300 rotate-[20deg] mr-4" />
+  const coolDivider = <div className="w-px h-10 bg-gray-300 rotate-[20deg] mx-4" />
 
   return (
     <div className="z-20">
@@ -91,9 +104,9 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
             </motion.div>
 
             {/* Desktop Menu */}
-            <PopoverGroup className="hidden lg:flex lg:gap-x-4">
-              {navigation.map((item, index) => (
-                <div key={item.id} className="flex items-center">
+            {navigation.map((item, index) => (
+              <PopoverGroup key={item.id} className="hidden lg:flex lg:gap-x-4">
+                <div className="flex items-center">
                   {index !== 0 && coolDivider}
                   <Link
                     href={item.link.url ? item.link.url : '/'}
@@ -102,16 +115,33 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
                     {/*{capitalizeFirst(item.)}*/}
                     {capitalizeFirst(item.link.label)}
                   </Link>
+
+                  <Popover className="relative">
+                    <PopoverButton className="flex items-center gap-x-1 text-sm/6 font-semibold text-gray-900 ml-1">
+                      <ChevronDownIcon
+                        aria-hidden="true"
+                        className="size-5 flex-none text-yellow-500"
+                      />
+                    </PopoverButton>
+
+                    <PopoverPanel
+                      transition
+                      className="absolute left-1/2 z-10 mt-3 w-screen max-w-md -translate-x-1/2 overflow-hidden rounded-3xl bg-white shadow-lg outline-1 outline-gray-900/5 transition data-closed:translate-y-1 data-closed:opacity-0 data-enter:duration-200 data-enter:ease-out data-leave:duration-150 data-leave:ease-in"
+                    >
+                      <div className="p-4">asd</div>
+                    </PopoverPanel>
+                  </Popover>
                 </div>
-              ))}
-              {/* Extra links */}
-              <div className="flex items-center">
-                {coolDivider}
-                <Link href={'/search'} className="hover:text-gray-700">
-                  <MagnifyingGlassIcon aria-hidden="true" className="size-6" />
-                </Link>
-              </div>
-            </PopoverGroup>
+              </PopoverGroup>
+            ))}
+
+            {/* Extra links */}
+            <div className="flex items-center">
+              {coolDivider}
+              <Link href={'/search'} className="hover:text-gray-700 hover:text-yellow-600">
+                <MagnifyingGlassIcon aria-hidden="true" className="size-6" />
+              </Link>
+            </div>
 
             {/* Donate Button */}
             <div className="flex flex-1 justify-end">
