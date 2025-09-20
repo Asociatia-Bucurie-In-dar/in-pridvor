@@ -66,7 +66,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
     }
   }, [isSticky])
 
-  const coolDivider = <div className="w-px h-10 bg-gray-300 rotate-[20deg] mx-4" />
+  const coolDivider = <div className="w-px h-10 bg-gray-300 rotate-20 mx-4" />
 
   return (
     <div className="z-20">
@@ -85,7 +85,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
           className="top-0 left-0 right-0 flex justify-center"
         ></div>
         <div
-          className={`w-full transition-all bg-white line shadow-sm ${isSticky ? 'fixed top-0 left-0' : ''}`}
+          className={`w-full transition-all bg-white line shadow-xs ${isSticky ? 'fixed top-0 left-0' : ''}`}
         >
           <nav
             className="mx-auto flex max-w-7xl items-center justify-between p-4 lg:px-8"
@@ -147,7 +147,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
             <div className="flex flex-1 justify-end">
               <button
                 type="button"
-                className="flex items-center text-sm shadow-sm text-black bg-yellow-400 hover:bg-yellow-500 focus:outline-none focus:ring-4 focus:ring-yellow-300 font-medium rounded-full px-5 py-2.5 text-center"
+                className="flex items-center text-sm shadow-xs text-black bg-yellow-400 hover:bg-yellow-500 focus:outline-hidden focus:ring-4 focus:ring-yellow-300 font-medium rounded-full px-5 py-2.5 text-center"
               >
                 <HeartIcon aria-hidden="true" className="size-5 mr-1" />
                 Donează
