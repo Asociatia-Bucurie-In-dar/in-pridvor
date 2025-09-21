@@ -16,6 +16,22 @@ export const Header: GlobalConfig = {
         link({
           appearances: false,
         }),
+        // now an array of sublinks
+        {
+          name: 'sublinks',
+          type: 'array',
+          fields: [
+            link({
+              appearances: false,
+              overrides: {
+                label: 'Sublink',
+              },
+            }),
+          ],
+          admin: {
+            initCollapsed: true,
+          },
+        },
       ],
       maxRows: 6,
       admin: {

@@ -2,7 +2,7 @@ import type { Field, GroupField } from 'payload'
 
 import deepMerge from '@/utilities/deepMerge'
 
-export type LinkAppearances = 'default' | 'outline-solid'
+export type LinkAppearances = 'default' | 'outline'
 
 export const appearanceOptions: Record<LinkAppearances, { label: string; value: string }> = {
   default: {
@@ -11,10 +11,16 @@ export const appearanceOptions: Record<LinkAppearances, { label: string; value: 
   },
   outline: {
     label: 'Outline',
-    value: 'outline-solid',
+    value: 'outline',
   },
 }
-
+function getAppearanceOption(appearance: LinkAppearances | undefined) {
+  if (appearance && appearanceOptions[appearance]) {
+    return appearanceOptions[appearance]
+  }
+  // Fallback to a default option if undefined or invalid
+  return appearanceOptions.default
+}
 type LinkType = (options?: {
   appearances?: LinkAppearances[] | false
   disableLabel?: boolean

@@ -1,0 +1,86 @@
+import type { Metadata } from 'next'
+
+import { PayloadRedirects } from '@/components/PayloadRedirects'
+import configPromise from '@payload-config'
+import { getPayload } from 'payload'
+import React, { cache } from 'react'
+
+import { generateMeta } from '@/utilities/generateMeta'
+import PageClient from './page.client'
+
+export async function generateStaticParams() {
+  const payload = await getPayload({ config: configPromise })
+  const categories = await payload.find({
+    collection: 'categories',
+    draft: false,
+    limit: 1000,
+    overrideAccess: false,
+    pagination: false,
+    select: {
+      slug: true,
+    },
+  })
+
+  const params = categories.docs.map(({ slug }) => {
+    return slug?.split('/') || []
+  })
+
+  return params
+}
+
+type Args = {
+  params: Promise<{
+    slug: string[]
+  }>
+}
+
+export default async function Category({ params: paramsPromise }: Args) {
+  const { slug } = await paramsPromise
+  const url = '/' + slug.join('/')
+  const category = await queryCategoryBySlug({ params: slug })
+
+  if (!category) return <PayloadRedirects url={url} />
+
+  return (
+    <div className="pt-16 pb-16">
+      <PageClient />
+
+      {/* Allows redirects for valid pages too */}
+      <PayloadRedirects disableNotFound url={url} />
+
+      <div className="flex flex-col items-center gap-4 pt-8">
+        <div className="container">
+          <h1>{category.slug}</h1>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export async function generateMetadata({ params: paramsPromise }: Args): Promise<Metadata> {
+  const { slug } = await paramsPromise
+  const post = await queryCategoryBySlug({ params: slug })
+
+  return generateMeta({ doc: post })
+}
+
+const queryCategoryBySlug = cache(async ({ params }: { params: string[] }) => {
+  // gat last array item
+  const slug = params[params.length - 1]
+
+  const payload = await getPayload({ config: configPromise })
+
+  const result = await payload.find({
+    collection: 'categories',
+    limit: 1,
+    overrideAccess: false,
+    pagination: false,
+    where: {
+      slug: {
+        equals: slug,
+      },
+    },
+  })
+
+  return result.docs?.[0] || null
+})

@@ -116,21 +116,23 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
                     {capitalizeFirst(item.link.label)}
                   </Link>
 
-                  <Popover className="relative">
-                    <PopoverButton className="flex items-center gap-x-1 text-sm/6 font-semibold text-gray-900 ml-1">
-                      <ChevronDownIcon
-                        aria-hidden="true"
-                        className="size-5 flex-none text-yellow-500"
-                      />
-                    </PopoverButton>
+                  {item.link.reference?.relationTo === 'categories' && (
+                    <Popover className="relative">
+                      <PopoverButton className="flex items-center gap-x-1 text-sm/6 font-semibold text-gray-900 ml-1">
+                        <ChevronDownIcon
+                          aria-hidden="true"
+                          className="size-5 flex-none text-yellow-500"
+                        />
+                      </PopoverButton>
 
-                    <PopoverPanel
-                      transition
-                      className="absolute left-1/2 z-10 mt-3 w-screen max-w-md -translate-x-1/2 overflow-hidden rounded-3xl bg-white shadow-lg outline-1 outline-gray-900/5 transition data-closed:translate-y-1 data-closed:opacity-0 data-enter:duration-200 data-enter:ease-out data-leave:duration-150 data-leave:ease-in"
-                    >
-                      <div className="p-4">asd</div>
-                    </PopoverPanel>
-                  </Popover>
+                      <PopoverPanel
+                        transition
+                        className="absolute left-1/2 z-10 mt-3 w-screen max-w-md -translate-x-1/2 overflow-hidden rounded-3xl bg-white shadow-lg outline-1 outline-gray-900/5 transition data-closed:translate-y-1 data-closed:opacity-0 data-enter:duration-200 data-enter:ease-out data-leave:duration-150 data-leave:ease-in"
+                      >
+                        <div className="p-4">asd</div>
+                      </PopoverPanel>
+                    </Popover>
+                  )}
                 </div>
               </PopoverGroup>
             ))}
