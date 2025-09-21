@@ -68,8 +68,14 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
 
   const coolDivider = <div className="w-px h-10 bg-gray-300 rotate-20 mx-4" />
 
+  function closeAllPopovers(): void {
+    // Close all open popovers by clicking any PopoverButton with aria-expanded="true"
+    const popoverButtons = document.querySelectorAll('[aria-expanded="true"]')
+    popoverButtons.forEach((button) => (button as HTMLElement).click())
+  }
+
   return (
-    <div className="z-20">
+    <div className="w-full">
       {/* BIG Logo */}
       <div className="flex justify-center mt-3 bg-white">
         <Link href="/">
@@ -77,7 +83,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
         </Link>
       </div>
 
-      <header ref={headerRef} className="relative">
+      <header ref={headerRef} className="relative z-20">
         {/* Sticky Header (only sticks after scrolling past its original position) */}
         {/* we need a div the height of header, which becomes visible when header becomes sticky */}
         <div
@@ -88,7 +94,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
           className={`w-full transition-all bg-white line shadow-xs ${isSticky ? 'fixed top-0 left-0' : ''}`}
         >
           <nav
-            className="mx-auto flex max-w-7xl items-center justify-between p-4 lg:px-8"
+            className="mx-auto flex items-center justify-between p-2 lg:px-8"
             aria-label="Global"
           >
             {/* Small Logo (only visible when sticky) */}
@@ -116,9 +122,17 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
                     {capitalizeFirst(item.link.label)}
                   </Link>
 
-                  {item.link.reference?.relationTo === 'categories' && (
+                  {item.sublinks && item.sublinks.length > 0 && (
                     <Popover className="relative">
-                      <PopoverButton className="flex items-center gap-x-1 text-sm/6 font-semibold text-gray-900 ml-1">
+                      <PopoverButton
+                        id={`popover-button-${item.id}`}
+                        className="flex items-center gap-x-1 text-sm/6 font-semibold text-gray-900 ml-1"
+                        onMouseEnter={() => {
+                          // Open the popover on hover
+                          const button = document.getElementById(`popover-button-${item.id}`)
+                          button?.click()
+                        }}
+                      >
                         <ChevronDownIcon
                           aria-hidden="true"
                           className="size-5 flex-none text-yellow-500"
@@ -127,9 +141,29 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
 
                       <PopoverPanel
                         transition
-                        className="absolute left-1/2 z-10 mt-3 w-screen max-w-md -translate-x-1/2 overflow-hidden rounded-3xl bg-white shadow-lg outline-1 outline-gray-900/5 transition data-closed:translate-y-1 data-closed:opacity-0 data-enter:duration-200 data-enter:ease-out data-leave:duration-150 data-leave:ease-in"
+                        className="absolute left-1/2 mt-3 w-screen max-w-md -translate-x-1/2 overflow-hidden rounded-3xl bg-white shadow-lg outline-1 outline-gray-900/5 transition data-closed:translate-y-1 data-closed:opacity-0 data-enter:duration-200 data-enter:ease-out data-leave:duration-150 data-leave:ease-in"
                       >
-                        <div className="p-4">asd</div>
+                        <div className="p-4" onMouseLeave={() => closeAllPopovers()}>
+                          {item.sublinks.map((subItem) => (
+                            <div
+                              key={subItem.id}
+                              className="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm leading-6 hover:bg-gray-50"
+                            >
+                              <div className="flex-auto">
+                                <Link
+                                  href={subItem.link?.url || '/posts'}
+                                  className="block font-semibold text-gray-900"
+                                  onClick={() => {
+                                    closeAllPopovers()
+                                  }}
+                                >
+                                  {capitalizeFirst(subItem.link?.label || '')}
+                                  <span className="absolute inset-0" />
+                                </Link>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
                       </PopoverPanel>
                     </Popover>
                   )}
@@ -138,7 +172,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
             ))}
 
             {/* Extra links */}
-            <div className="flex items-center">
+            <div className="flex items-center hidden lg:flex">
               {coolDivider}
               <Link href={'/search'} className="hover:text-gray-700 hover:text-yellow-600">
                 <MagnifyingGlassIcon aria-hidden="true" className="size-6" />
@@ -149,16 +183,16 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
             <div className="flex flex-1 justify-end">
               <button
                 type="button"
-                className="flex items-center text-sm shadow-xs text-black bg-yellow-400 hover:bg-yellow-500 focus:outline-hidden focus:ring-4 focus:ring-yellow-300 font-medium rounded-full px-5 py-2.5 text-center"
+                className="flex items-center text-sm shadow-sm text-black bg-yellow-400 hover:shadow-md focus:outline-hidden focus:ring-4 focus:ring-yellow-300 font-medium rounded-full px-5 py-2.5 text-center"
               >
                 <HeartIcon aria-hidden="true" className="size-5 mr-1" />
                 Donează
               </button>
-              <div className="lg:hidden mr-4"></div>
+              <div className="lg:hidden mr-5"></div>
             </div>
 
             {/* Mobile Menu Button */}
-            <div className="flex lg:hidden">
+            <div className="flex lg:hidden mr-2">
               <button
                 type="button"
                 onClick={() => setMobileMenuOpen(true)}
@@ -171,8 +205,11 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
         </div>
 
         {/* Mobile Menu */}
-        <Dialog open={mobileMenuOpen} onClose={setMobileMenuOpen} className="lg:hidden">
-          <DialogPanel className="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm">
+        <Dialog open={mobileMenuOpen} onClose={setMobileMenuOpen} className="lg:hidden z-30">
+          <DialogPanel
+            transition
+            className="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm z-30 transition data-closed:translate-x-full data-closed:opacity-0 data-enter:duration-300 data-enter:ease-out data-leave:duration-200 data-leave:ease-in"
+          >
             <div className="flex items-center justify-between">
               {/* Mobile Logo */}
               <Link href="/" onClick={() => setMobileMenuOpen(false)}>
