@@ -138,24 +138,17 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
                     <Popover className="relative">
                       <PopoverButton
                         id={`popover-button-${item.id}`}
-                        className="flex items-center gap-x-1 text-sm/6 font-semibold text-gray-900 ml-1"
-                        onMouseEnter={() => {
-                          // Open the popover on hover
-                          const button = document.getElementById(`popover-button-${item.id}`)
-                          button?.click()
-                        }}
+                        className="flex items-center gap-x-1 text-sm/6 font-semibold text-gray-900 ml-1 text-yellow-500 hover:text-yellow-600 hover:cursor-pointer focus:outline-none focus:text-yellow-600"
                       >
-                        <ChevronDownIcon
-                          aria-hidden="true"
-                          className="size-5 flex-none text-yellow-500"
-                        />
+                        <ChevronDownIcon aria-hidden="true" className="size-4 flex-none" />
                       </PopoverButton>
 
                       <PopoverPanel
+                        onMouseLeave={() => closeAllPopovers()}
                         transition
-                        className="absolute left-1/2 mt-3 w-screen max-w-md -translate-x-1/2 overflow-hidden rounded-3xl bg-white shadow-lg outline-1 outline-gray-900/5 transition data-closed:translate-y-1 data-closed:opacity-0 data-enter:duration-200 data-enter:ease-out data-leave:duration-150 data-leave:ease-in"
+                        className="absolute left-1/2 mt-3 w-screen max-w-sm -translate-x-1/2 overflow-hidden rounded-3xl bg-white shadow-lg outline-1 outline-gray-900/5 transition data-closed:translate-y-1 data-closed:opacity-0 data-enter:duration-200 data-enter:ease-out data-leave:duration-150 data-leave:ease-in"
                       >
-                        <div className="p-4" onMouseLeave={() => closeAllPopovers()}>
+                        <div className="p-4">
                           {item.sublinks.map((subItem) => (
                             <div
                               key={subItem.id}
