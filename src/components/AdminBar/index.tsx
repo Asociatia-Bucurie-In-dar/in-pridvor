@@ -39,7 +39,7 @@ export const AdminBar: React.FC<{
   const segments = useSelectedLayoutSegments()
   const [show, setShow] = useState(false)
   const collection = (
-    collectionLabels[segments?.[1] as keyof typeof collectionLabels] ? segments[1] : 'pages'
+    collectionLabels[segments?.[0] as keyof typeof collectionLabels] ? segments[0] : 'posts'
   ) as keyof typeof collectionLabels
   const router = useRouter()
 
@@ -49,7 +49,7 @@ export const AdminBar: React.FC<{
 
   return (
     <div
-      className={cn(baseClass, 'py-2 bg-black text-white', {
+      className={cn(baseClass, 'py-2 bg-black text-white opacity-80', {
         block: show,
         hidden: !show,
       })}
@@ -66,8 +66,8 @@ export const AdminBar: React.FC<{
           cmsURL={getClientSideURL()}
           collection={collection}
           collectionLabels={{
-            plural: collectionLabels[collection]?.plural || 'Pages',
-            singular: collectionLabels[collection]?.singular || 'Page',
+            plural: collectionLabels[collection]?.plural || 'Articles',
+            singular: collectionLabels[collection]?.singular || 'Article',
           }}
           logo={<Title />}
           onAuthChange={onAuthChange}
