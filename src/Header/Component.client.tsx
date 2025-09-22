@@ -122,7 +122,13 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
                 <div className="flex items-center">
                   {index !== 0 && coolDivider}
                   <Link
-                    href={item.link.url || 'categories/' + item.link.reference?.value.slug}
+                    href={
+                      item.link.url ||
+                      (typeof item.link.reference?.value === 'object' &&
+                      'slug' in item.link.reference.value
+                        ? 'categories/' + item.link.reference.value.slug
+                        : '/')
+                    }
                     className="text-md text-gray-800 hover:text-yellow-600 font-playfair"
                   >
                     {item.link.label}
@@ -159,7 +165,10 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
                                 <Link
                                   href={
                                     subItem.link.url ||
-                                    'categories/' + item.link.reference?.value.slug
+                                    (typeof item.link.reference?.value === 'object' &&
+                                    'slug' in item.link.reference.value
+                                      ? 'categories/' + item.link.reference.value.slug
+                                      : '/')
                                   }
                                   className="block font-medium font-playfair text-gray-900 group-hover:text-yellow-600"
                                   onClick={() => {
