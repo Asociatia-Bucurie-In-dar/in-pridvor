@@ -18,7 +18,7 @@ import {
   MagnifyingGlassIcon,
   XMarkIcon,
 } from '@heroicons/react/24/outline'
-import { capitalizeFirst } from '@/utilities/stringUtils'
+// import { capitalizeFirst } from '@/utilities/stringUtils'
 
 import type { Header } from '@/payload-types'
 
@@ -66,7 +66,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
     }
   }, [isSticky])
 
-  const coolDivider = <div className="w-px h-10 bg-gray-300 rotate-20 mx-4" />
+  const coolDivider = <div className="w-px h-10 bg-gray-300 rotate-20 mx-3" />
 
   function closeAllPopovers(): void {
     // Close all open popovers by clicking any PopoverButton with aria-expanded="true"
@@ -80,6 +80,13 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
       <div className="flex justify-center mt-3 bg-white">
         <Link href="/">
           <Logo loading="eager" priority="high" width={525} height={525} />
+        </Link>
+
+        <Link
+          href={'/search'}
+          className="hover:text-gray-700 hover:text-yellow-600 absolute top-6 right-6 hidden lg:block"
+        >
+          <MagnifyingGlassIcon aria-hidden="true" className="size-6" />
         </Link>
       </div>
 
@@ -115,11 +122,10 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
                 <div className="flex items-center">
                   {index !== 0 && coolDivider}
                   <Link
-                    href={item.link.url ? item.link.url : '/'}
-                    className="text-md/6 text-gray-700 hover:text-yellow-600 font-playfair font-medium"
+                    href={item.link.url || 'categories/' + item.link.reference?.value.slug}
+                    className="text-md text-gray-800 hover:text-yellow-600 font-playfair"
                   >
-                    {/*{capitalizeFirst(item.)}*/}
-                    {capitalizeFirst(item.link.label)}
+                    {item.link.label}
                   </Link>
 
                   {item.sublinks && item.sublinks.length > 0 && (
@@ -151,13 +157,16 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
                             >
                               <div className="flex-auto">
                                 <Link
-                                  href={subItem.link?.url || '/posts'}
-                                  className="block font-semibold text-gray-900"
+                                  href={
+                                    subItem.link.url ||
+                                    'categories/' + item.link.reference?.value.slug
+                                  }
+                                  className="block font-medium font-playfair text-gray-900 group-hover:text-yellow-600"
                                   onClick={() => {
                                     closeAllPopovers()
                                   }}
                                 >
-                                  {capitalizeFirst(subItem.link?.label || '')}
+                                  {subItem.link?.label || ''}
                                   <span className="absolute inset-0" />
                                 </Link>
                               </div>
@@ -170,14 +179,6 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
                 </div>
               </PopoverGroup>
             ))}
-
-            {/* Extra links */}
-            <div className="flex items-center hidden lg:flex">
-              {coolDivider}
-              <Link href={'/search'} className="hover:text-gray-700 hover:text-yellow-600">
-                <MagnifyingGlassIcon aria-hidden="true" className="size-6" />
-              </Link>
-            </div>
 
             {/* Donate Button */}
             <div className="flex flex-1 justify-end">
