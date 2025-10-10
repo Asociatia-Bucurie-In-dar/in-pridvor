@@ -74,7 +74,7 @@ export default async function Post({ params: paramsPromise }: Args) {
               docs={post.relatedPosts.filter((post) => typeof post === 'object')}
             />
           )}
-          <Comments postId={post.id} />
+          <Comments postId={String(post.id)} />
         </div>
       </div>
     </article>
