@@ -99,10 +99,10 @@ export function CommentForm({ postId, onCommentSubmitted }: CommentFormProps) {
       }
 
       setSubmitStatus('success')
-      
+
       // Reset only the comment field
       setValue('comment', '')
-      
+
       // Notify parent component
       if (onCommentSubmitted) {
         onCommentSubmitted()
@@ -178,9 +178,7 @@ export function CommentForm({ postId, onCommentSubmitted }: CommentFormProps) {
             })}
             className={errors.comment ? 'border-red-500' : ''}
           />
-          {errors.comment && (
-            <p className="text-red-500 text-sm mt-1">{errors.comment.message}</p>
-          )}
+          {errors.comment && <p className="text-red-500 text-sm mt-1">{errors.comment.message}</p>}
         </div>
 
         <div className="flex items-center space-x-2">
@@ -189,10 +187,7 @@ export function CommentForm({ postId, onCommentSubmitted }: CommentFormProps) {
             checked={rememberMe}
             onCheckedChange={(checked) => setValue('rememberMe', checked as boolean)}
           />
-          <Label
-            htmlFor="rememberMe"
-            className="text-sm font-normal cursor-pointer"
-          >
+          <Label htmlFor="rememberMe" className="text-sm font-normal cursor-pointer">
             Salvează numele și emailul meu pentru următorul comentariu
           </Label>
         </div>
@@ -200,7 +195,7 @@ export function CommentForm({ postId, onCommentSubmitted }: CommentFormProps) {
         {submitStatus === 'success' && (
           <div className="p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-md">
             <p className="text-green-800 dark:text-green-200">
-              Comentariul tău a fost trimis cu succes și așteaptă moderare!
+              Comentariul tău a fost trimis cu succes!
             </p>
           </div>
         )}
@@ -218,4 +213,3 @@ export function CommentForm({ postId, onCommentSubmitted }: CommentFormProps) {
     </div>
   )
 }
-

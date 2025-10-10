@@ -736,7 +736,7 @@ export interface Comment {
   email: string;
   comment: string;
   post: number | Post;
-  status: 'pending' | 'approved' | 'rejected';
+  status: 'approved' | 'pending' | 'rejected';
   updatedAt: string;
   createdAt: string;
 }

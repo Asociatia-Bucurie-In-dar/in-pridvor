@@ -46,15 +46,15 @@ export const Comments: CollectionConfig = {
       name: 'status',
       type: 'select',
       required: true,
-      defaultValue: 'pending',
+      defaultValue: 'approved',
       options: [
-        {
-          label: 'Pending',
-          value: 'pending',
-        },
         {
           label: 'Approved',
           value: 'approved',
+        },
+        {
+          label: 'Pending',
+          value: 'pending',
         },
         {
           label: 'Rejected',
@@ -68,4 +68,3 @@ export const Comments: CollectionConfig = {
   ],
   timestamps: true,
 }
-
