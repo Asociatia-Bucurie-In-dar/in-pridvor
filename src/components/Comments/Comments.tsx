@@ -33,10 +33,13 @@ export async function Comments({ postId }: CommentsProps) {
   })
 
   const comments = commentsData.docs.map((comment) => ({
-    id: comment.id,
+    id: String(comment.id),
     name: comment.name,
     comment: comment.comment,
-    createdAt: comment.createdAt,
+    createdAt:
+      typeof comment.createdAt === 'string'
+        ? comment.createdAt
+        : new Date(comment.createdAt).toISOString(),
   }))
 
   return (
@@ -46,4 +49,3 @@ export async function Comments({ postId }: CommentsProps) {
     </div>
   )
 }
-

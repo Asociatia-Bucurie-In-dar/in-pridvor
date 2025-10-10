@@ -17,18 +17,14 @@ export function CommentList({ comments }: CommentListProps) {
     return (
       <div className="mt-8">
         <h3 className="text-2xl font-semibold mb-4 font-playfair">Comentarii</h3>
-        <p className="text-muted-foreground">
-          Niciun comentariu încă. Fii primul care comentează!
-        </p>
+        <p className="text-muted-foreground">Niciun comentariu încă. Fii primul care comentează!</p>
       </div>
     )
   }
 
   return (
     <div className="mt-8">
-      <h3 className="text-2xl font-semibold mb-6 font-playfair">
-        Comentarii ({comments.length})
-      </h3>
+      <h3 className="text-2xl font-semibold mb-6 font-playfair">Comentarii ({comments.length})</h3>
 
       <div className="space-y-6">
         {comments.map((comment) => (
@@ -39,10 +35,7 @@ export function CommentList({ comments }: CommentListProps) {
             <div className="flex items-center justify-between mb-2">
               <h4 className="font-semibold text-foreground">{comment.name}</h4>
               <time className="text-sm text-muted-foreground" dateTime={comment.createdAt}>
-                {formatDateTime({
-                  timestamp: comment.createdAt,
-                  format: 'short',
-                })}
+                {formatDateTime(comment.createdAt)}
               </time>
             </div>
             <p className="text-foreground whitespace-pre-wrap">{comment.comment}</p>
@@ -52,4 +45,3 @@ export function CommentList({ comments }: CommentListProps) {
     </div>
   )
 }
-
