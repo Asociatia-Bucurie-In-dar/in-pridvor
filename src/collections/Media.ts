@@ -22,6 +22,32 @@ export const Media: CollectionConfig = {
     read: anyone,
     update: authenticated,
   },
+  hooks: {
+    afterRead: [
+      ({ doc }) => {
+        // Transform URLs from /api/media/file/... to /media/...
+        if (doc.url && doc.url.includes('/api/media/file/')) {
+          const filename = doc.filename || doc.url.split('/').pop()?.split('?')[0]
+          if (filename) {
+            doc.url = `/media/${filename}`
+          }
+        }
+        // Transform size URLs as well
+        if (doc.sizes) {
+          Object.keys(doc.sizes).forEach((key) => {
+            const size = doc.sizes[key]
+            if (size.url && size.url.includes('/api/media/file/')) {
+              const filename = size.filename || size.url.split('/').pop()?.split('?')[0]
+              if (filename) {
+                size.url = `/media/${filename}`
+              }
+            }
+          })
+        }
+        return doc
+      },
+    ],
+  },
   fields: [
     {
       name: 'alt',
@@ -43,8 +69,6 @@ export const Media: CollectionConfig = {
     staticDir: path.resolve(dirname, '../../public/media'),
     adminThumbnail: 'thumbnail',
     focalPoint: true,
-    // Generate URLs that point directly to /media/ instead of API route
-    generateFileURL: ({ filename }) => `/media/${filename}`,
     imageSizes: [
       {
         name: 'thumbnail',
