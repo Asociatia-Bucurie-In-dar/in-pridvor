@@ -41,10 +41,10 @@ export const Media: CollectionConfig = {
   upload: {
     // Upload to the public/media directory in Next.js making them publicly accessible even outside of Payload
     staticDir: path.resolve(dirname, '../../public/media'),
-    // Serve images directly from /media/ path instead of API route for better Vercel compatibility
-    staticURL: '/media',
     adminThumbnail: 'thumbnail',
     focalPoint: true,
+    // Generate URLs that point directly to /media/ instead of API route
+    generateFileURL: ({ filename }) => `/media/${filename}`,
     imageSizes: [
       {
         name: 'thumbnail',
