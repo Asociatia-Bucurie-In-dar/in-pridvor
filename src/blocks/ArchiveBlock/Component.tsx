@@ -31,6 +31,14 @@ export const ArchiveBlock: React.FC<
       depth: 1,
       limit,
       sort: '-publishedAt',
+      select: {
+        title: true,
+        slug: true,
+        categories: true,
+        meta: true,
+        heroImage: true,
+        content: true,
+      },
       ...(flattenedCategories && flattenedCategories.length > 0
         ? {
             where: {

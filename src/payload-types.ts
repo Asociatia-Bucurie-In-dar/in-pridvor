@@ -491,7 +491,6 @@ export interface Post {
      * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
      */
     image?: (number | null) | Media;
-    description?: string | null;
   };
   publishedAt?: string | null;
   authors: (number | User)[];
@@ -1112,7 +1111,6 @@ export interface PostsSelect<T extends boolean = true> {
     | {
         title?: T;
         image?: T;
-        description?: T;
       };
   publishedAt?: T;
   authors?: T;

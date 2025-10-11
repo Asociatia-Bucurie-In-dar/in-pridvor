@@ -7,8 +7,12 @@ import React, { Fragment } from 'react'
 import type { Post } from '@/payload-types'
 
 import { Media } from '@/components/Media'
+import { extractTextFromLexical } from '@/utilities/extractTextFromLexical'
 
-export type CardPostData = Pick<Post, 'slug' | 'categories' | 'meta' | 'title' | 'heroImage'>
+export type CardPostData = Pick<
+  Post,
+  'slug' | 'categories' | 'meta' | 'title' | 'heroImage' | 'content'
+>
 
 export const Card: React.FC<{
   alignItems?: 'center'
@@ -21,15 +25,18 @@ export const Card: React.FC<{
   const { card, link } = useClickableCard({})
   const { className, doc, relationTo, showCategories, title: titleFromProps } = props
 
-  const { slug, categories, meta, title, heroImage } = doc || {}
-  const { description, image: metaImage } = meta || {}
+  const { slug, categories, meta, title, heroImage, content } = doc || {}
+  const { image: metaImage } = meta || {}
 
   // Use heroImage first, fall back to meta image
   const cardImage = heroImage || metaImage
 
   const hasCategories = categories && Array.isArray(categories) && categories.length > 0
   const titleToUse = titleFromProps || title
-  const sanitizedDescription = description?.replace(/\s/g, ' ') // replace non-breaking space with white space
+
+  // Extract preview text from content
+  const previewText = content ? extractTextFromLexical(content, 200) : ''
+
   const href = `/${relationTo}/${slug}`
 
   return (
@@ -82,9 +89,9 @@ export const Card: React.FC<{
             </h3>
           </div>
         )}
-        {description && (
-          <div className="mt-2 line-clamp-5 leading-relaxed">
-            {description && <p>{sanitizedDescription}</p>}
+        {previewText && (
+          <div className="mt-2 line-clamp-5 leading-relaxed text-muted-foreground">
+            {previewText}
           </div>
         )}
       </div>

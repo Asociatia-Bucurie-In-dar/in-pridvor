@@ -33,6 +33,14 @@ export default async function Page({ params: paramsPromise }: Args) {
     page: sanitizedPageNumber,
     sort: '-publishedAt',
     overrideAccess: false,
+    select: {
+      title: true,
+      slug: true,
+      categories: true,
+      meta: true,
+      heroImage: true,
+      content: true,
+    },
   })
 
   return (

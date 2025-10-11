@@ -28,6 +28,7 @@ export default async function Page({ searchParams: searchParamsPromise }: Args) 
       categories: true,
       meta: true,
       heroImage: true,
+      content: true,
     },
     ...(query
       ? {
@@ -35,11 +36,6 @@ export default async function Page({ searchParams: searchParamsPromise }: Args) 
             or: [
               {
                 title: {
-                  like: query,
-                },
-              },
-              {
-                'meta.description': {
                   like: query,
                 },
               },
