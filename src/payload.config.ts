@@ -73,15 +73,14 @@ export default buildConfig({
   globals: [Header, Footer],
   plugins: [
     ...plugins,
-    // Temporarily disabled Vercel Blob during import (quota exceeded)
-    // Re-enable after import is complete
-    ...(process.env.ENABLE_VERCEL_BLOB === 'true'
+    // Use Vercel Blob in production, local storage in development
+    ...(process.env.NODE_ENV === 'production' && process.env.BLOB_READ_WRITE_TOKEN
       ? [
           vercelBlobStorage({
             collections: {
               media: true,
             },
-            token: process.env.BLOB_READ_WRITE_TOKEN || '',
+            token: process.env.BLOB_READ_WRITE_TOKEN,
           }),
         ]
       : []),
