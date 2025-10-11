@@ -77,14 +77,14 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
   return (
     <div className="w-full">
       {/* BIG Logo */}
-      <div className="flex justify-center mt-3 bg-white">
-        <Link href="/">
+      <div className="flex justify-center mt-3 bg-white relative">
+        <Link href="/" className="relative z-10 block">
           <Logo loading="eager" priority="high" width={525} height={525} />
         </Link>
 
         <Link
           href={'/search'}
-          className="hover:text-gray-700 hover:text-yellow-600 absolute top-6 right-6 hidden lg:block"
+          className="hover:text-gray-700 hover:text-yellow-600 absolute top-6 right-6 hidden lg:block z-20"
         >
           <MagnifyingGlassIcon aria-hidden="true" className="size-6" />
         </Link>

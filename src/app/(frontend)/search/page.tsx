@@ -18,17 +18,17 @@ export default async function Page({ searchParams: searchParamsPromise }: Args) 
   const payload = await getPayload({ config: configPromise })
 
   const posts = await payload.find({
-    collection: 'search',
-    depth: 3,
+    collection: 'posts',
+    depth: 1,
     limit: 12,
+    sort: '-publishedAt',
     select: {
       title: true,
       slug: true,
-      //categories: true,
+      categories: true,
       meta: true,
+      heroImage: true,
     },
-    // pagination: false reduces overhead if you don't need totalDocs
-    pagination: false,
     ...(query
       ? {
           where: {
