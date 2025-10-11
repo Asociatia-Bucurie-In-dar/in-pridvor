@@ -18,12 +18,14 @@ export default async function Page() {
     collection: 'posts',
     depth: 1,
     limit: 12,
+    sort: '-publishedAt',
     overrideAccess: false,
     select: {
       title: true,
       slug: true,
       categories: true,
       meta: true,
+      heroImage: true,
     },
   })
 

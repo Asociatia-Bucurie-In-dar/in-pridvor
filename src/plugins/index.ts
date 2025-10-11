@@ -82,14 +82,20 @@ export const plugins: Plugin[] = [
       },
     },
   }),
-  searchPlugin({
-    collections: ['posts'],
-    beforeSync: beforeSyncWithSearch,
-    searchOverrides: {
-      fields: ({ defaultFields }) => {
-        return [...defaultFields, ...searchFields]
-      },
-    },
-  }),
+  // Temporarily disabled during import to avoid ID conflicts
+  // Re-enable after import is complete
+  ...(process.env.ENABLE_SEARCH_PLUGIN === 'true'
+    ? [
+        searchPlugin({
+          collections: ['posts'],
+          beforeSync: beforeSyncWithSearch,
+          searchOverrides: {
+            fields: ({ defaultFields }) => {
+              return [...defaultFields, ...searchFields]
+            },
+          },
+        }),
+      ]
+    : []),
   payloadCloudPlugin(),
 ]
