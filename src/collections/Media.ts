@@ -22,32 +22,6 @@ export const Media: CollectionConfig = {
     read: anyone,
     update: authenticated,
   },
-  hooks: {
-    afterRead: [
-      ({ doc }) => {
-        // Transform URLs from /api/media/file/... to /media/...
-        if (doc.url && doc.url.includes('/api/media/file/')) {
-          const filename = doc.filename || doc.url.split('/').pop()?.split('?')[0]
-          if (filename) {
-            doc.url = `/media/${filename}`
-          }
-        }
-        // Transform size URLs as well
-        if (doc.sizes) {
-          Object.keys(doc.sizes).forEach((key) => {
-            const size = doc.sizes[key]
-            if (size.url && size.url.includes('/api/media/file/')) {
-              const filename = size.filename || size.url.split('/').pop()?.split('?')[0]
-              if (filename) {
-                size.url = `/media/${filename}`
-              }
-            }
-          })
-        }
-        return doc
-      },
-    ],
-  },
   fields: [
     {
       name: 'alt',
@@ -65,41 +39,98 @@ export const Media: CollectionConfig = {
     },
   ],
   upload: {
-    // Upload to the public/media directory in Next.js making them publicly accessible even outside of Payload
+    // Local storage for now - will be replaced by Cloudflare R2 in payload.config.ts
     staticDir: path.resolve(dirname, '../../public/media'),
     adminThumbnail: 'thumbnail',
     focalPoint: true,
+    crop: true, // Enable cropping in admin panel
+    // Enhanced image optimization settings
+    formatOptions: {
+      format: 'webp', // Use WebP for better compression
+      options: {
+        quality: 85, // Good balance between quality and file size
+      },
+    },
     imageSizes: [
       {
         name: 'thumbnail',
         width: 300,
+        height: 300,
+        crop: 'centre', // Crop from center for thumbnails
+        formatOptions: {
+          format: 'webp',
+          options: {
+            quality: 80,
+          },
+        },
       },
       {
         name: 'square',
         width: 500,
         height: 500,
+        crop: 'centre',
+        formatOptions: {
+          format: 'webp',
+          options: {
+            quality: 85,
+          },
+        },
       },
       {
         name: 'small',
         width: 600,
+        withoutEnlargement: true, // Don't enlarge small images
+        formatOptions: {
+          format: 'webp',
+          options: {
+            quality: 85,
+          },
+        },
       },
       {
         name: 'medium',
         width: 900,
+        withoutEnlargement: true,
+        formatOptions: {
+          format: 'webp',
+          options: {
+            quality: 85,
+          },
+        },
       },
       {
         name: 'large',
         width: 1400,
+        withoutEnlargement: true,
+        formatOptions: {
+          format: 'webp',
+          options: {
+            quality: 90, // Higher quality for large images
+          },
+        },
       },
       {
         name: 'xlarge',
         width: 1920,
+        withoutEnlargement: true,
+        formatOptions: {
+          format: 'webp',
+          options: {
+            quality: 90,
+          },
+        },
       },
       {
         name: 'og',
         width: 1200,
         height: 630,
-        crop: 'center',
+        crop: 'centre',
+        formatOptions: {
+          format: 'jpeg', // OG images should be JPEG for compatibility
+          options: {
+            quality: 90,
+          },
+        },
       },
     ],
   },
