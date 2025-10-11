@@ -17,7 +17,7 @@ const collections: CollectionSlug[] = [
   'posts',
   'forms',
   'form-submissions',
-  'search',
+  // 'search', // Disabled - search plugin not active
 ]
 const globals: GlobalSlug[] = ['header', 'footer']
 
