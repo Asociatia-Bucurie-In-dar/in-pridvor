@@ -73,17 +73,19 @@ export default buildConfig({
   globals: [Header, Footer],
   plugins: [
     ...plugins,
-    // Use Vercel Blob in production, local storage in development
-    ...(process.env.NODE_ENV === 'production' && process.env.BLOB_READ_WRITE_TOKEN
-      ? [
-          vercelBlobStorage({
-            collections: {
-              media: true,
-            },
-            token: process.env.BLOB_READ_WRITE_TOKEN,
-          }),
-        ]
-      : []),
+    // Vercel Blob disabled - using local storage with images committed to git
+    // This avoids quota issues and keeps images in the repository
+    // Uncomment below to re-enable Vercel Blob if needed:
+    // ...(process.env.ENABLE_VERCEL_BLOB === 'true'
+    //   ? [
+    //       vercelBlobStorage({
+    //         collections: {
+    //           media: true,
+    //         },
+    //         token: process.env.BLOB_READ_WRITE_TOKEN || '',
+    //       }),
+    //     ]
+    //   : []),
   ],
   secret: process.env.PAYLOAD_SECRET,
   sharp,
