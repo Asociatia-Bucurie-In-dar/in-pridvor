@@ -39,8 +39,8 @@ export const Media: CollectionConfig = {
     },
   ],
   upload: {
-    // Local storage for now - will be replaced by Cloudflare R2 in payload.config.ts
-    staticDir: path.resolve(dirname, '../../public/media'),
+    // R2 storage configured in payload.config.ts - no local staticDir needed
+    // staticDir is omitted when using external storage (R2)
     adminThumbnail: 'thumbnail',
     focalPoint: true,
     crop: true, // Enable cropping in admin panel

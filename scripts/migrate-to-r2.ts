@@ -91,8 +91,14 @@ class R2Migration {
   }
 
   private validateEnvironment() {
-    const required = ['R2_ACCESS_KEY_ID', 'R2_SECRET_ACCESS_KEY', 'R2_ENDPOINT', 'R2_BUCKET_NAME', 'R2_PUBLIC_URL']
-    
+    const required = [
+      'R2_ACCESS_KEY_ID',
+      'R2_SECRET_ACCESS_KEY',
+      'R2_ENDPOINT',
+      'R2_BUCKET_NAME',
+      'R2_PUBLIC_URL',
+    ]
+
     for (const envVar of required) {
       if (!process.env[envVar]) {
         throw new Error(`Missing required environment variable: ${envVar}`)
@@ -104,13 +110,13 @@ class R2Migration {
 
   private async getImageFiles(dir: string): Promise<string[]> {
     const files: string[] = []
-    
+
     try {
       const entries = await readdir(dir, { withFileTypes: true })
-      
+
       for (const entry of entries) {
         const fullPath = join(dir, entry.name)
-        
+
         if (entry.isDirectory()) {
           // Recursively scan subdirectories
           const subFiles = await this.getImageFiles(fullPath)
@@ -125,7 +131,7 @@ class R2Migration {
     } catch (error) {
       console.error(`❌ Error reading directory ${dir}:`, error)
     }
-    
+
     return files
   }
 
@@ -137,14 +143,16 @@ class R2Migration {
 
       // Check if file already exists in R2
       try {
-        await s3Client.send(new HeadObjectCommand({
-          Bucket: bucketName,
-          Key: r2Key,
-        }))
-        
+        await s3Client.send(
+          new HeadObjectCommand({
+            Bucket: bucketName,
+            Key: r2Key,
+          }),
+        )
+
         console.log(`⏭️  Skipped: ${relativePath} (already exists)`)
         this.skippedFiles++
-        
+
         this.results.push({
           localPath: filePath,
           r2Path: r2Key,
@@ -152,7 +160,7 @@ class R2Migration {
           size: 0,
           success: true,
         })
-        
+
         return
       } catch (error: any) {
         // File doesn't exist, continue with upload
@@ -166,14 +174,16 @@ class R2Migration {
       const fileStats = await stat(filePath)
 
       // Upload to R2
-      await s3Client.send(new PutObjectCommand({
-        Bucket: bucketName,
-        Key: r2Key,
-        Body: fileContent,
-        ContentType: this.getContentType(filePath),
-        // Set cache headers for better performance
-        CacheControl: 'public, max-age=31536000, immutable',
-      }))
+      await s3Client.send(
+        new PutObjectCommand({
+          Bucket: bucketName,
+          Key: r2Key,
+          Body: fileContent,
+          ContentType: this.getContentType(filePath),
+          // Set cache headers for better performance
+          CacheControl: 'public, max-age=31536000, immutable',
+        }),
+      )
 
       console.log(`✅ Uploaded: ${relativePath} (${this.formatBytes(fileStats.size)})`)
       this.uploadedFiles++
@@ -185,7 +195,6 @@ class R2Migration {
         size: fileStats.size,
         success: true,
       })
-
     } catch (error: any) {
       console.error(`❌ Failed: ${filePath} - ${error.message}`)
       this.results.push({
@@ -201,7 +210,7 @@ class R2Migration {
 
   private getContentType(filePath: string): string {
     const ext = extname(filePath).toLowerCase()
-    
+
     const contentTypes: Record<string, string> = {
       '.jpg': 'image/jpeg',
       '.jpeg': 'image/jpeg',
@@ -210,17 +219,17 @@ class R2Migration {
       '.gif': 'image/gif',
       '.svg': 'image/svg+xml',
     }
-    
+
     return contentTypes[ext] || 'application/octet-stream'
   }
 
   private formatBytes(bytes: number): string {
     if (bytes === 0) return '0 Bytes'
-    
+
     const k = 1024
     const sizes = ['Bytes', 'KB', 'MB', 'GB']
     const i = Math.floor(Math.log(bytes) / Math.log(k))
-    
+
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i]
   }
 
@@ -232,11 +241,11 @@ class R2Migration {
     console.log(`✅ Uploaded: ${this.uploadedFiles}`)
     console.log(`⏭️  Skipped: ${this.skippedFiles}`)
     console.log(`❌ Failed: ${this.totalFiles - this.uploadedFiles - this.skippedFiles}`)
-    
-    const successfulResults = this.results.filter(r => r.success)
+
+    const successfulResults = this.results.filter((r) => r.success)
     const totalSize = successfulResults.reduce((sum, r) => sum + r.size, 0)
     console.log(`📦 Total size: ${this.formatBytes(totalSize)}`)
-    
+
     console.log('\n🌐 Your images are now available at:')
     console.log(`   ${publicUrl}/media/`)
   }
@@ -244,22 +253,29 @@ class R2Migration {
   private async saveResults() {
     const resultsFile = join(process.cwd(), 'migration-results.json')
     const fs = await import('fs/promises')
-    
-    await fs.writeFile(resultsFile, JSON.stringify({
-      timestamp: new Date().toISOString(),
-      config: {
-        bucket: bucketName,
-        publicUrl,
-      },
-      summary: {
-        total: this.totalFiles,
-        uploaded: this.uploadedFiles,
-        skipped: this.skippedFiles,
-        failed: this.totalFiles - this.uploadedFiles - this.skippedFiles,
-      },
-      results: this.results,
-    }, null, 2))
-    
+
+    await fs.writeFile(
+      resultsFile,
+      JSON.stringify(
+        {
+          timestamp: new Date().toISOString(),
+          config: {
+            bucket: bucketName,
+            publicUrl,
+          },
+          summary: {
+            total: this.totalFiles,
+            uploaded: this.uploadedFiles,
+            skipped: this.skippedFiles,
+            failed: this.totalFiles - this.uploadedFiles - this.skippedFiles,
+          },
+          results: this.results,
+        },
+        null,
+        2,
+      ),
+    )
+
     console.log(`\n💾 Results saved to: migration-results.json`)
   }
 }

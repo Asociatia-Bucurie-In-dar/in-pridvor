@@ -1,7 +1,6 @@
 import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
 import { vercelPostgresAdapter } from '@payloadcms/db-vercel-postgres'
-import { cloudStorage } from '@payloadcms/plugin-cloud-storage'
-import { s3Adapter } from '@payloadcms/plugin-cloud-storage/s3'
+import { s3Storage } from '@payloadcms/storage-s3'
 
 import sharp from 'sharp' // sharp-import
 import path from 'path'
@@ -75,8 +74,32 @@ export default buildConfig({
   globals: [Header, Footer],
   plugins: [
     ...plugins,
-    // Vercel Blob disabled - using local storage with images committed to git
-    // This avoids quota issues and keeps images in the repository
+    // Cloudflare R2 Storage - replaces local storage and Vercel Blob
+    // Only enable if R2 credentials are provided
+    ...(process.env.R2_ACCESS_KEY_ID && process.env.R2_SECRET_ACCESS_KEY
+      ? [
+          s3Storage({
+            collections: {
+              media: {
+                disableLocalStorage: true,
+                generateFileURL: ({ filename }) => {
+                  return `${process.env.R2_PUBLIC_URL}/media/${filename}`
+                },
+              },
+            },
+            bucket: process.env.R2_BUCKET_NAME || '',
+            config: {
+              credentials: {
+                accessKeyId: process.env.R2_ACCESS_KEY_ID || '',
+                secretAccessKey: process.env.R2_SECRET_ACCESS_KEY || '',
+              },
+              region: 'auto',
+              endpoint: process.env.R2_ENDPOINT || '',
+            },
+          }),
+        ]
+      : []),
+    // Vercel Blob disabled - using R2 or local storage
     // Uncomment below to re-enable Vercel Blob if needed:
     // ...(process.env.ENABLE_VERCEL_BLOB === 'true'
     //   ? [

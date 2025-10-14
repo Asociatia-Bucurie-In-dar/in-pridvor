@@ -18,6 +18,15 @@ const nextConfig = {
           protocol: url.protocol.replace(':', ''),
         }
       }),
+      // Cloudflare R2 storage (if configured)
+      ...(process.env.R2_PUBLIC_URL
+        ? [
+            {
+              protocol: 'https',
+              hostname: new URL(process.env.R2_PUBLIC_URL).hostname,
+            },
+          ]
+        : []),
     ],
   },
   reactStrictMode: true,

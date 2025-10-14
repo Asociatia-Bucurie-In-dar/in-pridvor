@@ -24,7 +24,13 @@ export const VideoMedia: React.FC<MediaProps> = (props) => {
   }, [])
 
   if (resource && typeof resource === 'object') {
-    const { filename } = resource
+    const { filename, url } = resource
+
+    // Check if URL is already absolute (from R2/external storage) or needs to be constructed
+    const videoSrc =
+      url?.startsWith('http://') || url?.startsWith('https://')
+        ? url
+        : `${getClientSideURL()}/media/${filename}`
 
     return (
       <video
@@ -37,7 +43,7 @@ export const VideoMedia: React.FC<MediaProps> = (props) => {
         playsInline
         ref={videoRef}
       >
-        <source src={`${getClientSideURL()}/media/${filename}`} />
+        <source src={videoSrc} />
       </video>
     )
   }

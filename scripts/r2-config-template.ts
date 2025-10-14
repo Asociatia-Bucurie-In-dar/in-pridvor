@@ -1,6 +1,6 @@
 /**
  * R2 Configuration Template
- * 
+ *
  * This file shows how to configure Payload CMS to use Cloudflare R2
  * for media storage instead of local storage.
  */

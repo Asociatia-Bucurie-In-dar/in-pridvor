@@ -1,0 +1,3753 @@
+{
+  "timestamp": "2025-10-14T21:30:19.248Z",
+  "config": {
+    "bucket": "in-pridvor-media",
+    "publicUrl": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev"
+  },
+  "summary": {
+    "total": 534,
+    "uploaded": 534,
+    "skipped": 0,
+    "failed": 0
+  },
+  "results": [
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/27-aprilie-2025-featured-1-1200x630.jpg",
+      "r2Path": "media/27-aprilie-2025-featured-1-1200x630.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/27-aprilie-2025-featured-1-1200x630.jpg",
+      "size": 304905,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/27-aprilie-2025-featured-1-1400x647.jpg",
+      "r2Path": "media/27-aprilie-2025-featured-1-1400x647.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/27-aprilie-2025-featured-1-1400x647.jpg",
+      "size": 360808,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/27-aprilie-2025-featured-1-300x139.jpg",
+      "r2Path": "media/27-aprilie-2025-featured-1-300x139.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/27-aprilie-2025-featured-1-300x139.jpg",
+      "size": 20349,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/27-aprilie-2025-featured-1-500x500.jpg",
+      "r2Path": "media/27-aprilie-2025-featured-1-500x500.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/27-aprilie-2025-featured-1-500x500.jpg",
+      "size": 109260,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/27-aprilie-2025-featured-1-600x277.jpg",
+      "r2Path": "media/27-aprilie-2025-featured-1-600x277.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/27-aprilie-2025-featured-1-600x277.jpg",
+      "size": 77622,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/27-aprilie-2025-featured-1-900x416.jpg",
+      "r2Path": "media/27-aprilie-2025-featured-1-900x416.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/27-aprilie-2025-featured-1-900x416.jpg",
+      "size": 165986,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/27-aprilie-2025-featured-1.jpg",
+      "r2Path": "media/27-aprilie-2025-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/27-aprilie-2025-featured-1.jpg",
+      "size": 425916,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/27-aprilie-2025-featured-2-1200x630.jpg",
+      "r2Path": "media/27-aprilie-2025-featured-2-1200x630.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/27-aprilie-2025-featured-2-1200x630.jpg",
+      "size": 304905,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/27-aprilie-2025-featured-2-1400x647.jpg",
+      "r2Path": "media/27-aprilie-2025-featured-2-1400x647.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/27-aprilie-2025-featured-2-1400x647.jpg",
+      "size": 360808,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/27-aprilie-2025-featured-2-300x139.jpg",
+      "r2Path": "media/27-aprilie-2025-featured-2-300x139.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/27-aprilie-2025-featured-2-300x139.jpg",
+      "size": 20349,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/27-aprilie-2025-featured-2-500x500.jpg",
+      "r2Path": "media/27-aprilie-2025-featured-2-500x500.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/27-aprilie-2025-featured-2-500x500.jpg",
+      "size": 109260,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/27-aprilie-2025-featured-2-600x277.jpg",
+      "r2Path": "media/27-aprilie-2025-featured-2-600x277.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/27-aprilie-2025-featured-2-600x277.jpg",
+      "size": 77622,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/27-aprilie-2025-featured-2-900x416.jpg",
+      "r2Path": "media/27-aprilie-2025-featured-2-900x416.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/27-aprilie-2025-featured-2-900x416.jpg",
+      "size": 165986,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/27-aprilie-2025-featured-2.jpg",
+      "r2Path": "media/27-aprilie-2025-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/27-aprilie-2025-featured-2.jpg",
+      "size": 425916,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/a-fi-crestin-nu-inseamna-a-fi-bun-featured-1.jpg",
+      "r2Path": "media/a-fi-crestin-nu-inseamna-a-fi-bun-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/a-fi-crestin-nu-inseamna-a-fi-bun-featured-1.jpg",
+      "size": 119741,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/a-venit-vacanta-featured-1.jpg",
+      "r2Path": "media/a-venit-vacanta-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/a-venit-vacanta-featured-1.jpg",
+      "size": 381698,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/a-venit-vacanta-featured-2.jpg",
+      "r2Path": "media/a-venit-vacanta-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/a-venit-vacanta-featured-2.jpg",
+      "size": 381698,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/acestea-sunt-faptele-minunate-ale-vietii-duhovnice-featured-2.jpg",
+      "r2Path": "media/acestea-sunt-faptele-minunate-ale-vietii-duhovnice-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/acestea-sunt-faptele-minunate-ale-vietii-duhovnice-featured-2.jpg",
+      "size": 180590,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/acestea-sunt-faptele-minunate-ale-vietii-duhovnice-featured-3.jpg",
+      "r2Path": "media/acestea-sunt-faptele-minunate-ale-vietii-duhovnice-featured-3.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/acestea-sunt-faptele-minunate-ale-vietii-duhovnice-featured-3.jpg",
+      "size": 180590,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/acum-stiu-am-aflat-si-eu-featured-1.jpg",
+      "r2Path": "media/acum-stiu-am-aflat-si-eu-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/acum-stiu-am-aflat-si-eu-featured-1.jpg",
+      "size": 292404,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/ah-primavara-featured-2-1200x630.jpg",
+      "r2Path": "media/ah-primavara-featured-2-1200x630.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/ah-primavara-featured-2-1200x630.jpg",
+      "size": 71901,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/ah-primavara-featured-2-300x649.jpg",
+      "r2Path": "media/ah-primavara-featured-2-300x649.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/ah-primavara-featured-2-300x649.jpg",
+      "size": 35039,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/ah-primavara-featured-2-500x500.jpg",
+      "r2Path": "media/ah-primavara-featured-2-500x500.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/ah-primavara-featured-2-500x500.jpg",
+      "size": 39583,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/ah-primavara-featured-2-600x1299.jpg",
+      "r2Path": "media/ah-primavara-featured-2-600x1299.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/ah-primavara-featured-2-600x1299.jpg",
+      "size": 100292,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/ah-primavara-featured-2-900x1948.jpg",
+      "r2Path": "media/ah-primavara-featured-2-900x1948.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/ah-primavara-featured-2-900x1948.jpg",
+      "size": 177378,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/ah-primavara-featured-2.jpg",
+      "r2Path": "media/ah-primavara-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/ah-primavara-featured-2.jpg",
+      "size": 168070,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/ah-primavara-featured-3-1200x630.jpg",
+      "r2Path": "media/ah-primavara-featured-3-1200x630.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/ah-primavara-featured-3-1200x630.jpg",
+      "size": 71901,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/ah-primavara-featured-3-300x649.jpg",
+      "r2Path": "media/ah-primavara-featured-3-300x649.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/ah-primavara-featured-3-300x649.jpg",
+      "size": 35039,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/ah-primavara-featured-3-500x500.jpg",
+      "r2Path": "media/ah-primavara-featured-3-500x500.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/ah-primavara-featured-3-500x500.jpg",
+      "size": 39583,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/ah-primavara-featured-3-600x1299.jpg",
+      "r2Path": "media/ah-primavara-featured-3-600x1299.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/ah-primavara-featured-3-600x1299.jpg",
+      "size": 100292,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/ah-primavara-featured-3-900x1948.jpg",
+      "r2Path": "media/ah-primavara-featured-3-900x1948.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/ah-primavara-featured-3-900x1948.jpg",
+      "size": 177378,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/ah-primavara-featured-3.jpg",
+      "r2Path": "media/ah-primavara-featured-3.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/ah-primavara-featured-3.jpg",
+      "size": 168070,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/ai-o-problema-nu-ai-rugaciune-featured.jpg",
+      "r2Path": "media/ai-o-problema-nu-ai-rugaciune-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/ai-o-problema-nu-ai-rugaciune-featured.jpg",
+      "size": 46336,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/am-avut-un-cosmar-featured.jpg",
+      "r2Path": "media/am-avut-un-cosmar-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/am-avut-un-cosmar-featured.jpg",
+      "size": 417324,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/am-imbatranit-i-nu-am-ineles-sensul-acestor-incerc-featured-2.jpg",
+      "r2Path": "media/am-imbatranit-i-nu-am-ineles-sensul-acestor-incerc-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/am-imbatranit-i-nu-am-ineles-sensul-acestor-incerc-featured-2.jpg",
+      "size": 252191,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/am-imbatranit-i-nu-am-ineles-sensul-acestor-incerc-featured-3.jpg",
+      "r2Path": "media/am-imbatranit-i-nu-am-ineles-sensul-acestor-incerc-featured-3.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/am-imbatranit-i-nu-am-ineles-sensul-acestor-incerc-featured-3.jpg",
+      "size": 252191,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/am-scris-un-articol-despre-tine-vrei-sa-l-citesti-featured-1.jpg",
+      "r2Path": "media/am-scris-un-articol-despre-tine-vrei-sa-l-citesti-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/am-scris-un-articol-despre-tine-vrei-sa-l-citesti-featured-1.jpg",
+      "size": 371791,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/am-un-dinte-din-fata-spart-featured-1.jpg",
+      "r2Path": "media/am-un-dinte-din-fata-spart-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/am-un-dinte-din-fata-spart-featured-1.jpg",
+      "size": 344497,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/am-vrut-doar-sa-stii-si-tu-de-lucia-featured-1.jpg",
+      "r2Path": "media/am-vrut-doar-sa-stii-si-tu-de-lucia-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/am-vrut-doar-sa-stii-si-tu-de-lucia-featured-1.jpg",
+      "size": 133544,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/am-vrut-doar-sa-stii-si-tu-de-lucia-featured-2.jpg",
+      "r2Path": "media/am-vrut-doar-sa-stii-si-tu-de-lucia-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/am-vrut-doar-sa-stii-si-tu-de-lucia-featured-2.jpg",
+      "size": 133544,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/am-vrut-sa-respir-featured.jpg",
+      "r2Path": "media/am-vrut-sa-respir-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/am-vrut-sa-respir-featured.jpg",
+      "size": 44668,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/amin-featured.jpg",
+      "r2Path": "media/amin-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/amin-featured.jpg",
+      "size": 49554,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/amintiri-din-inchisoare-featured-1.jpg",
+      "r2Path": "media/amintiri-din-inchisoare-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/amintiri-din-inchisoare-featured-1.jpg",
+      "size": 165361,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/ancora-praznicelor-noastre-ortodoxe-featured-2.jpg",
+      "r2Path": "media/ancora-praznicelor-noastre-ortodoxe-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/ancora-praznicelor-noastre-ortodoxe-featured-2.jpg",
+      "size": 105765,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/ancora-praznicelor-noastre-ortodoxe-featured-3.jpg",
+      "r2Path": "media/ancora-praznicelor-noastre-ortodoxe-featured-3.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/ancora-praznicelor-noastre-ortodoxe-featured-3.jpg",
+      "size": 105765,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/aripi-featured-1.jpg",
+      "r2Path": "media/aripi-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/aripi-featured-1.jpg",
+      "size": 144373,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/aripi-featured-2.jpg",
+      "r2Path": "media/aripi-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/aripi-featured-2.jpg",
+      "size": 144373,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/ars-aquatica-featured.jpg",
+      "r2Path": "media/ars-aquatica-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/ars-aquatica-featured.jpg",
+      "size": 221917,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/asa-cum-respiram-asa-ne-si-rugam-featured.jpg",
+      "r2Path": "media/asa-cum-respiram-asa-ne-si-rugam-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/asa-cum-respiram-asa-ne-si-rugam-featured.jpg",
+      "size": 102477,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/astrofizica-featured.jpg",
+      "r2Path": "media/astrofizica-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/astrofizica-featured.jpg",
+      "size": 45726,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/atat-de-aproape-featured-1.jpg",
+      "r2Path": "media/atat-de-aproape-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/atat-de-aproape-featured-1.jpg",
+      "size": 374849,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/atat-de-aproape-featured-2.jpg",
+      "r2Path": "media/atat-de-aproape-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/atat-de-aproape-featured-2.jpg",
+      "size": 374849,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/bad-hair-day-featured.jpg",
+      "r2Path": "media/bad-hair-day-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/bad-hair-day-featured.jpg",
+      "size": 14180,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/betiv-de-frumos-si-betiv-de-iubire-featured.jpg",
+      "r2Path": "media/betiv-de-frumos-si-betiv-de-iubire-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/betiv-de-frumos-si-betiv-de-iubire-featured.jpg",
+      "size": 885657,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/bucuria-de-a-fi-bunic-featured-1.jpg",
+      "r2Path": "media/bucuria-de-a-fi-bunic-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/bucuria-de-a-fi-bunic-featured-1.jpg",
+      "size": 350032,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/bucuria-de-a-fi-bunic-featured-2.jpg",
+      "r2Path": "media/bucuria-de-a-fi-bunic-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/bucuria-de-a-fi-bunic-featured-2.jpg",
+      "size": 350032,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/bucuria-de-a-fi-featured.jpg",
+      "r2Path": "media/bucuria-de-a-fi-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/bucuria-de-a-fi-featured.jpg",
+      "size": 134169,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/cafea-cu-gust-duhovnicesc-featured-1.jpg",
+      "r2Path": "media/cafea-cu-gust-duhovnicesc-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/cafea-cu-gust-duhovnicesc-featured-1.jpg",
+      "size": 1027532,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/cafea-cu-gust-duhovnicesc-featured-2.jpg",
+      "r2Path": "media/cafea-cu-gust-duhovnicesc-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/cafea-cu-gust-duhovnicesc-featured-2.jpg",
+      "size": 1027532,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/calatorie-in-luna-mai-featured-1.jpg",
+      "r2Path": "media/calatorie-in-luna-mai-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/calatorie-in-luna-mai-featured-1.jpg",
+      "size": 164407,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/calatorie-in-luna-mai-featured-2.jpg",
+      "r2Path": "media/calatorie-in-luna-mai-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/calatorie-in-luna-mai-featured-2.jpg",
+      "size": 164407,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/cand-dumnezeu-rescrie-inima-unei-mame-featured.jpg",
+      "r2Path": "media/cand-dumnezeu-rescrie-inima-unei-mame-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/cand-dumnezeu-rescrie-inima-unei-mame-featured.jpg",
+      "size": 55090,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/cand-e-prea-cald-featured-1.jpg",
+      "r2Path": "media/cand-e-prea-cald-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/cand-e-prea-cald-featured-1.jpg",
+      "size": 146747,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/cand-e-prea-cald-featured-2.jpg",
+      "r2Path": "media/cand-e-prea-cald-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/cand-e-prea-cald-featured-2.jpg",
+      "size": 146747,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/catacomba-lui-costion-featured-1.jpg",
+      "r2Path": "media/catacomba-lui-costion-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/catacomba-lui-costion-featured-1.jpg",
+      "size": 418565,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/catacomba-lui-costion-featured-2.jpg",
+      "r2Path": "media/catacomba-lui-costion-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/catacomba-lui-costion-featured-2.jpg",
+      "size": 418565,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/cauta-pe-hristos-la-vrajmaul-tau-featured-1-1200x630.webp",
+      "r2Path": "media/cauta-pe-hristos-la-vrajmaul-tau-featured-1-1200x630.webp",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/cauta-pe-hristos-la-vrajmaul-tau-featured-1-1200x630.webp",
+      "size": 36378,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/cauta-pe-hristos-la-vrajmaul-tau-featured-1-300x450.webp",
+      "r2Path": "media/cauta-pe-hristos-la-vrajmaul-tau-featured-1-300x450.webp",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/cauta-pe-hristos-la-vrajmaul-tau-featured-1-300x450.webp",
+      "size": 13066,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/cauta-pe-hristos-la-vrajmaul-tau-featured-1-500x500.webp",
+      "r2Path": "media/cauta-pe-hristos-la-vrajmaul-tau-featured-1-500x500.webp",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/cauta-pe-hristos-la-vrajmaul-tau-featured-1-500x500.webp",
+      "size": 19376,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/cauta-pe-hristos-la-vrajmaul-tau-featured-1-600x900.webp",
+      "r2Path": "media/cauta-pe-hristos-la-vrajmaul-tau-featured-1-600x900.webp",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/cauta-pe-hristos-la-vrajmaul-tau-featured-1-600x900.webp",
+      "size": 33110,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/cauta-pe-hristos-la-vrajmaul-tau-featured-1.webp",
+      "r2Path": "media/cauta-pe-hristos-la-vrajmaul-tau-featured-1.webp",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/cauta-pe-hristos-la-vrajmaul-tau-featured-1.webp",
+      "size": 41872,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/ce-este-femeia-featured.jpg",
+      "r2Path": "media/ce-este-femeia-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/ce-este-femeia-featured.jpg",
+      "size": 451874,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/ce-este-sfantul-munte-featured-1.jpg",
+      "r2Path": "media/ce-este-sfantul-munte-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/ce-este-sfantul-munte-featured-1.jpg",
+      "size": 97953,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/ce-este-sfantul-munte-featured-2.jpg",
+      "r2Path": "media/ce-este-sfantul-munte-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/ce-este-sfantul-munte-featured-2.jpg",
+      "size": 97953,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/ce-mai-vrei-featured.jpg",
+      "r2Path": "media/ce-mai-vrei-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/ce-mai-vrei-featured.jpg",
+      "size": 265732,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/ce-nu-poate-masura-cantarul-featured-2-1200x630.jpg",
+      "r2Path": "media/ce-nu-poate-masura-cantarul-featured-2-1200x630.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/ce-nu-poate-masura-cantarul-featured-2-1200x630.jpg",
+      "size": 84716,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/ce-nu-poate-masura-cantarul-featured-2-1400x1867.jpg",
+      "r2Path": "media/ce-nu-poate-masura-cantarul-featured-2-1400x1867.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/ce-nu-poate-masura-cantarul-featured-2-1400x1867.jpg",
+      "size": 265944,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/ce-nu-poate-masura-cantarul-featured-2-300x400.jpg",
+      "r2Path": "media/ce-nu-poate-masura-cantarul-featured-2-300x400.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/ce-nu-poate-masura-cantarul-featured-2-300x400.jpg",
+      "size": 15465,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/ce-nu-poate-masura-cantarul-featured-2-500x500.jpg",
+      "r2Path": "media/ce-nu-poate-masura-cantarul-featured-2-500x500.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/ce-nu-poate-masura-cantarul-featured-2-500x500.jpg",
+      "size": 29971,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/ce-nu-poate-masura-cantarul-featured-2-600x800.jpg",
+      "r2Path": "media/ce-nu-poate-masura-cantarul-featured-2-600x800.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/ce-nu-poate-masura-cantarul-featured-2-600x800.jpg",
+      "size": 53962,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/ce-nu-poate-masura-cantarul-featured-2-900x1200.jpg",
+      "r2Path": "media/ce-nu-poate-masura-cantarul-featured-2-900x1200.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/ce-nu-poate-masura-cantarul-featured-2-900x1200.jpg",
+      "size": 117154,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/ce-nu-poate-masura-cantarul-featured-2.jpg",
+      "r2Path": "media/ce-nu-poate-masura-cantarul-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/ce-nu-poate-masura-cantarul-featured-2.jpg",
+      "size": 316244,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/ce-nu-poate-masura-cantarul-featured-3-1200x630.jpg",
+      "r2Path": "media/ce-nu-poate-masura-cantarul-featured-3-1200x630.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/ce-nu-poate-masura-cantarul-featured-3-1200x630.jpg",
+      "size": 84716,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/ce-nu-poate-masura-cantarul-featured-3-1400x1867.jpg",
+      "r2Path": "media/ce-nu-poate-masura-cantarul-featured-3-1400x1867.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/ce-nu-poate-masura-cantarul-featured-3-1400x1867.jpg",
+      "size": 265944,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/ce-nu-poate-masura-cantarul-featured-3-300x400.jpg",
+      "r2Path": "media/ce-nu-poate-masura-cantarul-featured-3-300x400.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/ce-nu-poate-masura-cantarul-featured-3-300x400.jpg",
+      "size": 15465,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/ce-nu-poate-masura-cantarul-featured-3-500x500.jpg",
+      "r2Path": "media/ce-nu-poate-masura-cantarul-featured-3-500x500.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/ce-nu-poate-masura-cantarul-featured-3-500x500.jpg",
+      "size": 29971,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/ce-nu-poate-masura-cantarul-featured-3-600x800.jpg",
+      "r2Path": "media/ce-nu-poate-masura-cantarul-featured-3-600x800.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/ce-nu-poate-masura-cantarul-featured-3-600x800.jpg",
+      "size": 53962,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/ce-nu-poate-masura-cantarul-featured-3-900x1200.jpg",
+      "r2Path": "media/ce-nu-poate-masura-cantarul-featured-3-900x1200.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/ce-nu-poate-masura-cantarul-featured-3-900x1200.jpg",
+      "size": 117154,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/ce-nu-poate-masura-cantarul-featured-3.jpg",
+      "r2Path": "media/ce-nu-poate-masura-cantarul-featured-3.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/ce-nu-poate-masura-cantarul-featured-3.jpg",
+      "size": 316244,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/cea-mai-frumoasa-featured.jpg",
+      "r2Path": "media/cea-mai-frumoasa-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/cea-mai-frumoasa-featured.jpg",
+      "size": 14180,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/cea-mai-mare-minune-din-biserica-featured.jpg",
+      "r2Path": "media/cea-mai-mare-minune-din-biserica-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/cea-mai-mare-minune-din-biserica-featured.jpg",
+      "size": 193715,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/ceea-ce-s-a-petrecut-pe-muntele-tabor-se-va-petrec-featured-2.jpg",
+      "r2Path": "media/ceea-ce-s-a-petrecut-pe-muntele-tabor-se-va-petrec-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/ceea-ce-s-a-petrecut-pe-muntele-tabor-se-va-petrec-featured-2.jpg",
+      "size": 363596,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/cei-tari-in-credinta-sa-poarte-slabiciunile-celor--featured-2.jpg",
+      "r2Path": "media/cei-tari-in-credinta-sa-poarte-slabiciunile-celor--featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/cei-tari-in-credinta-sa-poarte-slabiciunile-celor--featured-2.jpg",
+      "size": 201282,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/cei-tari-in-credinta-sa-poarte-slabiciunile-celor--featured-3.jpg",
+      "r2Path": "media/cei-tari-in-credinta-sa-poarte-slabiciunile-celor--featured-3.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/cei-tari-in-credinta-sa-poarte-slabiciunile-celor--featured-3.jpg",
+      "size": 201282,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/cele-doua-chipuri-ale-ierusalimului-featured-1.jpg",
+      "r2Path": "media/cele-doua-chipuri-ale-ierusalimului-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/cele-doua-chipuri-ale-ierusalimului-featured-1.jpg",
+      "size": 793700,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/cele-doua-chipuri-ale-ierusalimului-featured-2.jpg",
+      "r2Path": "media/cele-doua-chipuri-ale-ierusalimului-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/cele-doua-chipuri-ale-ierusalimului-featured-2.jpg",
+      "size": 793700,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/cele-patru-categorii-din-biserica-featured-1.jpg",
+      "r2Path": "media/cele-patru-categorii-din-biserica-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/cele-patru-categorii-din-biserica-featured-1.jpg",
+      "size": 369211,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/chiar-i-noi-putem-deveni-sfinti-featured-1.jpg",
+      "r2Path": "media/chiar-i-noi-putem-deveni-sfinti-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/chiar-i-noi-putem-deveni-sfinti-featured-1.jpg",
+      "size": 71400,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/cine-a-schimbat-totul-featured.jpg",
+      "r2Path": "media/cine-a-schimbat-totul-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/cine-a-schimbat-totul-featured.jpg",
+      "size": 205987,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/cine-este-adevaratul-proroc-featured.jpg",
+      "r2Path": "media/cine-este-adevaratul-proroc-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/cine-este-adevaratul-proroc-featured.jpg",
+      "size": 875630,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/cine-sunt-eu-i-featured-1.jpg",
+      "r2Path": "media/cine-sunt-eu-i-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/cine-sunt-eu-i-featured-1.jpg",
+      "size": 327448,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/cine-sunt-eu-i-featured-2.jpg",
+      "r2Path": "media/cine-sunt-eu-i-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/cine-sunt-eu-i-featured-2.jpg",
+      "size": 327448,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/cine-sunt-eu-ii-featured-1.jpg",
+      "r2Path": "media/cine-sunt-eu-ii-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/cine-sunt-eu-ii-featured-1.jpg",
+      "size": 715687,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/cine-sunt-eu-ii-featured-2.jpg",
+      "r2Path": "media/cine-sunt-eu-ii-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/cine-sunt-eu-ii-featured-2.jpg",
+      "size": 715687,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/clipe-fara-ceas-featured.jpg",
+      "r2Path": "media/clipe-fara-ceas-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/clipe-fara-ceas-featured.jpg",
+      "size": 484474,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/copilul-meu-ca-painea-calda-featured-1.jpg",
+      "r2Path": "media/copilul-meu-ca-painea-calda-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/copilul-meu-ca-painea-calda-featured-1.jpg",
+      "size": 93738,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/copilul-si-ecranele-merge-sau-nu-merge-si-asa-featured.jpg",
+      "r2Path": "media/copilul-si-ecranele-merge-sau-nu-merge-si-asa-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/copilul-si-ecranele-merge-sau-nu-merge-si-asa-featured.jpg",
+      "size": 347179,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/coronita-sau-despre-distinctul-devenit-duzina-featured-1.jpg",
+      "r2Path": "media/coronita-sau-despre-distinctul-devenit-duzina-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/coronita-sau-despre-distinctul-devenit-duzina-featured-1.jpg",
+      "size": 617544,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/coronita-sau-despre-distinctul-devenit-duzina-featured-2.jpg",
+      "r2Path": "media/coronita-sau-despre-distinctul-devenit-duzina-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/coronita-sau-despre-distinctul-devenit-duzina-featured-2.jpg",
+      "size": 617544,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/cosarul-featured.jpg",
+      "r2Path": "media/cosarul-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/cosarul-featured.jpg",
+      "size": 18672,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/cosmeticele-si-produsele-de-igiena-si-ingrijire-pe-featured-2.jpg",
+      "r2Path": "media/cosmeticele-si-produsele-de-igiena-si-ingrijire-pe-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/cosmeticele-si-produsele-de-igiena-si-ingrijire-pe-featured-2.jpg",
+      "size": 802612,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/crampeie-din-viaa-sfantului-siluan-athonitul-i-featured-1.jpg",
+      "r2Path": "media/crampeie-din-viaa-sfantului-siluan-athonitul-i-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/crampeie-din-viaa-sfantului-siluan-athonitul-i-featured-1.jpg",
+      "size": 1439714,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/crampeie-din-viaa-sfantului-siluan-athonitul-ii-featured-1.jpg",
+      "r2Path": "media/crampeie-din-viaa-sfantului-siluan-athonitul-ii-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/crampeie-din-viaa-sfantului-siluan-athonitul-ii-featured-1.jpg",
+      "size": 329619,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/crampeie-din-viaa-sfantului-siluan-athonitul-iii-featured-1.jpg",
+      "r2Path": "media/crampeie-din-viaa-sfantului-siluan-athonitul-iii-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/crampeie-din-viaa-sfantului-siluan-athonitul-iii-featured-1.jpg",
+      "size": 196310,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/crucea-de-sanziene-featured-1.jpg",
+      "r2Path": "media/crucea-de-sanziene-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/crucea-de-sanziene-featured-1.jpg",
+      "size": 321468,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/crucea-de-sanziene-featured-2.jpg",
+      "r2Path": "media/crucea-de-sanziene-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/crucea-de-sanziene-featured-2.jpg",
+      "size": 321468,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/cu-cat-mai-mare-dragostea-cu-atat-mai-mare-durerea-featured.jpg",
+      "r2Path": "media/cu-cat-mai-mare-dragostea-cu-atat-mai-mare-durerea-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/cu-cat-mai-mare-dragostea-cu-atat-mai-mare-durerea-featured.jpg",
+      "size": 111386,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/cu-zaica-despre-creativitate-i-featured-1200x630.webp",
+      "r2Path": "media/cu-zaica-despre-creativitate-i-featured-1200x630.webp",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/cu-zaica-despre-creativitate-i-featured-1200x630.webp",
+      "size": 51882,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/cu-zaica-despre-creativitate-i-featured-1400x934.webp",
+      "r2Path": "media/cu-zaica-despre-creativitate-i-featured-1400x934.webp",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/cu-zaica-despre-creativitate-i-featured-1400x934.webp",
+      "size": 69842,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/cu-zaica-despre-creativitate-i-featured-1920x1282.webp",
+      "r2Path": "media/cu-zaica-despre-creativitate-i-featured-1920x1282.webp",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/cu-zaica-despre-creativitate-i-featured-1920x1282.webp",
+      "size": 95496,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/cu-zaica-despre-creativitate-i-featured-300x200.webp",
+      "r2Path": "media/cu-zaica-despre-creativitate-i-featured-300x200.webp",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/cu-zaica-despre-creativitate-i-featured-300x200.webp",
+      "size": 10166,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/cu-zaica-despre-creativitate-i-featured-500x500.webp",
+      "r2Path": "media/cu-zaica-despre-creativitate-i-featured-500x500.webp",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/cu-zaica-despre-creativitate-i-featured-500x500.webp",
+      "size": 24476,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/cu-zaica-despre-creativitate-i-featured-600x400.webp",
+      "r2Path": "media/cu-zaica-despre-creativitate-i-featured-600x400.webp",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/cu-zaica-despre-creativitate-i-featured-600x400.webp",
+      "size": 24584,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/cu-zaica-despre-creativitate-i-featured-900x601.webp",
+      "r2Path": "media/cu-zaica-despre-creativitate-i-featured-900x601.webp",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/cu-zaica-despre-creativitate-i-featured-900x601.webp",
+      "size": 41130,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/cu-zaica-despre-creativitate-i-featured.webp",
+      "r2Path": "media/cu-zaica-despre-creativitate-i-featured.webp",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/cu-zaica-despre-creativitate-i-featured.webp",
+      "size": 106088,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/cu-zaica-despre-creativitate-ii-featured-1200x630.webp",
+      "r2Path": "media/cu-zaica-despre-creativitate-ii-featured-1200x630.webp",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/cu-zaica-despre-creativitate-ii-featured-1200x630.webp",
+      "size": 50124,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/cu-zaica-despre-creativitate-ii-featured-300x225.webp",
+      "r2Path": "media/cu-zaica-despre-creativitate-ii-featured-300x225.webp",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/cu-zaica-despre-creativitate-ii-featured-300x225.webp",
+      "size": 11568,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/cu-zaica-despre-creativitate-ii-featured-500x500.webp",
+      "r2Path": "media/cu-zaica-despre-creativitate-ii-featured-500x500.webp",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/cu-zaica-despre-creativitate-ii-featured-500x500.webp",
+      "size": 29316,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/cu-zaica-despre-creativitate-ii-featured-600x450.webp",
+      "r2Path": "media/cu-zaica-despre-creativitate-ii-featured-600x450.webp",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/cu-zaica-despre-creativitate-ii-featured-600x450.webp",
+      "size": 30136,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/cu-zaica-despre-creativitate-ii-featured.webp",
+      "r2Path": "media/cu-zaica-despre-creativitate-ii-featured.webp",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/cu-zaica-despre-creativitate-ii-featured.webp",
+      "size": 46978,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/cum-isi-poarta-crucea-un-copil-de-cinci-ani-featured-1200x630.jpg",
+      "r2Path": "media/cum-isi-poarta-crucea-un-copil-de-cinci-ani-featured-1200x630.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/cum-isi-poarta-crucea-un-copil-de-cinci-ani-featured-1200x630.jpg",
+      "size": 67085,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/cum-isi-poarta-crucea-un-copil-de-cinci-ani-featured-300x450.jpg",
+      "r2Path": "media/cum-isi-poarta-crucea-un-copil-de-cinci-ani-featured-300x450.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/cum-isi-poarta-crucea-un-copil-de-cinci-ani-featured-300x450.jpg",
+      "size": 24296,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/cum-isi-poarta-crucea-un-copil-de-cinci-ani-featured-500x500.jpg",
+      "r2Path": "media/cum-isi-poarta-crucea-un-copil-de-cinci-ani-featured-500x500.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/cum-isi-poarta-crucea-un-copil-de-cinci-ani-featured-500x500.jpg",
+      "size": 38531,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/cum-isi-poarta-crucea-un-copil-de-cinci-ani-featured-600x901.jpg",
+      "r2Path": "media/cum-isi-poarta-crucea-un-copil-de-cinci-ani-featured-600x901.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/cum-isi-poarta-crucea-un-copil-de-cinci-ani-featured-600x901.jpg",
+      "size": 77711,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/cum-isi-poarta-crucea-un-copil-de-cinci-ani-featured.jpg",
+      "r2Path": "media/cum-isi-poarta-crucea-un-copil-de-cinci-ani-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/cum-isi-poarta-crucea-un-copil-de-cinci-ani-featured.jpg",
+      "size": 64916,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/cum-ne-aflam-patimile-featured.jpg",
+      "r2Path": "media/cum-ne-aflam-patimile-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/cum-ne-aflam-patimile-featured.jpg",
+      "size": 69636,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/cum-rad-sfintii-featured-1.jpg",
+      "r2Path": "media/cum-rad-sfintii-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/cum-rad-sfintii-featured-1.jpg",
+      "size": 77746,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/cum-sa-continuam-sa-fim-cu-hristos-featured-2.jpg",
+      "r2Path": "media/cum-sa-continuam-sa-fim-cu-hristos-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/cum-sa-continuam-sa-fim-cu-hristos-featured-2.jpg",
+      "size": 906861,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/cum-sa-continuam-sa-fim-cu-hristos-featured-3.jpg",
+      "r2Path": "media/cum-sa-continuam-sa-fim-cu-hristos-featured-3.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/cum-sa-continuam-sa-fim-cu-hristos-featured-3.jpg",
+      "size": 906861,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/cum-te-invata-un-bebelus-sa-te-bucuri-featured.jpg",
+      "r2Path": "media/cum-te-invata-un-bebelus-sa-te-bucuri-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/cum-te-invata-un-bebelus-sa-te-bucuri-featured.jpg",
+      "size": 319721,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/cuvinte-care-ranesc-featured-1.jpg",
+      "r2Path": "media/cuvinte-care-ranesc-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/cuvinte-care-ranesc-featured-1.jpg",
+      "size": 474969,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/cuvinte-spre-mantuire-featured-1.jpg",
+      "r2Path": "media/cuvinte-spre-mantuire-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/cuvinte-spre-mantuire-featured-1.jpg",
+      "size": 47087,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/cuvinte-spre-mantuire-featured-2.jpg",
+      "r2Path": "media/cuvinte-spre-mantuire-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/cuvinte-spre-mantuire-featured-2.jpg",
+      "size": 47087,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/daca-ai-ti-ce-lumina-e-inlauntrul-meu-featured-1-1200x630.webp",
+      "r2Path": "media/daca-ai-ti-ce-lumina-e-inlauntrul-meu-featured-1-1200x630.webp",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/daca-ai-ti-ce-lumina-e-inlauntrul-meu-featured-1-1200x630.webp",
+      "size": 39796,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/daca-ai-ti-ce-lumina-e-inlauntrul-meu-featured-1-300x169.webp",
+      "r2Path": "media/daca-ai-ti-ce-lumina-e-inlauntrul-meu-featured-1-300x169.webp",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/daca-ai-ti-ce-lumina-e-inlauntrul-meu-featured-1-300x169.webp",
+      "size": 6372,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/daca-ai-ti-ce-lumina-e-inlauntrul-meu-featured-1-500x500.webp",
+      "r2Path": "media/daca-ai-ti-ce-lumina-e-inlauntrul-meu-featured-1-500x500.webp",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/daca-ai-ti-ce-lumina-e-inlauntrul-meu-featured-1-500x500.webp",
+      "size": 23662,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/daca-ai-ti-ce-lumina-e-inlauntrul-meu-featured-1-600x338.webp",
+      "r2Path": "media/daca-ai-ti-ce-lumina-e-inlauntrul-meu-featured-1-600x338.webp",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/daca-ai-ti-ce-lumina-e-inlauntrul-meu-featured-1-600x338.webp",
+      "size": 17208,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/daca-ai-ti-ce-lumina-e-inlauntrul-meu-featured-1-900x506.webp",
+      "r2Path": "media/daca-ai-ti-ce-lumina-e-inlauntrul-meu-featured-1-900x506.webp",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/daca-ai-ti-ce-lumina-e-inlauntrul-meu-featured-1-900x506.webp",
+      "size": 27286,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/daca-ai-ti-ce-lumina-e-inlauntrul-meu-featured-1.webp",
+      "r2Path": "media/daca-ai-ti-ce-lumina-e-inlauntrul-meu-featured-1.webp",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/daca-ai-ti-ce-lumina-e-inlauntrul-meu-featured-1.webp",
+      "size": 40522,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/daca-inseteaza-cineva-sa-vina-la-mine-si-sa-bea-io-featured-2.jpg",
+      "r2Path": "media/daca-inseteaza-cineva-sa-vina-la-mine-si-sa-bea-io-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/daca-inseteaza-cineva-sa-vina-la-mine-si-sa-bea-io-featured-2.jpg",
+      "size": 494632,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/daca-inseteaza-cineva-sa-vina-la-mine-si-sa-bea-io-featured-3.jpg",
+      "r2Path": "media/daca-inseteaza-cineva-sa-vina-la-mine-si-sa-bea-io-featured-3.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/daca-inseteaza-cineva-sa-vina-la-mine-si-sa-bea-io-featured-3.jpg",
+      "size": 494632,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/daca-nu-i-cina-la-ce-bun-toata-zdroaba-featured-2.jpg",
+      "r2Path": "media/daca-nu-i-cina-la-ce-bun-toata-zdroaba-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/daca-nu-i-cina-la-ce-bun-toata-zdroaba-featured-2.jpg",
+      "size": 417137,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/daca-nu-i-cina-la-ce-bun-toata-zdroaba-featured-3.jpg",
+      "r2Path": "media/daca-nu-i-cina-la-ce-bun-toata-zdroaba-featured-3.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/daca-nu-i-cina-la-ce-bun-toata-zdroaba-featured-3.jpg",
+      "size": 417137,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/de-ce-iubim-ai-ul-featured-1.jpg",
+      "r2Path": "media/de-ce-iubim-ai-ul-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/de-ce-iubim-ai-ul-featured-1.jpg",
+      "size": 166197,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/de-ce-nu-mai-apucam-sa-privim-cerul-featured-2.jpg",
+      "r2Path": "media/de-ce-nu-mai-apucam-sa-privim-cerul-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/de-ce-nu-mai-apucam-sa-privim-cerul-featured-2.jpg",
+      "size": 175917,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/de-ce-nu-mai-apucam-sa-privim-cerul-featured-3.jpg",
+      "r2Path": "media/de-ce-nu-mai-apucam-sa-privim-cerul-featured-3.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/de-ce-nu-mai-apucam-sa-privim-cerul-featured-3.jpg",
+      "size": 175917,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/de-ce-nu-ne-casatorim-cu-telefonul-mobil-featured-2.jpg",
+      "r2Path": "media/de-ce-nu-ne-casatorim-cu-telefonul-mobil-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/de-ce-nu-ne-casatorim-cu-telefonul-mobil-featured-2.jpg",
+      "size": 319014,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/de-ce-nu-ne-casatorim-cu-telefonul-mobil-featured-3.jpg",
+      "r2Path": "media/de-ce-nu-ne-casatorim-cu-telefonul-mobil-featured-3.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/de-ce-nu-ne-casatorim-cu-telefonul-mobil-featured-3.jpg",
+      "size": 319014,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/de-la-fourka-la-suroti-featured-1.jpg",
+      "r2Path": "media/de-la-fourka-la-suroti-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/de-la-fourka-la-suroti-featured-1.jpg",
+      "size": 618312,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/de-la-fourka-la-suroti-featured-2.jpg",
+      "r2Path": "media/de-la-fourka-la-suroti-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/de-la-fourka-la-suroti-featured-2.jpg",
+      "size": 618312,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/de-la-simfonia-a-treia-la-a-patra-featured.jpg",
+      "r2Path": "media/de-la-simfonia-a-treia-la-a-patra-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/de-la-simfonia-a-treia-la-a-patra-featured.jpg",
+      "size": 45726,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/de-mana-featured-1.jpg",
+      "r2Path": "media/de-mana-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/de-mana-featured-1.jpg",
+      "size": 460294,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/de-mana-featured-2.jpg",
+      "r2Path": "media/de-mana-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/de-mana-featured-2.jpg",
+      "size": 460294,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/despre-cum-am-perceput-cartea-organizatorii-de-vie-featured-2.jpg",
+      "r2Path": "media/despre-cum-am-perceput-cartea-organizatorii-de-vie-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/despre-cum-am-perceput-cartea-organizatorii-de-vie-featured-2.jpg",
+      "size": 118566,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/despre-cum-am-perceput-cartea-organizatorii-de-vie-featured-3.jpg",
+      "r2Path": "media/despre-cum-am-perceput-cartea-organizatorii-de-vie-featured-3.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/despre-cum-am-perceput-cartea-organizatorii-de-vie-featured-3.jpg",
+      "size": 118566,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/despre-cum-n-am-vazut-parisul-inca-featured.jpg",
+      "r2Path": "media/despre-cum-n-am-vazut-parisul-inca-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/despre-cum-n-am-vazut-parisul-inca-featured.jpg",
+      "size": 190762,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/despre-sfinti-si-sfintenie-astazi-featured-1.jpg",
+      "r2Path": "media/despre-sfinti-si-sfintenie-astazi-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/despre-sfinti-si-sfintenie-astazi-featured-1.jpg",
+      "size": 245953,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/despre-sfinti-si-sfintenie-astazi-featured-2.jpg",
+      "r2Path": "media/despre-sfinti-si-sfintenie-astazi-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/despre-sfinti-si-sfintenie-astazi-featured-2.jpg",
+      "size": 245953,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/dialog-interior-la-mare-featured-1.jpg",
+      "r2Path": "media/dialog-interior-la-mare-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/dialog-interior-la-mare-featured-1.jpg",
+      "size": 180878,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/dialog-interior-la-mare-featured-2.jpg",
+      "r2Path": "media/dialog-interior-la-mare-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/dialog-interior-la-mare-featured-2.jpg",
+      "size": 180878,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/dialogurile-lui-cristian-patrasconiu-featured-1.jpg",
+      "r2Path": "media/dialogurile-lui-cristian-patrasconiu-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/dialogurile-lui-cristian-patrasconiu-featured-1.jpg",
+      "size": 170014,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/dialogurile-lui-cristian-patrasconiu-featured-2.jpg",
+      "r2Path": "media/dialogurile-lui-cristian-patrasconiu-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/dialogurile-lui-cristian-patrasconiu-featured-2.jpg",
+      "size": 170014,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/dimineata-de-mai-featured-2.jpg",
+      "r2Path": "media/dimineata-de-mai-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/dimineata-de-mai-featured-2.jpg",
+      "size": 346477,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/dimineata-de-mai-featured-3.jpg",
+      "r2Path": "media/dimineata-de-mai-featured-3.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/dimineata-de-mai-featured-3.jpg",
+      "size": 346477,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/dimineti-de-august-featured.jpg",
+      "r2Path": "media/dimineti-de-august-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/dimineti-de-august-featured.jpg",
+      "size": 489146,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/din-darurile-maicii-domnului-featured.jpg",
+      "r2Path": "media/din-darurile-maicii-domnului-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/din-darurile-maicii-domnului-featured.jpg",
+      "size": 151955,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/doamna-ak-chiar-si-medicul-m-a-intrebat-cine-s-a-r-featured-2.jpg",
+      "r2Path": "media/doamna-ak-chiar-si-medicul-m-a-intrebat-cine-s-a-r-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/doamna-ak-chiar-si-medicul-m-a-intrebat-cine-s-a-r-featured-2.jpg",
+      "size": 144015,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/doamna-ak-chiar-si-medicul-m-a-intrebat-cine-s-a-r-featured-3.jpg",
+      "r2Path": "media/doamna-ak-chiar-si-medicul-m-a-intrebat-cine-s-a-r-featured-3.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/doamna-ak-chiar-si-medicul-m-a-intrebat-cine-s-a-r-featured-3.jpg",
+      "size": 144015,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/doamne-lumea-asta-a-cui-e-featured-1.jpg",
+      "r2Path": "media/doamne-lumea-asta-a-cui-e-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/doamne-lumea-asta-a-cui-e-featured-1.jpg",
+      "size": 47945,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/doar-o-mama-poate-sti-featured-2.jpg",
+      "r2Path": "media/doar-o-mama-poate-sti-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/doar-o-mama-poate-sti-featured-2.jpg",
+      "size": 173764,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/doar-o-mama-poate-sti-featured-3.jpg",
+      "r2Path": "media/doar-o-mama-poate-sti-featured-3.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/doar-o-mama-poate-sti-featured-3.jpg",
+      "size": 173764,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/doi-caini-featured.jpg",
+      "r2Path": "media/doi-caini-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/doi-caini-featured.jpg",
+      "size": 128703,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/doi-trei-milimetri-featured.jpg",
+      "r2Path": "media/doi-trei-milimetri-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/doi-trei-milimetri-featured.jpg",
+      "size": 115164,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/domnul-manole-featured.jpg",
+      "r2Path": "media/domnul-manole-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/domnul-manole-featured.jpg",
+      "size": 541064,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/domnul-varna-featured.jpg",
+      "r2Path": "media/domnul-varna-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/domnul-varna-featured.jpg",
+      "size": 330887,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/dor-de-parintele-arsenie-papacioc-featured-1.jpg",
+      "r2Path": "media/dor-de-parintele-arsenie-papacioc-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/dor-de-parintele-arsenie-papacioc-featured-1.jpg",
+      "size": 81577,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/dor-featured.jpg",
+      "r2Path": "media/dor-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/dor-featured.jpg",
+      "size": 114116,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/dorel-zaica-omul-cu-cerul-in-el-featured-1200x630.jpg",
+      "r2Path": "media/dorel-zaica-omul-cu-cerul-in-el-featured-1200x630.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/dorel-zaica-omul-cu-cerul-in-el-featured-1200x630.jpg",
+      "size": 83570,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/dorel-zaica-omul-cu-cerul-in-el-featured-1400x1867.jpg",
+      "r2Path": "media/dorel-zaica-omul-cu-cerul-in-el-featured-1400x1867.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/dorel-zaica-omul-cu-cerul-in-el-featured-1400x1867.jpg",
+      "size": 214150,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/dorel-zaica-omul-cu-cerul-in-el-featured-300x400.jpg",
+      "r2Path": "media/dorel-zaica-omul-cu-cerul-in-el-featured-300x400.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/dorel-zaica-omul-cu-cerul-in-el-featured-300x400.jpg",
+      "size": 19294,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/dorel-zaica-omul-cu-cerul-in-el-featured-500x500.jpg",
+      "r2Path": "media/dorel-zaica-omul-cu-cerul-in-el-featured-500x500.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/dorel-zaica-omul-cu-cerul-in-el-featured-500x500.jpg",
+      "size": 34692,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/dorel-zaica-omul-cu-cerul-in-el-featured-600x800.jpg",
+      "r2Path": "media/dorel-zaica-omul-cu-cerul-in-el-featured-600x800.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/dorel-zaica-omul-cu-cerul-in-el-featured-600x800.jpg",
+      "size": 57098,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/dorel-zaica-omul-cu-cerul-in-el-featured-900x1200.jpg",
+      "r2Path": "media/dorel-zaica-omul-cu-cerul-in-el-featured-900x1200.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/dorel-zaica-omul-cu-cerul-in-el-featured-900x1200.jpg",
+      "size": 107876,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/dorel-zaica-omul-cu-cerul-in-el-featured.jpg",
+      "r2Path": "media/dorel-zaica-omul-cu-cerul-in-el-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/dorel-zaica-omul-cu-cerul-in-el-featured.jpg",
+      "size": 213051,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/doua-luni-cu-tine-featured-1.jpg",
+      "r2Path": "media/doua-luni-cu-tine-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/doua-luni-cu-tine-featured-1.jpg",
+      "size": 92044,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/doua-luni-cu-tine-featured-2.jpg",
+      "r2Path": "media/doua-luni-cu-tine-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/doua-luni-cu-tine-featured-2.jpg",
+      "size": 92044,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/doua-luni-in-pridvor-featured-1.jpg",
+      "r2Path": "media/doua-luni-in-pridvor-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/doua-luni-in-pridvor-featured-1.jpg",
+      "size": 74866,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/dragostea-toate-le-sufera-featured-1.jpg",
+      "r2Path": "media/dragostea-toate-le-sufera-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/dragostea-toate-le-sufera-featured-1.jpg",
+      "size": 302347,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/duminica-tuturor-sfintilor-featured-1.jpg",
+      "r2Path": "media/duminica-tuturor-sfintilor-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/duminica-tuturor-sfintilor-featured-1.jpg",
+      "size": 171844,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/duminica-tuturor-sfintilor-featured-2.jpg",
+      "r2Path": "media/duminica-tuturor-sfintilor-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/duminica-tuturor-sfintilor-featured-2.jpg",
+      "size": 171844,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/dumnezeu-si-marea-featured.jpg",
+      "r2Path": "media/dumnezeu-si-marea-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/dumnezeu-si-marea-featured.jpg",
+      "size": 252781,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/dumnezeu-si-sfanta-paraschiva-featured.jpg",
+      "r2Path": "media/dumnezeu-si-sfanta-paraschiva-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/dumnezeu-si-sfanta-paraschiva-featured.jpg",
+      "size": 363399,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/dumnezeul-carabusilor-featured-1.jpg",
+      "r2Path": "media/dumnezeul-carabusilor-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/dumnezeul-carabusilor-featured-1.jpg",
+      "size": 368554,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/dumnezeul-carabusilor-featured-2.jpg",
+      "r2Path": "media/dumnezeul-carabusilor-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/dumnezeul-carabusilor-featured-2.jpg",
+      "size": 368554,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/esente-1-featured.jpg",
+      "r2Path": "media/esente-1-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/esente-1-featured.jpg",
+      "size": 30958,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/esente-2-featured.jpg",
+      "r2Path": "media/esente-2-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/esente-2-featured.jpg",
+      "size": 35061,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/excelsior-featured.jpg",
+      "r2Path": "media/excelsior-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/excelsior-featured.jpg",
+      "size": 35419,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/fascinatia-umbrelor-featured-1.jpg",
+      "r2Path": "media/fascinatia-umbrelor-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/fascinatia-umbrelor-featured-1.jpg",
+      "size": 81678,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/fascinatia-umbrelor-featured-2.jpg",
+      "r2Path": "media/fascinatia-umbrelor-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/fascinatia-umbrelor-featured-2.jpg",
+      "size": 81678,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/felurite-intamplari-featured.jpg",
+      "r2Path": "media/felurite-intamplari-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/felurite-intamplari-featured.jpg",
+      "size": 99459,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/femei-versus-femei-competitie-sau-sprijin-featured.jpg",
+      "r2Path": "media/femei-versus-femei-competitie-sau-sprijin-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/femei-versus-femei-competitie-sau-sprijin-featured.jpg",
+      "size": 111970,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/fericita-spovedanie-featured.jpg",
+      "r2Path": "media/fericita-spovedanie-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/fericita-spovedanie-featured.jpg",
+      "size": 67112,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/firimituri-featured-1.jpg",
+      "r2Path": "media/firimituri-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/firimituri-featured-1.jpg",
+      "size": 224278,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/firimituri-featured-2.jpg",
+      "r2Path": "media/firimituri-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/firimituri-featured-2.jpg",
+      "size": 224278,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/fiti-realisti-cereti-imposibilul-featured-1.jpg",
+      "r2Path": "media/fiti-realisti-cereti-imposibilul-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/fiti-realisti-cereti-imposibilul-featured-1.jpg",
+      "size": 449695,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/fiti-sfinti-caci-eu-sfant-sunt-featured-1200x630.png",
+      "r2Path": "media/fiti-sfinti-caci-eu-sfant-sunt-featured-1200x630.png",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/fiti-sfinti-caci-eu-sfant-sunt-featured-1200x630.png",
+      "size": 1706940,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/fiti-sfinti-caci-eu-sfant-sunt-featured-300x221.png",
+      "r2Path": "media/fiti-sfinti-caci-eu-sfant-sunt-featured-300x221.png",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/fiti-sfinti-caci-eu-sfant-sunt-featured-300x221.png",
+      "size": 166203,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/fiti-sfinti-caci-eu-sfant-sunt-featured-500x500.png",
+      "r2Path": "media/fiti-sfinti-caci-eu-sfant-sunt-featured-500x500.png",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/fiti-sfinti-caci-eu-sfant-sunt-featured-500x500.png",
+      "size": 549136,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/fiti-sfinti-caci-eu-sfant-sunt-featured-600x441.png",
+      "r2Path": "media/fiti-sfinti-caci-eu-sfant-sunt-featured-600x441.png",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/fiti-sfinti-caci-eu-sfant-sunt-featured-600x441.png",
+      "size": 648249,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/fiti-sfinti-caci-eu-sfant-sunt-featured.png",
+      "r2Path": "media/fiti-sfinti-caci-eu-sfant-sunt-featured.png",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/fiti-sfinti-caci-eu-sfant-sunt-featured.png",
+      "size": 1340184,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/foc-featured.jpg",
+      "r2Path": "media/foc-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/foc-featured.jpg",
+      "size": 46578,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/ganduri-la-inceput-de-an-featured-2.jpg",
+      "r2Path": "media/ganduri-la-inceput-de-an-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/ganduri-la-inceput-de-an-featured-2.jpg",
+      "size": 444481,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/ganduri-la-inceput-de-an-featured-3.jpg",
+      "r2Path": "media/ganduri-la-inceput-de-an-featured-3.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/ganduri-la-inceput-de-an-featured-3.jpg",
+      "size": 444481,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/gardurile-care-ne-cresc-mari-featured-1.jpg",
+      "r2Path": "media/gardurile-care-ne-cresc-mari-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/gardurile-care-ne-cresc-mari-featured-1.jpg",
+      "size": 114772,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/gardurile-care-ne-cresc-mari-featured-2.jpg",
+      "r2Path": "media/gardurile-care-ne-cresc-mari-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/gardurile-care-ne-cresc-mari-featured-2.jpg",
+      "size": 114772,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/gherghesenii-si-noi-featured-1.jpg",
+      "r2Path": "media/gherghesenii-si-noi-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/gherghesenii-si-noi-featured-1.jpg",
+      "size": 445194,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/grabnic-ascultatoare-asculta-ma-featured.jpg",
+      "r2Path": "media/grabnic-ascultatoare-asculta-ma-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/grabnic-ascultatoare-asculta-ma-featured.jpg",
+      "size": 276447,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/hristodulos-a-minunea-care-mi-a-schimbat-viata-featured-1.jpg",
+      "r2Path": "media/hristodulos-a-minunea-care-mi-a-schimbat-viata-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/hristodulos-a-minunea-care-mi-a-schimbat-viata-featured-1.jpg",
+      "size": 889991,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/hristodulos-a-minunea-care-mi-a-schimbat-viata-featured-2.jpg",
+      "r2Path": "media/hristodulos-a-minunea-care-mi-a-schimbat-viata-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/hristodulos-a-minunea-care-mi-a-schimbat-viata-featured-2.jpg",
+      "size": 889991,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/hyperion-featured-1.jpg",
+      "r2Path": "media/hyperion-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/hyperion-featured-1.jpg",
+      "size": 732189,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/hyperion-featured-2.jpg",
+      "r2Path": "media/hyperion-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/hyperion-featured-2.jpg",
+      "size": 732189,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/imbratisarea-featured.jpg",
+      "r2Path": "media/imbratisarea-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/imbratisarea-featured.jpg",
+      "size": 68573,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/impreuna-pe-drumul-crucii-featured.jpg",
+      "r2Path": "media/impreuna-pe-drumul-crucii-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/impreuna-pe-drumul-crucii-featured.jpg",
+      "size": 182580,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/imunitate-la-inceput-de-colectivitate-featured.jpg",
+      "r2Path": "media/imunitate-la-inceput-de-colectivitate-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/imunitate-la-inceput-de-colectivitate-featured.jpg",
+      "size": 569222,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/in-ochii-tai-in-ochii-tai-featured-1.jpg",
+      "r2Path": "media/in-ochii-tai-in-ochii-tai-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/in-ochii-tai-in-ochii-tai-featured-1.jpg",
+      "size": 331003,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/in-pridvor-featured-1.jpg",
+      "r2Path": "media/in-pridvor-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/in-pridvor-featured-1.jpg",
+      "size": 70583,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/in-pridvor-featured-2.jpg",
+      "r2Path": "media/in-pridvor-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/in-pridvor-featured-2.jpg",
+      "size": 70583,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/inapoi-in-pridvor-featured-1.jpg",
+      "r2Path": "media/inapoi-in-pridvor-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/inapoi-in-pridvor-featured-1.jpg",
+      "size": 78163,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/inapoi-in-pridvor-featured-2.jpg",
+      "r2Path": "media/inapoi-in-pridvor-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/inapoi-in-pridvor-featured-2.jpg",
+      "size": 78163,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/inchipuiri-ale-unei-false-vieti-duhovnicesti-inalt-featured-2.jpg",
+      "r2Path": "media/inchipuiri-ale-unei-false-vieti-duhovnicesti-inalt-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/inchipuiri-ale-unei-false-vieti-duhovnicesti-inalt-featured-2.jpg",
+      "size": 74523,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/inchipuiri-ale-unei-false-vieti-duhovnicesti-inalt-featured-3.jpg",
+      "r2Path": "media/inchipuiri-ale-unei-false-vieti-duhovnicesti-inalt-featured-3.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/inchipuiri-ale-unei-false-vieti-duhovnicesti-inalt-featured-3.jpg",
+      "size": 74523,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/indragostit-de-hristos-featured-1.jpg",
+      "r2Path": "media/indragostit-de-hristos-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/indragostit-de-hristos-featured-1.jpg",
+      "size": 45754,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/indragostit-de-hristos-featured-2.jpg",
+      "r2Path": "media/indragostit-de-hristos-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/indragostit-de-hristos-featured-2.jpg",
+      "size": 45754,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/inimi-batand-la-unison-featured-1.jpg",
+      "r2Path": "media/inimi-batand-la-unison-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/inimi-batand-la-unison-featured-1.jpg",
+      "size": 492099,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/inimi-batand-la-unison-featured-2.jpg",
+      "r2Path": "media/inimi-batand-la-unison-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/inimi-batand-la-unison-featured-2.jpg",
+      "size": 492099,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/intalnirea-cuvioasei-maria-egipteanca-cu-crucea-do-featured-2.jpg",
+      "r2Path": "media/intalnirea-cuvioasei-maria-egipteanca-cu-crucea-do-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/intalnirea-cuvioasei-maria-egipteanca-cu-crucea-do-featured-2.jpg",
+      "size": 587785,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/intalnirea-cuvioasei-maria-egipteanca-cu-crucea-do-featured-3.jpg",
+      "r2Path": "media/intalnirea-cuvioasei-maria-egipteanca-cu-crucea-do-featured-3.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/intalnirea-cuvioasei-maria-egipteanca-cu-crucea-do-featured-3.jpg",
+      "size": 587785,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/intr-adevar-featured-1.jpg",
+      "r2Path": "media/intr-adevar-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/intr-adevar-featured-1.jpg",
+      "size": 602187,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/intr-adevar-featured-2.jpg",
+      "r2Path": "media/intr-adevar-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/intr-adevar-featured-2.jpg",
+      "size": 602187,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/intra-poarta-e-deschisa-featured.jpg",
+      "r2Path": "media/intra-poarta-e-deschisa-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/intra-poarta-e-deschisa-featured.jpg",
+      "size": 1306503,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/invatatura-sfintilor-contemporani-despre-frecventa-featured-1.jpg",
+      "r2Path": "media/invatatura-sfintilor-contemporani-despre-frecventa-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/invatatura-sfintilor-contemporani-despre-frecventa-featured-1.jpg",
+      "size": 286579,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/invesnicire-featured.jpg",
+      "r2Path": "media/invesnicire-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/invesnicire-featured.jpg",
+      "size": 180663,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/iubirea-care-nu-cere-nimic-dar-da-totul-featured.jpg",
+      "r2Path": "media/iubirea-care-nu-cere-nimic-dar-da-totul-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/iubirea-care-nu-cere-nimic-dar-da-totul-featured.jpg",
+      "size": 2011839,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/jocurile-copilariei-featured.jpg",
+      "r2Path": "media/jocurile-copilariei-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/jocurile-copilariei-featured.jpg",
+      "size": 748760,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/jurnal-de-pe-meleaguri-bizantine-ii-2022-featured.jpg",
+      "r2Path": "media/jurnal-de-pe-meleaguri-bizantine-ii-2022-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/jurnal-de-pe-meleaguri-bizantine-ii-2022-featured.jpg",
+      "size": 409580,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/jurnal-de-pe-taramuri-bizantine-i-constantinopol-2-featured-2.jpg",
+      "r2Path": "media/jurnal-de-pe-taramuri-bizantine-i-constantinopol-2-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/jurnal-de-pe-taramuri-bizantine-i-constantinopol-2-featured-2.jpg",
+      "size": 1072432,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/jurnal-de-pe-taramuri-bizantine-i-constantinopol-2-featured-3.jpg",
+      "r2Path": "media/jurnal-de-pe-taramuri-bizantine-i-constantinopol-2-featured-3.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/jurnal-de-pe-taramuri-bizantine-i-constantinopol-2-featured-3.jpg",
+      "size": 1072432,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/jurnal-ivirean-georgia-iunie-2017-featured-1.jpg",
+      "r2Path": "media/jurnal-ivirean-georgia-iunie-2017-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/jurnal-ivirean-georgia-iunie-2017-featured-1.jpg",
+      "size": 481483,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/jurnal-ivirean-georgia-iunie-2017-featured-2.jpg",
+      "r2Path": "media/jurnal-ivirean-georgia-iunie-2017-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/jurnal-ivirean-georgia-iunie-2017-featured-2.jpg",
+      "size": 481483,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/jurnal-sofronian-i-essex-2015-featured-2.jpg",
+      "r2Path": "media/jurnal-sofronian-i-essex-2015-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/jurnal-sofronian-i-essex-2015-featured-2.jpg",
+      "size": 437322,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/jurnal-sofronian-i-essex-2015-featured-3.jpg",
+      "r2Path": "media/jurnal-sofronian-i-essex-2015-featured-3.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/jurnal-sofronian-i-essex-2015-featured-3.jpg",
+      "size": 437322,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/jurnal-sofronian-ii-essex-2017-featured-2.jpg",
+      "r2Path": "media/jurnal-sofronian-ii-essex-2017-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/jurnal-sofronian-ii-essex-2017-featured-2.jpg",
+      "size": 40187,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/jurnal-sofronian-ii-essex-2017-featured-3.jpg",
+      "r2Path": "media/jurnal-sofronian-ii-essex-2017-featured-3.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/jurnal-sofronian-ii-essex-2017-featured-3.jpg",
+      "size": 40187,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/jurnalul-tarnosirii-essex-2025-i-featured-1.jpg",
+      "r2Path": "media/jurnalul-tarnosirii-essex-2025-i-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/jurnalul-tarnosirii-essex-2025-i-featured-1.jpg",
+      "size": 101685,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/jurnalul-tarnosirii-essex-2025-i-featured-2.jpg",
+      "r2Path": "media/jurnalul-tarnosirii-essex-2025-i-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/jurnalul-tarnosirii-essex-2025-i-featured-2.jpg",
+      "size": 101685,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/jurnalul-tarnosirii-essex-2025-ii-featured-1.jpg",
+      "r2Path": "media/jurnalul-tarnosirii-essex-2025-ii-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/jurnalul-tarnosirii-essex-2025-ii-featured-1.jpg",
+      "size": 375271,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/jurnalul-tarnosirii-essex-2025-ii-featured-2.jpg",
+      "r2Path": "media/jurnalul-tarnosirii-essex-2025-ii-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/jurnalul-tarnosirii-essex-2025-ii-featured-2.jpg",
+      "size": 375271,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/jurnalul-tarnosirii-essex-2025-iii-featured-1.jpg",
+      "r2Path": "media/jurnalul-tarnosirii-essex-2025-iii-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/jurnalul-tarnosirii-essex-2025-iii-featured-1.jpg",
+      "size": 970720,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/jurnalul-tarnosirii-essex-2025-iii-featured-2.jpg",
+      "r2Path": "media/jurnalul-tarnosirii-essex-2025-iii-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/jurnalul-tarnosirii-essex-2025-iii-featured-2.jpg",
+      "size": 970720,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/jurnalul-tarnosirii-essex-2025-iv-featured-1.jpg",
+      "r2Path": "media/jurnalul-tarnosirii-essex-2025-iv-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/jurnalul-tarnosirii-essex-2025-iv-featured-1.jpg",
+      "size": 164292,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/jurnalul-tarnosirii-essex-2025-iv-featured-2.jpg",
+      "r2Path": "media/jurnalul-tarnosirii-essex-2025-iv-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/jurnalul-tarnosirii-essex-2025-iv-featured-2.jpg",
+      "size": 164292,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/jurnalul-tarnosirii-essex-2025-v-featured-1.jpg",
+      "r2Path": "media/jurnalul-tarnosirii-essex-2025-v-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/jurnalul-tarnosirii-essex-2025-v-featured-1.jpg",
+      "size": 114263,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/jurnalul-tarnosirii-essex-2025-v-featured-2.jpg",
+      "r2Path": "media/jurnalul-tarnosirii-essex-2025-v-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/jurnalul-tarnosirii-essex-2025-v-featured-2.jpg",
+      "size": 114263,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/la-capatul-durerii-e-dumnezeu-featured-2.jpg",
+      "r2Path": "media/la-capatul-durerii-e-dumnezeu-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/la-capatul-durerii-e-dumnezeu-featured-2.jpg",
+      "size": 77046,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/la-capatul-durerii-e-dumnezeu-featured-3.jpg",
+      "r2Path": "media/la-capatul-durerii-e-dumnezeu-featured-3.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/la-capatul-durerii-e-dumnezeu-featured-3.jpg",
+      "size": 77046,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/la-cirese-featured-1.jpg",
+      "r2Path": "media/la-cirese-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/la-cirese-featured-1.jpg",
+      "size": 129726,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/la-cirese-featured-2.jpg",
+      "r2Path": "media/la-cirese-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/la-cirese-featured-2.jpg",
+      "size": 129726,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/la-multi-ani-si-vesnica-pomenire-featured.jpg",
+      "r2Path": "media/la-multi-ani-si-vesnica-pomenire-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/la-multi-ani-si-vesnica-pomenire-featured.jpg",
+      "size": 135103,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/la-plecarea-la-cer-a-lui-costion-nicolescu-featured-1.jpg",
+      "r2Path": "media/la-plecarea-la-cer-a-lui-costion-nicolescu-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/la-plecarea-la-cer-a-lui-costion-nicolescu-featured-1.jpg",
+      "size": 126729,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/la-plecarea-la-cer-a-lui-costion-nicolescu-featured-2.jpg",
+      "r2Path": "media/la-plecarea-la-cer-a-lui-costion-nicolescu-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/la-plecarea-la-cer-a-lui-costion-nicolescu-featured-2.jpg",
+      "size": 126729,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/lasa-te-purtat-featured-1.jpg",
+      "r2Path": "media/lasa-te-purtat-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/lasa-te-purtat-featured-1.jpg",
+      "size": 683874,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/lut-stramb-featured.jpg",
+      "r2Path": "media/lut-stramb-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/lut-stramb-featured.jpg",
+      "size": 410693,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/ma-aud-strigata-maaa-maaa-featured-1.jpg",
+      "r2Path": "media/ma-aud-strigata-maaa-maaa-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/ma-aud-strigata-maaa-maaa-featured-1.jpg",
+      "size": 1156013,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/ma-aud-strigata-maaa-maaa-featured-2.jpg",
+      "r2Path": "media/ma-aud-strigata-maaa-maaa-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/ma-aud-strigata-maaa-maaa-featured-2.jpg",
+      "size": 1156013,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/maci-featured-1.jpg",
+      "r2Path": "media/maci-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/maci-featured-1.jpg",
+      "size": 200264,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/maci-featured-2.jpg",
+      "r2Path": "media/maci-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/maci-featured-2.jpg",
+      "size": 200264,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/maica-domnului-cea-care-da-foc-inimilor-noastre-featured-1.jpg",
+      "r2Path": "media/maica-domnului-cea-care-da-foc-inimilor-noastre-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/maica-domnului-cea-care-da-foc-inimilor-noastre-featured-1.jpg",
+      "size": 120815,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/maica-domnului-featured-1.jpg",
+      "r2Path": "media/maica-domnului-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/maica-domnului-featured-1.jpg",
+      "size": 114574,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/maica-domnului-featured-2.jpg",
+      "r2Path": "media/maica-domnului-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/maica-domnului-featured-2.jpg",
+      "size": 114574,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/maica-domnului-il-scoate-din-pacat-pe-tanarul-sime-featured-1.jpg",
+      "r2Path": "media/maica-domnului-il-scoate-din-pacat-pe-tanarul-sime-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/maica-domnului-il-scoate-din-pacat-pe-tanarul-sime-featured-1.jpg",
+      "size": 77577,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/maica-gavrilia-maica-bucuriei-featured.jpg",
+      "r2Path": "media/maica-gavrilia-maica-bucuriei-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/maica-gavrilia-maica-bucuriei-featured.jpg",
+      "size": 173091,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/maica-noastra-dupa-duh-featured.jpg",
+      "r2Path": "media/maica-noastra-dupa-duh-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/maica-noastra-dupa-duh-featured.jpg",
+      "size": 666976,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/mama-mama-featured.jpg",
+      "r2Path": "media/mama-mama-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/mama-mama-featured.jpg",
+      "size": 808092,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/mangaierea-duhovniceasca-a-rugaciunii-featured.jpg",
+      "r2Path": "media/mangaierea-duhovniceasca-a-rugaciunii-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/mangaierea-duhovniceasca-a-rugaciunii-featured.jpg",
+      "size": 345121,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/mansarda-featured.jpg",
+      "r2Path": "media/mansarda-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/mansarda-featured.jpg",
+      "size": 90190,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/maternitatea-intre-nevointa-bucurie-si-har-featured.jpg",
+      "r2Path": "media/maternitatea-intre-nevointa-bucurie-si-har-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/maternitatea-intre-nevointa-bucurie-si-har-featured.jpg",
+      "size": 59242,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/mica-scoala-de-acasa-featured-1.jpg",
+      "r2Path": "media/mica-scoala-de-acasa-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/mica-scoala-de-acasa-featured-1.jpg",
+      "size": 1483989,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/mica-scoala-de-acasa-featured-2.jpg",
+      "r2Path": "media/mica-scoala-de-acasa-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/mica-scoala-de-acasa-featured-2.jpg",
+      "size": 1483989,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/mihai-vladu-asta-e-teologia-parintelui-arsenie-featured-1.jpg",
+      "r2Path": "media/mihai-vladu-asta-e-teologia-parintelui-arsenie-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/mihai-vladu-asta-e-teologia-parintelui-arsenie-featured-1.jpg",
+      "size": 281445,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/mihai-vladu-asta-e-teologia-parintelui-arsenie-featured-2.jpg",
+      "r2Path": "media/mihai-vladu-asta-e-teologia-parintelui-arsenie-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/mihai-vladu-asta-e-teologia-parintelui-arsenie-featured-2.jpg",
+      "size": 281445,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/mireni-si-monahi-featured-1.jpg",
+      "r2Path": "media/mireni-si-monahi-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/mireni-si-monahi-featured-1.jpg",
+      "size": 102391,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/mireni-si-monahi-featured-2.jpg",
+      "r2Path": "media/mireni-si-monahi-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/mireni-si-monahi-featured-2.jpg",
+      "size": 102391,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/mirosul-de-viata-featured.jpg",
+      "r2Path": "media/mirosul-de-viata-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/mirosul-de-viata-featured.jpg",
+      "size": 477628,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/monahism-sau-casatorie-featured.jpg",
+      "r2Path": "media/monahism-sau-casatorie-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/monahism-sau-casatorie-featured.jpg",
+      "size": 27998,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/mundus-mirabilis-featured-1.jpg",
+      "r2Path": "media/mundus-mirabilis-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/mundus-mirabilis-featured-1.jpg",
+      "size": 70829,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/muzeul-inocentei-din-istanbul-featured-1.jpg",
+      "r2Path": "media/muzeul-inocentei-din-istanbul-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/muzeul-inocentei-din-istanbul-featured-1.jpg",
+      "size": 273320,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/muzeul-inocentei-din-istanbul-featured-2.jpg",
+      "r2Path": "media/muzeul-inocentei-din-istanbul-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/muzeul-inocentei-din-istanbul-featured-2.jpg",
+      "size": 273320,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/nascut-din-inima-si-rugaciune-featured-1.jpg",
+      "r2Path": "media/nascut-din-inima-si-rugaciune-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/nascut-din-inima-si-rugaciune-featured-1.jpg",
+      "size": 484567,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/neincetat-va-rugai-featured-1.jpg",
+      "r2Path": "media/neincetat-va-rugai-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/neincetat-va-rugai-featured-1.jpg",
+      "size": 114609,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/neliniste-sau-har-featured-1.jpg",
+      "r2Path": "media/neliniste-sau-har-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/neliniste-sau-har-featured-1.jpg",
+      "size": 90545,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/nimeni-acasa-featured-1.jpg",
+      "r2Path": "media/nimeni-acasa-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/nimeni-acasa-featured-1.jpg",
+      "size": 244644,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/nimeni-acasa-featured-2.jpg",
+      "r2Path": "media/nimeni-acasa-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/nimeni-acasa-featured-2.jpg",
+      "size": 244644,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/nimic-nu-e-pierdut-featured-1.jpg",
+      "r2Path": "media/nimic-nu-e-pierdut-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/nimic-nu-e-pierdut-featured-1.jpg",
+      "size": 287469,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/nimic-nu-e-pierdut-featured-2.jpg",
+      "r2Path": "media/nimic-nu-e-pierdut-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/nimic-nu-e-pierdut-featured-2.jpg",
+      "size": 287469,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/nimic-nu-se-pierde-featured.jpg",
+      "r2Path": "media/nimic-nu-se-pierde-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/nimic-nu-se-pierde-featured.jpg",
+      "size": 30891,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/nu-voi-muri-inainte-de-a-iubi-featured.jpg",
+      "r2Path": "media/nu-voi-muri-inainte-de-a-iubi-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/nu-voi-muri-inainte-de-a-iubi-featured.jpg",
+      "size": 6691,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/nu-vrei-sa-suferi-totul-pentru-dragostea-mea-featured.jpg",
+      "r2Path": "media/nu-vrei-sa-suferi-totul-pentru-dragostea-mea-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/nu-vrei-sa-suferi-totul-pentru-dragostea-mea-featured.jpg",
+      "size": 1257446,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/numai-ce-iese-din-inima-merge-in-inima-featured.jpg",
+      "r2Path": "media/numai-ce-iese-din-inima-merge-in-inima-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/numai-ce-iese-din-inima-merge-in-inima-featured.jpg",
+      "size": 232530,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/numai-dumnezeu-poate-implini-iubirea-noastra-featured.jpg",
+      "r2Path": "media/numai-dumnezeu-poate-implini-iubirea-noastra-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/numai-dumnezeu-poate-implini-iubirea-noastra-featured.jpg",
+      "size": 906861,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/o-alta-atmosfera-featured-1.jpg",
+      "r2Path": "media/o-alta-atmosfera-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/o-alta-atmosfera-featured-1.jpg",
+      "size": 134620,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/o-alta-atmosfera-featured-2.jpg",
+      "r2Path": "media/o-alta-atmosfera-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/o-alta-atmosfera-featured-2.jpg",
+      "size": 134620,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/o-bucurie-i-o-pace-de-nespus-featured.jpg",
+      "r2Path": "media/o-bucurie-i-o-pace-de-nespus-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/o-bucurie-i-o-pace-de-nespus-featured.jpg",
+      "size": 1443629,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/o-cruce-mare-inseamna-o-inviere-mare-featured-2.jpg",
+      "r2Path": "media/o-cruce-mare-inseamna-o-inviere-mare-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/o-cruce-mare-inseamna-o-inviere-mare-featured-2.jpg",
+      "size": 304156,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/o-luna-in-pridvor-featured-1.jpg",
+      "r2Path": "media/o-luna-in-pridvor-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/o-luna-in-pridvor-featured-1.jpg",
+      "size": 73825,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/o-luna-in-pridvor-featured-2.jpg",
+      "r2Path": "media/o-luna-in-pridvor-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/o-luna-in-pridvor-featured-2.jpg",
+      "size": 73825,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/o-minune-de-pe-vremea-cand-nu-l-cunosteam-pe-sfant-featured-2.jpg",
+      "r2Path": "media/o-minune-de-pe-vremea-cand-nu-l-cunosteam-pe-sfant-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/o-minune-de-pe-vremea-cand-nu-l-cunosteam-pe-sfant-featured-2.jpg",
+      "size": 422705,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/o-prescriptie-neobisnuita-featured-1-1200x630.jpg",
+      "r2Path": "media/o-prescriptie-neobisnuita-featured-1-1200x630.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/o-prescriptie-neobisnuita-featured-1-1200x630.jpg",
+      "size": 305453,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/o-prescriptie-neobisnuita-featured-1-300x400.jpg",
+      "r2Path": "media/o-prescriptie-neobisnuita-featured-1-300x400.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/o-prescriptie-neobisnuita-featured-1-300x400.jpg",
+      "size": 45167,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/o-prescriptie-neobisnuita-featured-1-500x500.jpg",
+      "r2Path": "media/o-prescriptie-neobisnuita-featured-1-500x500.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/o-prescriptie-neobisnuita-featured-1-500x500.jpg",
+      "size": 98706,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/o-prescriptie-neobisnuita-featured-1-600x800.jpg",
+      "r2Path": "media/o-prescriptie-neobisnuita-featured-1-600x800.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/o-prescriptie-neobisnuita-featured-1-600x800.jpg",
+      "size": 192278,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/o-prescriptie-neobisnuita-featured-1-900x1200.jpg",
+      "r2Path": "media/o-prescriptie-neobisnuita-featured-1-900x1200.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/o-prescriptie-neobisnuita-featured-1-900x1200.jpg",
+      "size": 430894,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/o-prescriptie-neobisnuita-featured-1.jpg",
+      "r2Path": "media/o-prescriptie-neobisnuita-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/o-prescriptie-neobisnuita-featured-1.jpg",
+      "size": 696242,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/o-prescriptie-neobisnuita-featured-2-1200x630.jpg",
+      "r2Path": "media/o-prescriptie-neobisnuita-featured-2-1200x630.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/o-prescriptie-neobisnuita-featured-2-1200x630.jpg",
+      "size": 305453,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/o-prescriptie-neobisnuita-featured-2-300x400.jpg",
+      "r2Path": "media/o-prescriptie-neobisnuita-featured-2-300x400.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/o-prescriptie-neobisnuita-featured-2-300x400.jpg",
+      "size": 45167,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/o-prescriptie-neobisnuita-featured-2-500x500.jpg",
+      "r2Path": "media/o-prescriptie-neobisnuita-featured-2-500x500.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/o-prescriptie-neobisnuita-featured-2-500x500.jpg",
+      "size": 98706,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/o-prescriptie-neobisnuita-featured-2-600x800.jpg",
+      "r2Path": "media/o-prescriptie-neobisnuita-featured-2-600x800.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/o-prescriptie-neobisnuita-featured-2-600x800.jpg",
+      "size": 192278,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/o-prescriptie-neobisnuita-featured-2-900x1200.jpg",
+      "r2Path": "media/o-prescriptie-neobisnuita-featured-2-900x1200.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/o-prescriptie-neobisnuita-featured-2-900x1200.jpg",
+      "size": 430894,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/o-prescriptie-neobisnuita-featured-2.jpg",
+      "r2Path": "media/o-prescriptie-neobisnuita-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/o-prescriptie-neobisnuita-featured-2.jpg",
+      "size": 696242,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/o-zi-in-palermo-featured-2.jpg",
+      "r2Path": "media/o-zi-in-palermo-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/o-zi-in-palermo-featured-2.jpg",
+      "size": 203461,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/o-zi-obisnuita-de-mama-featured.jpg",
+      "r2Path": "media/o-zi-obisnuita-de-mama-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/o-zi-obisnuita-de-mama-featured.jpg",
+      "size": 285192,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/oare-am-tinut-cu-dintii-sa-am-toti-dintii-featured-1.jpg",
+      "r2Path": "media/oare-am-tinut-cu-dintii-sa-am-toti-dintii-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/oare-am-tinut-cu-dintii-sa-am-toti-dintii-featured-1.jpg",
+      "size": 760650,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/oare-am-tinut-cu-dintii-sa-am-toti-dintii-featured-2.jpg",
+      "r2Path": "media/oare-am-tinut-cu-dintii-sa-am-toti-dintii-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/oare-am-tinut-cu-dintii-sa-am-toti-dintii-featured-2.jpg",
+      "size": 760650,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/odata-pe-la-amurg-featured.jpg",
+      "r2Path": "media/odata-pe-la-amurg-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/odata-pe-la-amurg-featured.jpg",
+      "size": 142868,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/omul-aripa-fragmente-featured-1-1200x630.jpg",
+      "r2Path": "media/omul-aripa-fragmente-featured-1-1200x630.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/omul-aripa-fragmente-featured-1-1200x630.jpg",
+      "size": 55344,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/omul-aripa-fragmente-featured-1-300x382.jpg",
+      "r2Path": "media/omul-aripa-fragmente-featured-1-300x382.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/omul-aripa-fragmente-featured-1-300x382.jpg",
+      "size": 17852,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/omul-aripa-fragmente-featured-1-500x500.jpg",
+      "r2Path": "media/omul-aripa-fragmente-featured-1-500x500.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/omul-aripa-fragmente-featured-1-500x500.jpg",
+      "size": 29200,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/omul-aripa-fragmente-featured-1-600x763.jpg",
+      "r2Path": "media/omul-aripa-fragmente-featured-1-600x763.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/omul-aripa-fragmente-featured-1-600x763.jpg",
+      "size": 48206,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/omul-aripa-fragmente-featured-1.jpg",
+      "r2Path": "media/omul-aripa-fragmente-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/omul-aripa-fragmente-featured-1.jpg",
+      "size": 69354,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/omul-aripa-fragmente-featured-2-1200x630.jpg",
+      "r2Path": "media/omul-aripa-fragmente-featured-2-1200x630.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/omul-aripa-fragmente-featured-2-1200x630.jpg",
+      "size": 55344,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/omul-aripa-fragmente-featured-2-300x382.jpg",
+      "r2Path": "media/omul-aripa-fragmente-featured-2-300x382.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/omul-aripa-fragmente-featured-2-300x382.jpg",
+      "size": 17852,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/omul-aripa-fragmente-featured-2-500x500.jpg",
+      "r2Path": "media/omul-aripa-fragmente-featured-2-500x500.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/omul-aripa-fragmente-featured-2-500x500.jpg",
+      "size": 29200,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/omul-aripa-fragmente-featured-2-600x763.jpg",
+      "r2Path": "media/omul-aripa-fragmente-featured-2-600x763.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/omul-aripa-fragmente-featured-2-600x763.jpg",
+      "size": 48206,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/omul-aripa-fragmente-featured-2.jpg",
+      "r2Path": "media/omul-aripa-fragmente-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/omul-aripa-fragmente-featured-2.jpg",
+      "size": 69354,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/omul-biserica-a-dumnezeului-celui-viu-featured-2.jpg",
+      "r2Path": "media/omul-biserica-a-dumnezeului-celui-viu-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/omul-biserica-a-dumnezeului-celui-viu-featured-2.jpg",
+      "size": 510437,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/omul-biserica-a-dumnezeului-celui-viu-featured-3.jpg",
+      "r2Path": "media/omul-biserica-a-dumnezeului-celui-viu-featured-3.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/omul-biserica-a-dumnezeului-celui-viu-featured-3.jpg",
+      "size": 510437,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/omul-in-chipul-crucii-featured.jpg",
+      "r2Path": "media/omul-in-chipul-crucii-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/omul-in-chipul-crucii-featured.jpg",
+      "size": 47414,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/painea-featured.jpg",
+      "r2Path": "media/painea-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/painea-featured.jpg",
+      "size": 10847,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/pana-si-cel-mai-rau-om-are-intr-insul-un-sambure-d-featured-2.jpg",
+      "r2Path": "media/pana-si-cel-mai-rau-om-are-intr-insul-un-sambure-d-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/pana-si-cel-mai-rau-om-are-intr-insul-un-sambure-d-featured-2.jpg",
+      "size": 75356,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/pana-si-cel-mai-rau-om-are-intr-insul-un-sambure-d-featured-3.jpg",
+      "r2Path": "media/pana-si-cel-mai-rau-om-are-intr-insul-un-sambure-d-featured-3.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/pana-si-cel-mai-rau-om-are-intr-insul-un-sambure-d-featured-3.jpg",
+      "size": 75356,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/paruta-parere-de-sine-featured-2.jpg",
+      "r2Path": "media/paruta-parere-de-sine-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/paruta-parere-de-sine-featured-2.jpg",
+      "size": 390607,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/paruta-parere-de-sine-featured-3.jpg",
+      "r2Path": "media/paruta-parere-de-sine-featured-3.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/paruta-parere-de-sine-featured-3.jpg",
+      "size": 390607,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/pe-gaura-cheii-featured-1.jpg",
+      "r2Path": "media/pe-gaura-cheii-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/pe-gaura-cheii-featured-1.jpg",
+      "size": 356724,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/pe-gaura-cheii-featured-2.jpg",
+      "r2Path": "media/pe-gaura-cheii-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/pe-gaura-cheii-featured-2.jpg",
+      "size": 356724,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/pentru-mai-tarziu-featured-2-1200x630.jpg",
+      "r2Path": "media/pentru-mai-tarziu-featured-2-1200x630.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/pentru-mai-tarziu-featured-2-1200x630.jpg",
+      "size": 254112,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/pentru-mai-tarziu-featured-2-300x649.jpg",
+      "r2Path": "media/pentru-mai-tarziu-featured-2-300x649.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/pentru-mai-tarziu-featured-2-300x649.jpg",
+      "size": 67599,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/pentru-mai-tarziu-featured-2-500x500.jpg",
+      "r2Path": "media/pentru-mai-tarziu-featured-2-500x500.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/pentru-mai-tarziu-featured-2-500x500.jpg",
+      "size": 111394,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/pentru-mai-tarziu-featured-2-600x1299.jpg",
+      "r2Path": "media/pentru-mai-tarziu-featured-2-600x1299.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/pentru-mai-tarziu-featured-2-600x1299.jpg",
+      "size": 261591,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/pentru-mai-tarziu-featured-2-900x1948.jpg",
+      "r2Path": "media/pentru-mai-tarziu-featured-2-900x1948.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/pentru-mai-tarziu-featured-2-900x1948.jpg",
+      "size": 519417,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/pentru-mai-tarziu-featured-2.jpg",
+      "r2Path": "media/pentru-mai-tarziu-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/pentru-mai-tarziu-featured-2.jpg",
+      "size": 530160,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/pentru-mai-tarziu-featured-3-1200x630.jpg",
+      "r2Path": "media/pentru-mai-tarziu-featured-3-1200x630.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/pentru-mai-tarziu-featured-3-1200x630.jpg",
+      "size": 254112,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/pentru-mai-tarziu-featured-3-300x649.jpg",
+      "r2Path": "media/pentru-mai-tarziu-featured-3-300x649.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/pentru-mai-tarziu-featured-3-300x649.jpg",
+      "size": 67599,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/pentru-mai-tarziu-featured-3-500x500.jpg",
+      "r2Path": "media/pentru-mai-tarziu-featured-3-500x500.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/pentru-mai-tarziu-featured-3-500x500.jpg",
+      "size": 111394,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/pentru-mai-tarziu-featured-3-600x1299.jpg",
+      "r2Path": "media/pentru-mai-tarziu-featured-3-600x1299.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/pentru-mai-tarziu-featured-3-600x1299.jpg",
+      "size": 261591,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/pentru-mai-tarziu-featured-3-900x1948.jpg",
+      "r2Path": "media/pentru-mai-tarziu-featured-3-900x1948.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/pentru-mai-tarziu-featured-3-900x1948.jpg",
+      "size": 519417,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/pentru-mai-tarziu-featured-3.jpg",
+      "r2Path": "media/pentru-mai-tarziu-featured-3.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/pentru-mai-tarziu-featured-3.jpg",
+      "size": 530160,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/pentru-rugaciunile-sfintilor-parintilor-nostri-featured-2.jpg",
+      "r2Path": "media/pentru-rugaciunile-sfintilor-parintilor-nostri-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/pentru-rugaciunile-sfintilor-parintilor-nostri-featured-2.jpg",
+      "size": 461535,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/piatra-featured.jpg",
+      "r2Path": "media/piatra-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/piatra-featured.jpg",
+      "size": 10847,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/picaturi-de-moarte-featured.jpg",
+      "r2Path": "media/picaturi-de-moarte-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/picaturi-de-moarte-featured.jpg",
+      "size": 45726,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/picnic-cu-picnic-featured-1.jpg",
+      "r2Path": "media/picnic-cu-picnic-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/picnic-cu-picnic-featured-1.jpg",
+      "size": 164608,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/picnic-fara-picnic-featured-1.jpg",
+      "r2Path": "media/picnic-fara-picnic-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/picnic-fara-picnic-featured-1.jpg",
+      "size": 236289,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/picnic-fara-picnic-featured-2.jpg",
+      "r2Path": "media/picnic-fara-picnic-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/picnic-fara-picnic-featured-2.jpg",
+      "size": 236289,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/poate-deveni-religia-o-boala-featured-2.jpg",
+      "r2Path": "media/poate-deveni-religia-o-boala-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/poate-deveni-religia-o-boala-featured-2.jpg",
+      "size": 79086,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/poate-deveni-religia-o-boala-featured-3.jpg",
+      "r2Path": "media/poate-deveni-religia-o-boala-featured-3.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/poate-deveni-religia-o-boala-featured-3.jpg",
+      "size": 79086,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/pomul-meu-cu-merele-de-aur-featured-1.jpg",
+      "r2Path": "media/pomul-meu-cu-merele-de-aur-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/pomul-meu-cu-merele-de-aur-featured-1.jpg",
+      "size": 94325,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/pomul-meu-cu-merele-de-aur-featured-2.jpg",
+      "r2Path": "media/pomul-meu-cu-merele-de-aur-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/pomul-meu-cu-merele-de-aur-featured-2.jpg",
+      "size": 94325,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/portofelul-gaurit-al-sfantului-calinic-al-edessei-featured.jpg",
+      "r2Path": "media/portofelul-gaurit-al-sfantului-calinic-al-edessei-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/portofelul-gaurit-al-sfantului-calinic-al-edessei-featured.jpg",
+      "size": 691266,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/portretul-lui-dumnezeu-featured-1.jpg",
+      "r2Path": "media/portretul-lui-dumnezeu-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/portretul-lui-dumnezeu-featured-1.jpg",
+      "size": 817748,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/portretul-lui-dumnezeu-featured-2.jpg",
+      "r2Path": "media/portretul-lui-dumnezeu-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/portretul-lui-dumnezeu-featured-2.jpg",
+      "size": 817748,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/pot-parintii-sa-fie-coach-pentru-copiii-lor-featured.jpg",
+      "r2Path": "media/pot-parintii-sa-fie-coach-pentru-copiii-lor-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/pot-parintii-sa-fie-coach-pentru-copiii-lor-featured.jpg",
+      "size": 392821,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/pregatiri-pentru-paste-featured-2-300x139.jpg",
+      "r2Path": "media/pregatiri-pentru-paste-featured-2-300x139.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/pregatiri-pentru-paste-featured-2-300x139.jpg",
+      "size": 14924,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/pregatiri-pentru-paste-featured-2-500x500.jpg",
+      "r2Path": "media/pregatiri-pentru-paste-featured-2-500x500.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/pregatiri-pentru-paste-featured-2-500x500.jpg",
+      "size": 81428,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/pregatiri-pentru-paste-featured-2-600x277.jpg",
+      "r2Path": "media/pregatiri-pentru-paste-featured-2-600x277.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/pregatiri-pentru-paste-featured-2-600x277.jpg",
+      "size": 60127,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/pregatiri-pentru-paste-featured-2-900x416.jpg",
+      "r2Path": "media/pregatiri-pentru-paste-featured-2-900x416.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/pregatiri-pentru-paste-featured-2-900x416.jpg",
+      "size": 129075,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/pregatiri-pentru-paste-featured-2.jpg",
+      "r2Path": "media/pregatiri-pentru-paste-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/pregatiri-pentru-paste-featured-2.jpg",
+      "size": 144992,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/pregatiri-pentru-paste-featured-3-300x139.jpg",
+      "r2Path": "media/pregatiri-pentru-paste-featured-3-300x139.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/pregatiri-pentru-paste-featured-3-300x139.jpg",
+      "size": 14924,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/pregatiri-pentru-paste-featured-3-500x500.jpg",
+      "r2Path": "media/pregatiri-pentru-paste-featured-3-500x500.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/pregatiri-pentru-paste-featured-3-500x500.jpg",
+      "size": 81428,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/pregatiri-pentru-paste-featured-3-600x277.jpg",
+      "r2Path": "media/pregatiri-pentru-paste-featured-3-600x277.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/pregatiri-pentru-paste-featured-3-600x277.jpg",
+      "size": 60127,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/pregatiri-pentru-paste-featured-3-900x416.jpg",
+      "r2Path": "media/pregatiri-pentru-paste-featured-3-900x416.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/pregatiri-pentru-paste-featured-3-900x416.jpg",
+      "size": 129075,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/pregatiri-pentru-paste-featured-3.jpg",
+      "r2Path": "media/pregatiri-pentru-paste-featured-3.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/pregatiri-pentru-paste-featured-3.jpg",
+      "size": 144992,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/prima-i-a-doua-inviere-featured-1.jpg",
+      "r2Path": "media/prima-i-a-doua-inviere-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/prima-i-a-doua-inviere-featured-1.jpg",
+      "size": 347546,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/primele-clipe-in-alaptare-featured-1.jpg",
+      "r2Path": "media/primele-clipe-in-alaptare-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/primele-clipe-in-alaptare-featured-1.jpg",
+      "size": 509323,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/primele-clipe-in-alaptare-featured-2.jpg",
+      "r2Path": "media/primele-clipe-in-alaptare-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/primele-clipe-in-alaptare-featured-2.jpg",
+      "size": 509323,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/punga-cu-nuci-featured.jpg",
+      "r2Path": "media/punga-cu-nuci-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/punga-cu-nuci-featured.jpg",
+      "size": 458687,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/raiul-nostru-este-a-darui-featured-2.jpg",
+      "r2Path": "media/raiul-nostru-este-a-darui-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/raiul-nostru-este-a-darui-featured-2.jpg",
+      "size": 467877,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/raiul-nostru-este-a-darui-featured-3.jpg",
+      "r2Path": "media/raiul-nostru-este-a-darui-featured-3.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/raiul-nostru-este-a-darui-featured-3.jpg",
+      "size": 467877,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/raiuri-pamantesti-featured-1.jpg",
+      "r2Path": "media/raiuri-pamantesti-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/raiuri-pamantesti-featured-1.jpg",
+      "size": 146940,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/reminder-prevenire-alzheimer-featured.jpg",
+      "r2Path": "media/reminder-prevenire-alzheimer-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/reminder-prevenire-alzheimer-featured.jpg",
+      "size": 442481,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/renasterea-proverbelor-i-featured-1.jpg",
+      "r2Path": "media/renasterea-proverbelor-i-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/renasterea-proverbelor-i-featured-1.jpg",
+      "size": 91824,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/renasterea-proverbelor-ii-featured-1.jpg",
+      "r2Path": "media/renasterea-proverbelor-ii-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/renasterea-proverbelor-ii-featured-1.jpg",
+      "size": 73198,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/renasterea-proverbelor-iii-featured.jpg",
+      "r2Path": "media/renasterea-proverbelor-iii-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/renasterea-proverbelor-iii-featured.jpg",
+      "size": 314832,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/renasterea-proverbelor-iv-featured.jpg",
+      "r2Path": "media/renasterea-proverbelor-iv-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/renasterea-proverbelor-iv-featured.jpg",
+      "size": 282234,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/renasterea-proverbelor-v-featured.jpg",
+      "r2Path": "media/renasterea-proverbelor-v-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/renasterea-proverbelor-v-featured.jpg",
+      "size": 111236,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/rolul-microbiomului-in-sanatatea-noastra-featured-1.jpg",
+      "r2Path": "media/rolul-microbiomului-in-sanatatea-noastra-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/rolul-microbiomului-in-sanatatea-noastra-featured-1.jpg",
+      "size": 93222,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/rolul-microbiomului-in-sanatatea-noastra-featured-2.jpg",
+      "r2Path": "media/rolul-microbiomului-in-sanatatea-noastra-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/rolul-microbiomului-in-sanatatea-noastra-featured-2.jpg",
+      "size": 93222,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/rolul-psihismului-in-viata-duhovniceasca-la-sfantu-featured-2.jpg",
+      "r2Path": "media/rolul-psihismului-in-viata-duhovniceasca-la-sfantu-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/rolul-psihismului-in-viata-duhovniceasca-la-sfantu-featured-2.jpg",
+      "size": 24390,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/rolul-psihismului-in-viata-duhovniceasca-la-sfantu-featured-3.jpg",
+      "r2Path": "media/rolul-psihismului-in-viata-duhovniceasca-la-sfantu-featured-3.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/rolul-psihismului-in-viata-duhovniceasca-la-sfantu-featured-3.jpg",
+      "size": 24390,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/rucodelie-de-vacanta-featured-1.jpg",
+      "r2Path": "media/rucodelie-de-vacanta-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/rucodelie-de-vacanta-featured-1.jpg",
+      "size": 196642,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/rucodelie-de-vacanta-featured-2.jpg",
+      "r2Path": "media/rucodelie-de-vacanta-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/rucodelie-de-vacanta-featured-2.jpg",
+      "size": 196642,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/rugaciunea-urmei-pasilor-nostri-featured.jpg",
+      "r2Path": "media/rugaciunea-urmei-pasilor-nostri-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/rugaciunea-urmei-pasilor-nostri-featured.jpg",
+      "size": 675353,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/sa-avei-bucuria-lui-hristos-featured-2.jpg",
+      "r2Path": "media/sa-avei-bucuria-lui-hristos-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/sa-avei-bucuria-lui-hristos-featured-2.jpg",
+      "size": 481042,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/sa-curga-harul-lui-dumnezeu-dar-sa-fiu-cu-gura-cas-featured-1.jpg",
+      "r2Path": "media/sa-curga-harul-lui-dumnezeu-dar-sa-fiu-cu-gura-cas-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/sa-curga-harul-lui-dumnezeu-dar-sa-fiu-cu-gura-cas-featured-1.jpg",
+      "size": 90383,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/sa-facem-loc-in-viata-noastra-preasfantului-duh-featured-1.jpg",
+      "r2Path": "media/sa-facem-loc-in-viata-noastra-preasfantului-duh-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/sa-facem-loc-in-viata-noastra-preasfantului-duh-featured-1.jpg",
+      "size": 182776,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/sa-facem-loc-in-viata-noastra-preasfantului-duh-featured-2.jpg",
+      "r2Path": "media/sa-facem-loc-in-viata-noastra-preasfantului-duh-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/sa-facem-loc-in-viata-noastra-preasfantului-duh-featured-2.jpg",
+      "size": 182776,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/sa-fie-dor-featured.jpg",
+      "r2Path": "media/sa-fie-dor-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/sa-fie-dor-featured.jpg",
+      "size": 328599,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/sa-ne-facem-lucratori-ai-bucuriei-featured.jpg",
+      "r2Path": "media/sa-ne-facem-lucratori-ai-bucuriei-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/sa-ne-facem-lucratori-ai-bucuriei-featured.jpg",
+      "size": 1021343,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/sa-ne-inem-de-vemantul-maicii-domnului-featured-1.jpg",
+      "r2Path": "media/sa-ne-inem-de-vemantul-maicii-domnului-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/sa-ne-inem-de-vemantul-maicii-domnului-featured-1.jpg",
+      "size": 117717,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/sa-ne-silim-sa-avem-continuu-harul-in-inima-featured-1.jpg",
+      "r2Path": "media/sa-ne-silim-sa-avem-continuu-harul-in-inima-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/sa-ne-silim-sa-avem-continuu-harul-in-inima-featured-1.jpg",
+      "size": 65100,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/sabotorii-care-ne-erodeaza-energia-vitala-featured-1.jpg",
+      "r2Path": "media/sabotorii-care-ne-erodeaza-energia-vitala-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/sabotorii-care-ne-erodeaza-energia-vitala-featured-1.jpg",
+      "size": 124366,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/sabotorii-care-ne-erodeaza-energia-vitala-featured-2.jpg",
+      "r2Path": "media/sabotorii-care-ne-erodeaza-energia-vitala-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/sabotorii-care-ne-erodeaza-energia-vitala-featured-2.jpg",
+      "size": 124366,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/scaldat-de-valurile-rugaciunii-i-ale-pacii-featured-1.jpg",
+      "r2Path": "media/scaldat-de-valurile-rugaciunii-i-ale-pacii-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/scaldat-de-valurile-rugaciunii-i-ale-pacii-featured-1.jpg",
+      "size": 187699,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/scara-featured.jpg",
+      "r2Path": "media/scara-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/scara-featured.jpg",
+      "size": 14180,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/scufundarile-in-adancuri-featured.jpg",
+      "r2Path": "media/scufundarile-in-adancuri-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/scufundarile-in-adancuri-featured.jpg",
+      "size": 461325,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/semnele-rugaciunii-mintii-in-inima-featured.jpg",
+      "r2Path": "media/semnele-rugaciunii-mintii-in-inima-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/semnele-rugaciunii-mintii-in-inima-featured.jpg",
+      "size": 346190,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/sfanta-ana-si-picaturile-de-har-featured.jpg",
+      "r2Path": "media/sfanta-ana-si-picaturile-de-har-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/sfanta-ana-si-picaturile-de-har-featured.jpg",
+      "size": 213354,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/sfanta-impartasanie-experienta-vietii-vesnice-featured-2.jpg",
+      "r2Path": "media/sfanta-impartasanie-experienta-vietii-vesnice-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/sfanta-impartasanie-experienta-vietii-vesnice-featured-2.jpg",
+      "size": 171426,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/sfanta-impartasanie-experienta-vietii-vesnice-featured-3.jpg",
+      "r2Path": "media/sfanta-impartasanie-experienta-vietii-vesnice-featured-3.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/sfanta-impartasanie-experienta-vietii-vesnice-featured-3.jpg",
+      "size": 171426,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/sfanta-lucia-si-caravaggio-de-la-siracuza-featured.jpg",
+      "r2Path": "media/sfanta-lucia-si-caravaggio-de-la-siracuza-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/sfanta-lucia-si-caravaggio-de-la-siracuza-featured.jpg",
+      "size": 138723,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/sfantul-serafim-cel-rabdator-featured.jpg",
+      "r2Path": "media/sfantul-serafim-cel-rabdator-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/sfantul-serafim-cel-rabdator-featured.jpg",
+      "size": 167831,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/si-nu-deznadajdui-featured-2.jpg",
+      "r2Path": "media/si-nu-deznadajdui-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/si-nu-deznadajdui-featured-2.jpg",
+      "size": 103340,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/si-nu-deznadajdui-featured-3.jpg",
+      "r2Path": "media/si-nu-deznadajdui-featured-3.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/si-nu-deznadajdui-featured-3.jpg",
+      "size": 103340,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/silouans-song-featured.jpg",
+      "r2Path": "media/silouans-song-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/silouans-song-featured.jpg",
+      "size": 304670,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/singur-ortodoxia-featured.jpg",
+      "r2Path": "media/singur-ortodoxia-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/singur-ortodoxia-featured.jpg",
+      "size": 33461,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/smerenia-atrage-harul-iar-harul-este-lumina-vietii-featured.jpg",
+      "r2Path": "media/smerenia-atrage-harul-iar-harul-este-lumina-vietii-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/smerenia-atrage-harul-iar-harul-este-lumina-vietii-featured.jpg",
+      "size": 1202300,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/sorocul-impartasaniei-featured.jpg",
+      "r2Path": "media/sorocul-impartasaniei-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/sorocul-impartasaniei-featured.jpg",
+      "size": 604878,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/spune-mi-trei-lucruri-pozitive-featured-1.jpg",
+      "r2Path": "media/spune-mi-trei-lucruri-pozitive-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/spune-mi-trei-lucruri-pozitive-featured-1.jpg",
+      "size": 543233,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/stapanul-inelelor-featured.jpg",
+      "r2Path": "media/stapanul-inelelor-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/stapanul-inelelor-featured.jpg",
+      "size": 654641,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/stradanie-featured.jpg",
+      "r2Path": "media/stradanie-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/stradanie-featured.jpg",
+      "size": 175669,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/sub-gutui-featured-1.jpg",
+      "r2Path": "media/sub-gutui-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/sub-gutui-featured-1.jpg",
+      "size": 250086,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/sub-gutui-featured-2.jpg",
+      "r2Path": "media/sub-gutui-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/sub-gutui-featured-2.jpg",
+      "size": 250086,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/suntem-biserica-a-lui-dumnezeu-featured.jpg",
+      "r2Path": "media/suntem-biserica-a-lui-dumnezeu-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/suntem-biserica-a-lui-dumnezeu-featured.jpg",
+      "size": 50845,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/sunteti-iubiti-de-dumnezeu-featured.jpg",
+      "r2Path": "media/sunteti-iubiti-de-dumnezeu-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/sunteti-iubiti-de-dumnezeu-featured.jpg",
+      "size": 116565,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/te-iubesc-si-vreau-sa-fac-voia-ta-i-featured.jpg",
+      "r2Path": "media/te-iubesc-si-vreau-sa-fac-voia-ta-i-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/te-iubesc-si-vreau-sa-fac-voia-ta-i-featured.jpg",
+      "size": 281578,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/te-iubesc-si-vreau-sa-fac-voia-ta-ii-featured.jpg",
+      "r2Path": "media/te-iubesc-si-vreau-sa-fac-voia-ta-ii-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/te-iubesc-si-vreau-sa-fac-voia-ta-ii-featured.jpg",
+      "size": 215321,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/timp-pentru-mine-sau-pentru-ceilalti-featured-1.jpg",
+      "r2Path": "media/timp-pentru-mine-sau-pentru-ceilalti-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/timp-pentru-mine-sau-pentru-ceilalti-featured-1.jpg",
+      "size": 345352,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/timp-pentru-mine-sau-pentru-ceilalti-featured-2.jpg",
+      "r2Path": "media/timp-pentru-mine-sau-pentru-ceilalti-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/timp-pentru-mine-sau-pentru-ceilalti-featured-2.jpg",
+      "size": 345352,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/to-do-list-pentru-fiul-nostru-featured.jpg",
+      "r2Path": "media/to-do-list-pentru-fiul-nostru-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/to-do-list-pentru-fiul-nostru-featured.jpg",
+      "size": 184616,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/toti-am-fost-candva-copii-featured.jpg",
+      "r2Path": "media/toti-am-fost-candva-copii-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/toti-am-fost-candva-copii-featured.jpg",
+      "size": 124363,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/trei-luni-in-pridvor-featured.jpg",
+      "r2Path": "media/trei-luni-in-pridvor-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/trei-luni-in-pridvor-featured.jpg",
+      "size": 72082,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/ucenicii-crucii-i-ai-imparaiei-lui-dumnezeu-featured-1-1200x630.png",
+      "r2Path": "media/ucenicii-crucii-i-ai-imparaiei-lui-dumnezeu-featured-1-1200x630.png",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/ucenicii-crucii-i-ai-imparaiei-lui-dumnezeu-featured-1-1200x630.png",
+      "size": 1698849,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/ucenicii-crucii-i-ai-imparaiei-lui-dumnezeu-featured-1-300x225.png",
+      "r2Path": "media/ucenicii-crucii-i-ai-imparaiei-lui-dumnezeu-featured-1-300x225.png",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/ucenicii-crucii-i-ai-imparaiei-lui-dumnezeu-featured-1-300x225.png",
+      "size": 177547,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/ucenicii-crucii-i-ai-imparaiei-lui-dumnezeu-featured-1-500x500.png",
+      "r2Path": "media/ucenicii-crucii-i-ai-imparaiei-lui-dumnezeu-featured-1-500x500.png",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/ucenicii-crucii-i-ai-imparaiei-lui-dumnezeu-featured-1-500x500.png",
+      "size": 596427,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/ucenicii-crucii-i-ai-imparaiei-lui-dumnezeu-featured-1-600x450.png",
+      "r2Path": "media/ucenicii-crucii-i-ai-imparaiei-lui-dumnezeu-featured-1-600x450.png",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/ucenicii-crucii-i-ai-imparaiei-lui-dumnezeu-featured-1-600x450.png",
+      "size": 663649,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/ucenicii-crucii-i-ai-imparaiei-lui-dumnezeu-featured-1-900x675.png",
+      "r2Path": "media/ucenicii-crucii-i-ai-imparaiei-lui-dumnezeu-featured-1-900x675.png",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/ucenicii-crucii-i-ai-imparaiei-lui-dumnezeu-featured-1-900x675.png",
+      "size": 1424570,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/ucenicii-crucii-i-ai-imparaiei-lui-dumnezeu-featured-1.png",
+      "r2Path": "media/ucenicii-crucii-i-ai-imparaiei-lui-dumnezeu-featured-1.png",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/ucenicii-crucii-i-ai-imparaiei-lui-dumnezeu-featured-1.png",
+      "size": 1574953,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/uitaiva-la-cruce-featured-1.jpg",
+      "r2Path": "media/uitaiva-la-cruce-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/uitaiva-la-cruce-featured-1.jpg",
+      "size": 1677087,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/un-loc-de-odihna-featured-2.jpg",
+      "r2Path": "media/un-loc-de-odihna-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/un-loc-de-odihna-featured-2.jpg",
+      "size": 547978,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/un-loc-de-odihna-featured-3.jpg",
+      "r2Path": "media/un-loc-de-odihna-featured-3.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/un-loc-de-odihna-featured-3.jpg",
+      "size": 547978,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/un-zambet-featured-1.jpg",
+      "r2Path": "media/un-zambet-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/un-zambet-featured-1.jpg",
+      "size": 330269,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/unde-eti-tu-dumnezeul-meu-featured.jpg",
+      "r2Path": "media/unde-eti-tu-dumnezeul-meu-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/unde-eti-tu-dumnezeul-meu-featured.jpg",
+      "size": 266686,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/vant-de-rusalii-featured.jpg",
+      "r2Path": "media/vant-de-rusalii-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/vant-de-rusalii-featured.jpg",
+      "size": 201476,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/verde-viu-featured-2.jpg",
+      "r2Path": "media/verde-viu-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/verde-viu-featured-2.jpg",
+      "size": 701659,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/verde-viu-featured-3.jpg",
+      "r2Path": "media/verde-viu-featured-3.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/verde-viu-featured-3.jpg",
+      "size": 701659,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/viaa-aceasta-este-doar-un-pretext-featured-2.jpg",
+      "r2Path": "media/viaa-aceasta-este-doar-un-pretext-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/viaa-aceasta-este-doar-un-pretext-featured-2.jpg",
+      "size": 223669,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/viata-cu-un-nou-nascut-featured-2-1200x630.jpg",
+      "r2Path": "media/viata-cu-un-nou-nascut-featured-2-1200x630.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/viata-cu-un-nou-nascut-featured-2-1200x630.jpg",
+      "size": 79546,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/viata-cu-un-nou-nascut-featured-2-300x400.jpg",
+      "r2Path": "media/viata-cu-un-nou-nascut-featured-2-300x400.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/viata-cu-un-nou-nascut-featured-2-300x400.jpg",
+      "size": 16320,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/viata-cu-un-nou-nascut-featured-2-500x500.jpg",
+      "r2Path": "media/viata-cu-un-nou-nascut-featured-2-500x500.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/viata-cu-un-nou-nascut-featured-2-500x500.jpg",
+      "size": 30711,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/viata-cu-un-nou-nascut-featured-2-600x800.jpg",
+      "r2Path": "media/viata-cu-un-nou-nascut-featured-2-600x800.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/viata-cu-un-nou-nascut-featured-2-600x800.jpg",
+      "size": 53352,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/viata-cu-un-nou-nascut-featured-2-900x1200.jpg",
+      "r2Path": "media/viata-cu-un-nou-nascut-featured-2-900x1200.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/viata-cu-un-nou-nascut-featured-2-900x1200.jpg",
+      "size": 112934,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/viata-cu-un-nou-nascut-featured-2.jpg",
+      "r2Path": "media/viata-cu-un-nou-nascut-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/viata-cu-un-nou-nascut-featured-2.jpg",
+      "size": 169267,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/viata-cu-un-nou-nascut-featured-3-1200x630.jpg",
+      "r2Path": "media/viata-cu-un-nou-nascut-featured-3-1200x630.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/viata-cu-un-nou-nascut-featured-3-1200x630.jpg",
+      "size": 79546,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/viata-cu-un-nou-nascut-featured-3-300x400.jpg",
+      "r2Path": "media/viata-cu-un-nou-nascut-featured-3-300x400.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/viata-cu-un-nou-nascut-featured-3-300x400.jpg",
+      "size": 16320,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/viata-cu-un-nou-nascut-featured-3-500x500.jpg",
+      "r2Path": "media/viata-cu-un-nou-nascut-featured-3-500x500.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/viata-cu-un-nou-nascut-featured-3-500x500.jpg",
+      "size": 30711,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/viata-cu-un-nou-nascut-featured-3-600x800.jpg",
+      "r2Path": "media/viata-cu-un-nou-nascut-featured-3-600x800.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/viata-cu-un-nou-nascut-featured-3-600x800.jpg",
+      "size": 53352,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/viata-cu-un-nou-nascut-featured-3-900x1200.jpg",
+      "r2Path": "media/viata-cu-un-nou-nascut-featured-3-900x1200.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/viata-cu-un-nou-nascut-featured-3-900x1200.jpg",
+      "size": 112934,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/viata-cu-un-nou-nascut-featured-3.jpg",
+      "r2Path": "media/viata-cu-un-nou-nascut-featured-3.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/viata-cu-un-nou-nascut-featured-3.jpg",
+      "size": 169267,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/viata-cu-un-nou-nascut-featured-4-1200x630.jpg",
+      "r2Path": "media/viata-cu-un-nou-nascut-featured-4-1200x630.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/viata-cu-un-nou-nascut-featured-4-1200x630.jpg",
+      "size": 79546,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/viata-cu-un-nou-nascut-featured-4-300x400.jpg",
+      "r2Path": "media/viata-cu-un-nou-nascut-featured-4-300x400.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/viata-cu-un-nou-nascut-featured-4-300x400.jpg",
+      "size": 16320,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/viata-cu-un-nou-nascut-featured-4-500x500.jpg",
+      "r2Path": "media/viata-cu-un-nou-nascut-featured-4-500x500.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/viata-cu-un-nou-nascut-featured-4-500x500.jpg",
+      "size": 30711,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/viata-cu-un-nou-nascut-featured-4-600x800.jpg",
+      "r2Path": "media/viata-cu-un-nou-nascut-featured-4-600x800.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/viata-cu-un-nou-nascut-featured-4-600x800.jpg",
+      "size": 53352,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/viata-cu-un-nou-nascut-featured-4-900x1200.jpg",
+      "r2Path": "media/viata-cu-un-nou-nascut-featured-4-900x1200.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/viata-cu-un-nou-nascut-featured-4-900x1200.jpg",
+      "size": 112934,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/viata-cu-un-nou-nascut-featured-4.jpg",
+      "r2Path": "media/viata-cu-un-nou-nascut-featured-4.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/viata-cu-un-nou-nascut-featured-4.jpg",
+      "size": 169267,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/viata-cuvioasei-mucenite-rafaila-din-cighirin-featured-1.jpg",
+      "r2Path": "media/viata-cuvioasei-mucenite-rafaila-din-cighirin-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/viata-cuvioasei-mucenite-rafaila-din-cighirin-featured-1.jpg",
+      "size": 270565,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/video-copilul-lui-dumnezeu-featured-1200x630.webp",
+      "r2Path": "media/video-copilul-lui-dumnezeu-featured-1200x630.webp",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/video-copilul-lui-dumnezeu-featured-1200x630.webp",
+      "size": 44794,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/video-copilul-lui-dumnezeu-featured-1400x934.webp",
+      "r2Path": "media/video-copilul-lui-dumnezeu-featured-1400x934.webp",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/video-copilul-lui-dumnezeu-featured-1400x934.webp",
+      "size": 61368,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/video-copilul-lui-dumnezeu-featured-1920x1282.webp",
+      "r2Path": "media/video-copilul-lui-dumnezeu-featured-1920x1282.webp",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/video-copilul-lui-dumnezeu-featured-1920x1282.webp",
+      "size": 83902,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/video-copilul-lui-dumnezeu-featured-300x200.webp",
+      "r2Path": "media/video-copilul-lui-dumnezeu-featured-300x200.webp",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/video-copilul-lui-dumnezeu-featured-300x200.webp",
+      "size": 9034,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/video-copilul-lui-dumnezeu-featured-500x500.webp",
+      "r2Path": "media/video-copilul-lui-dumnezeu-featured-500x500.webp",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/video-copilul-lui-dumnezeu-featured-500x500.webp",
+      "size": 21760,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/video-copilul-lui-dumnezeu-featured-600x400.webp",
+      "r2Path": "media/video-copilul-lui-dumnezeu-featured-600x400.webp",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/video-copilul-lui-dumnezeu-featured-600x400.webp",
+      "size": 21776,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/video-copilul-lui-dumnezeu-featured-900x601.webp",
+      "r2Path": "media/video-copilul-lui-dumnezeu-featured-900x601.webp",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/video-copilul-lui-dumnezeu-featured-900x601.webp",
+      "size": 35238,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/video-copilul-lui-dumnezeu-featured.webp",
+      "r2Path": "media/video-copilul-lui-dumnezeu-featured.webp",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/video-copilul-lui-dumnezeu-featured.webp",
+      "size": 93676,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/video-doi-talhari-featured.jpg",
+      "r2Path": "media/video-doi-talhari-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/video-doi-talhari-featured.jpg",
+      "size": 276545,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/video-dreptul-copiilor-la-servicii-de-sanatate-featured.jpg",
+      "r2Path": "media/video-dreptul-copiilor-la-servicii-de-sanatate-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/video-dreptul-copiilor-la-servicii-de-sanatate-featured.jpg",
+      "size": 222770,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/video-educatie-prin-animatie-featured-2.jpg",
+      "r2Path": "media/video-educatie-prin-animatie-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/video-educatie-prin-animatie-featured-2.jpg",
+      "size": 822296,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/video-educatie-prin-animatie-featured-3.jpg",
+      "r2Path": "media/video-educatie-prin-animatie-featured-3.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/video-educatie-prin-animatie-featured-3.jpg",
+      "size": 822296,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/video-pot-parintii-sa-fie-coach-pentru-copiii-lor-featured.jpg",
+      "r2Path": "media/video-pot-parintii-sa-fie-coach-pentru-copiii-lor-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/video-pot-parintii-sa-fie-coach-pentru-copiii-lor-featured.jpg",
+      "size": 204595,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/video-sabotorii-care-ne-erodeaza-energia-vitala-featured-1.jpg",
+      "r2Path": "media/video-sabotorii-care-ne-erodeaza-energia-vitala-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/video-sabotorii-care-ne-erodeaza-energia-vitala-featured-1.jpg",
+      "size": 204595,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/video-sabotorii-care-ne-erodeaza-energia-vitala-featured-2.jpg",
+      "r2Path": "media/video-sabotorii-care-ne-erodeaza-energia-vitala-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/video-sabotorii-care-ne-erodeaza-energia-vitala-featured-2.jpg",
+      "size": 204595,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/video-spune-mi-trei-lucruri-pozitive-featured-1.jpg",
+      "r2Path": "media/video-spune-mi-trei-lucruri-pozitive-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/video-spune-mi-trei-lucruri-pozitive-featured-1.jpg",
+      "size": 204595,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/video-talharul-cel-bun-featured-1.jpg",
+      "r2Path": "media/video-talharul-cel-bun-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/video-talharul-cel-bun-featured-1.jpg",
+      "size": 226303,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/vita-mia-featured-1.jpg",
+      "r2Path": "media/vita-mia-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/vita-mia-featured-1.jpg",
+      "size": 231653,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/zi-de-vara-featured-1.jpg",
+      "r2Path": "media/zi-de-vara-featured-1.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/zi-de-vara-featured-1.jpg",
+      "size": 257072,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/zi-de-vara-featured-2.jpg",
+      "r2Path": "media/zi-de-vara-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/zi-de-vara-featured-2.jpg",
+      "size": 257072,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/zi-doamne-iisuse-cat-de-scurt-si-cat-de-des-featured.jpg",
+      "r2Path": "media/zi-doamne-iisuse-cat-de-scurt-si-cat-de-des-featured.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/zi-doamne-iisuse-cat-de-scurt-si-cat-de-des-featured.jpg",
+      "size": 573440,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/ziua-in-care-ai-vazut-lumina-featured-2-1200x630.jpg",
+      "r2Path": "media/ziua-in-care-ai-vazut-lumina-featured-2-1200x630.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/ziua-in-care-ai-vazut-lumina-featured-2-1200x630.jpg",
+      "size": 111929,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/ziua-in-care-ai-vazut-lumina-featured-2-1400x1867.jpg",
+      "r2Path": "media/ziua-in-care-ai-vazut-lumina-featured-2-1400x1867.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/ziua-in-care-ai-vazut-lumina-featured-2-1400x1867.jpg",
+      "size": 327386,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/ziua-in-care-ai-vazut-lumina-featured-2-300x400.jpg",
+      "r2Path": "media/ziua-in-care-ai-vazut-lumina-featured-2-300x400.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/ziua-in-care-ai-vazut-lumina-featured-2-300x400.jpg",
+      "size": 26872,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/ziua-in-care-ai-vazut-lumina-featured-2-500x500.jpg",
+      "r2Path": "media/ziua-in-care-ai-vazut-lumina-featured-2-500x500.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/ziua-in-care-ai-vazut-lumina-featured-2-500x500.jpg",
+      "size": 53195,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/ziua-in-care-ai-vazut-lumina-featured-2-600x800.jpg",
+      "r2Path": "media/ziua-in-care-ai-vazut-lumina-featured-2-600x800.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/ziua-in-care-ai-vazut-lumina-featured-2-600x800.jpg",
+      "size": 91009,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/ziua-in-care-ai-vazut-lumina-featured-2-900x1200.jpg",
+      "r2Path": "media/ziua-in-care-ai-vazut-lumina-featured-2-900x1200.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/ziua-in-care-ai-vazut-lumina-featured-2-900x1200.jpg",
+      "size": 172129,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/ziua-in-care-ai-vazut-lumina-featured-2.jpg",
+      "r2Path": "media/ziua-in-care-ai-vazut-lumina-featured-2.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/ziua-in-care-ai-vazut-lumina-featured-2.jpg",
+      "size": 321262,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/ziua-in-care-ai-vazut-lumina-featured-3-1200x630.jpg",
+      "r2Path": "media/ziua-in-care-ai-vazut-lumina-featured-3-1200x630.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/ziua-in-care-ai-vazut-lumina-featured-3-1200x630.jpg",
+      "size": 111929,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/ziua-in-care-ai-vazut-lumina-featured-3-1400x1867.jpg",
+      "r2Path": "media/ziua-in-care-ai-vazut-lumina-featured-3-1400x1867.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/ziua-in-care-ai-vazut-lumina-featured-3-1400x1867.jpg",
+      "size": 327386,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/ziua-in-care-ai-vazut-lumina-featured-3-300x400.jpg",
+      "r2Path": "media/ziua-in-care-ai-vazut-lumina-featured-3-300x400.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/ziua-in-care-ai-vazut-lumina-featured-3-300x400.jpg",
+      "size": 26872,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/ziua-in-care-ai-vazut-lumina-featured-3-500x500.jpg",
+      "r2Path": "media/ziua-in-care-ai-vazut-lumina-featured-3-500x500.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/ziua-in-care-ai-vazut-lumina-featured-3-500x500.jpg",
+      "size": 53195,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/ziua-in-care-ai-vazut-lumina-featured-3-600x800.jpg",
+      "r2Path": "media/ziua-in-care-ai-vazut-lumina-featured-3-600x800.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/ziua-in-care-ai-vazut-lumina-featured-3-600x800.jpg",
+      "size": 91009,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/ziua-in-care-ai-vazut-lumina-featured-3-900x1200.jpg",
+      "r2Path": "media/ziua-in-care-ai-vazut-lumina-featured-3-900x1200.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/ziua-in-care-ai-vazut-lumina-featured-3-900x1200.jpg",
+      "size": 172129,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/ziua-in-care-ai-vazut-lumina-featured-3.jpg",
+      "r2Path": "media/ziua-in-care-ai-vazut-lumina-featured-3.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/ziua-in-care-ai-vazut-lumina-featured-3.jpg",
+      "size": 321262,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/ziua-in-care-ai-vazut-lumina-featured-4-1200x630.jpg",
+      "r2Path": "media/ziua-in-care-ai-vazut-lumina-featured-4-1200x630.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/ziua-in-care-ai-vazut-lumina-featured-4-1200x630.jpg",
+      "size": 111929,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/ziua-in-care-ai-vazut-lumina-featured-4-1400x1867.jpg",
+      "r2Path": "media/ziua-in-care-ai-vazut-lumina-featured-4-1400x1867.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/ziua-in-care-ai-vazut-lumina-featured-4-1400x1867.jpg",
+      "size": 327386,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/ziua-in-care-ai-vazut-lumina-featured-4-300x400.jpg",
+      "r2Path": "media/ziua-in-care-ai-vazut-lumina-featured-4-300x400.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/ziua-in-care-ai-vazut-lumina-featured-4-300x400.jpg",
+      "size": 26872,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/ziua-in-care-ai-vazut-lumina-featured-4-500x500.jpg",
+      "r2Path": "media/ziua-in-care-ai-vazut-lumina-featured-4-500x500.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/ziua-in-care-ai-vazut-lumina-featured-4-500x500.jpg",
+      "size": 53195,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/ziua-in-care-ai-vazut-lumina-featured-4-600x800.jpg",
+      "r2Path": "media/ziua-in-care-ai-vazut-lumina-featured-4-600x800.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/ziua-in-care-ai-vazut-lumina-featured-4-600x800.jpg",
+      "size": 91009,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/ziua-in-care-ai-vazut-lumina-featured-4-900x1200.jpg",
+      "r2Path": "media/ziua-in-care-ai-vazut-lumina-featured-4-900x1200.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/ziua-in-care-ai-vazut-lumina-featured-4-900x1200.jpg",
+      "size": 172129,
+      "success": true
+    },
+    {
+      "localPath": "/Users/fabi/Documents/GitHub/in-pridvor/public/media/ziua-in-care-ai-vazut-lumina-featured-4.jpg",
+      "r2Path": "media/ziua-in-care-ai-vazut-lumina-featured-4.jpg",
+      "r2Url": "https://pub-783d443dc99c4437a1dec57bce145273.r2.dev/media/ziua-in-care-ai-vazut-lumina-featured-4.jpg",
+      "size": 321262,
+      "success": true
+    }
+  ]
+}

@@ -43,7 +43,9 @@ export const ImageMedia: React.FC<MediaProps> = (props) => {
 
     const cacheTag = resource.updatedAt
 
-    src = `${getClientSideURL()}${url}?${cacheTag}`
+    // Check if URL is already absolute (from R2/external storage) or relative (local)
+    const isAbsoluteURL = url?.startsWith('http://') || url?.startsWith('https://')
+    src = isAbsoluteURL ? `${url}?${cacheTag}` : `${getClientSideURL()}${url}?${cacheTag}`
   }
 
   const loading = loadingFromProps || (!priority ? 'lazy' : undefined)
