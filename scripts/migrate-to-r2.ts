@@ -1,168 +1,274 @@
-import 'dotenv/config'
-import { getPayload } from 'payload'
-import configPromise from '../src/payload.config'
-import fs from 'fs'
-import path from 'path'
-import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3'
+#!/usr/bin/env tsx
 
 /**
- * Migration Script: Upload Local Images to Cloudflare R2
- * 
- * This script will:
- * 1. Connect to your Cloudflare R2 bucket
- * 2. Upload all 535 images from public/media/
- * 3. Update database URLs to point to R2
- * 4. Preserve all image metadata
- * 
- * Prerequisites:
- * - R2 credentials in .env file
- * - @aws-sdk/client-s3 installed (pnpm add @aws-sdk/client-s3)
+ * Migration script to upload all images from /public/media to Cloudflare R2
+ * and update the database with new URLs
  */
 
-async function migrateToR2() {
-  console.log('🚀 Starting migration to Cloudflare R2...\n')
+import { S3Client, PutObjectCommand, HeadObjectCommand } from '@aws-sdk/client-s3'
+import { readdir, readFile, stat } from 'fs/promises'
+import { join, extname, basename } from 'path'
+import { createRequire } from 'module'
 
-  // Check environment variables
-  const requiredEnvVars = [
-    'R2_ACCESS_KEY_ID',
-    'R2_SECRET_ACCESS_KEY',
-    'R2_ENDPOINT',
-    'R2_BUCKET_NAME',
-    'R2_PUBLIC_URL',
-  ]
+const require = createRequire(import.meta.url)
 
-  const missingVars = requiredEnvVars.filter((v) => !process.env[v])
-  if (missingVars.length > 0) {
-    console.error('❌ Missing required environment variables:')
-    missingVars.forEach((v) => console.error(`   - ${v}`))
-    console.error('\nPlease add these to your .env file')
-    process.exit(1)
+// Load environment variables
+require('dotenv').config()
+
+// R2 Configuration
+const r2Config = {
+  region: 'auto',
+  endpoint: process.env.R2_ENDPOINT!,
+  credentials: {
+    accessKeyId: process.env.R2_ACCESS_KEY_ID!,
+    secretAccessKey: process.env.R2_SECRET_ACCESS_KEY!,
+  },
+}
+
+const bucketName = process.env.R2_BUCKET_NAME!
+const publicUrl = process.env.R2_PUBLIC_URL!
+
+// Initialize S3 client for R2
+const s3Client = new S3Client(r2Config)
+
+// Supported image formats
+const supportedFormats = ['.jpg', '.jpeg', '.png', '.webp', '.gif', '.svg']
+
+interface UploadResult {
+  localPath: string
+  r2Path: string
+  r2Url: string
+  size: number
+  success: boolean
+  error?: string
+}
+
+class R2Migration {
+  private results: UploadResult[] = []
+  private totalFiles = 0
+  private uploadedFiles = 0
+  private skippedFiles = 0
+
+  async run() {
+    console.log('🚀 Starting R2 Migration...')
+    console.log(`📦 Bucket: ${bucketName}`)
+    console.log(`🌐 Public URL: ${publicUrl}`)
+    console.log('─'.repeat(50))
+
+    // Validate environment variables
+    this.validateEnvironment()
+
+    // Get all image files from public/media
+    const mediaDir = join(process.cwd(), 'public', 'media')
+    const imageFiles = await this.getImageFiles(mediaDir)
+
+    this.totalFiles = imageFiles.length
+    console.log(`📁 Found ${this.totalFiles} image files to migrate`)
+
+    if (this.totalFiles === 0) {
+      console.log('❌ No image files found in public/media')
+      return
+    }
+
+    // Upload files to R2
+    console.log('\n📤 Uploading files to R2...')
+    for (const filePath of imageFiles) {
+      await this.uploadFile(filePath, mediaDir)
+    }
+
+    // Print summary
+    this.printSummary()
+
+    // Save results to file
+    await this.saveResults()
+
+    console.log('\n✅ Migration completed!')
+    console.log('\nNext steps:')
+    console.log('1. Update payload.config.ts to use R2 storage')
+    console.log('2. Test image upload/delete in admin panel')
+    console.log('3. Verify images load on frontend')
+    console.log('4. Run database update script if needed')
   }
 
-  // Initialize S3 client (R2 is S3-compatible)
-  const s3Client = new S3Client({
-    region: 'auto',
-    endpoint: process.env.R2_ENDPOINT,
-    credentials: {
-      accessKeyId: process.env.R2_ACCESS_KEY_ID!,
-      secretAccessKey: process.env.R2_SECRET_ACCESS_KEY!,
-    },
-  })
-
-  const payload = await getPayload({ config: configPromise })
-
-  console.log('📋 Getting list of media files from database...\n')
-
-  // Get all media from database
-  const allMedia = await payload.find({
-    collection: 'media',
-    limit: 1000,
-  })
-
-  console.log(`Found ${allMedia.totalDocs} media records in database\n`)
-
-  const mediaDir = path.resolve(process.cwd(), 'public/media')
-  let uploaded = 0
-  let skipped = 0
-  let failed = 0
-
-  for (const media of allMedia.docs) {
-    const filename = media.filename
-    if (!filename) {
-      console.log(`⏭️  Skipping ${media.id} - no filename`)
-      skipped++
-      continue
+  private validateEnvironment() {
+    const required = ['R2_ACCESS_KEY_ID', 'R2_SECRET_ACCESS_KEY', 'R2_ENDPOINT', 'R2_BUCKET_NAME', 'R2_PUBLIC_URL']
+    
+    for (const envVar of required) {
+      if (!process.env[envVar]) {
+        throw new Error(`Missing required environment variable: ${envVar}`)
+      }
     }
 
-    const localPath = path.join(mediaDir, filename)
+    console.log('✅ Environment variables validated')
+  }
 
-    // Check if file exists locally
-    if (!fs.existsSync(localPath)) {
-      console.log(`⚠️  File not found: ${filename}`)
-      failed++
-      continue
-    }
-
+  private async getImageFiles(dir: string): Promise<string[]> {
+    const files: string[] = []
+    
     try {
-      // Read file
-      const fileBuffer = fs.readFileSync(localPath)
-      const contentType = media.mimeType || 'application/octet-stream'
-
-      // Upload to R2
-      await s3Client.send(
-        new PutObjectCommand({
-          Bucket: process.env.R2_BUCKET_NAME!,
-          Key: filename,
-          Body: fileBuffer,
-          ContentType: contentType,
-          // Make public readable
-          ACL: 'public-read',
-        }),
-      )
-
-      // Update database URL
-      const newUrl = `${process.env.R2_PUBLIC_URL}/${filename}`
-
-      await payload.update({
-        collection: 'media',
-        id: media.id,
-        data: {
-          url: newUrl,
-        },
-      })
-
-      console.log(`✅ Uploaded: ${filename}`)
-      uploaded++
-
-      // Also upload all size variants
-      if (media.sizes) {
-        for (const sizeName of Object.keys(media.sizes)) {
-          const size = media.sizes[sizeName]
-          if (size.filename) {
-            const sizePath = path.join(mediaDir, size.filename)
-            if (fs.existsSync(sizePath)) {
-              const sizeBuffer = fs.readFileSync(sizePath)
-              await s3Client.send(
-                new PutObjectCommand({
-                  Bucket: process.env.R2_BUCKET_NAME!,
-                  Key: size.filename,
-                  Body: sizeBuffer,
-                  ContentType: size.mimeType || contentType,
-                  ACL: 'public-read',
-                }),
-              )
-              console.log(`   ↳ ${sizeName}: ${size.filename}`)
-            }
+      const entries = await readdir(dir, { withFileTypes: true })
+      
+      for (const entry of entries) {
+        const fullPath = join(dir, entry.name)
+        
+        if (entry.isDirectory()) {
+          // Recursively scan subdirectories
+          const subFiles = await this.getImageFiles(fullPath)
+          files.push(...subFiles)
+        } else if (entry.isFile()) {
+          const ext = extname(entry.name).toLowerCase()
+          if (supportedFormats.includes(ext)) {
+            files.push(fullPath)
           }
         }
       }
     } catch (error) {
-      console.error(`❌ Failed to upload ${filename}:`, error)
-      failed++
+      console.error(`❌ Error reading directory ${dir}:`, error)
+    }
+    
+    return files
+  }
+
+  private async uploadFile(filePath: string, mediaDir: string): Promise<void> {
+    try {
+      const relativePath = filePath.replace(mediaDir + '/', '')
+      const r2Key = `media/${relativePath}`
+      const r2Url = `${publicUrl}/${r2Key}`
+
+      // Check if file already exists in R2
+      try {
+        await s3Client.send(new HeadObjectCommand({
+          Bucket: bucketName,
+          Key: r2Key,
+        }))
+        
+        console.log(`⏭️  Skipped: ${relativePath} (already exists)`)
+        this.skippedFiles++
+        
+        this.results.push({
+          localPath: filePath,
+          r2Path: r2Key,
+          r2Url,
+          size: 0,
+          success: true,
+        })
+        
+        return
+      } catch (error: any) {
+        // File doesn't exist, continue with upload
+        if (error.name !== 'NotFound') {
+          throw error
+        }
+      }
+
+      // Read file content
+      const fileContent = await readFile(filePath)
+      const fileStats = await stat(filePath)
+
+      // Upload to R2
+      await s3Client.send(new PutObjectCommand({
+        Bucket: bucketName,
+        Key: r2Key,
+        Body: fileContent,
+        ContentType: this.getContentType(filePath),
+        // Set cache headers for better performance
+        CacheControl: 'public, max-age=31536000, immutable',
+      }))
+
+      console.log(`✅ Uploaded: ${relativePath} (${this.formatBytes(fileStats.size)})`)
+      this.uploadedFiles++
+
+      this.results.push({
+        localPath: filePath,
+        r2Path: r2Key,
+        r2Url,
+        size: fileStats.size,
+        success: true,
+      })
+
+    } catch (error: any) {
+      console.error(`❌ Failed: ${filePath} - ${error.message}`)
+      this.results.push({
+        localPath: filePath,
+        r2Path: '',
+        r2Url: '',
+        size: 0,
+        success: false,
+        error: error.message,
+      })
     }
   }
 
-  console.log('\n' + '='.repeat(60))
-  console.log('📊 Migration Summary:')
-  console.log('='.repeat(60))
-  console.log(`✅ Uploaded: ${uploaded} images`)
-  console.log(`⏭️  Skipped: ${skipped} images`)
-  console.log(`❌ Failed: ${failed} images`)
-  console.log('='.repeat(60))
-
-  if (failed === 0) {
-    console.log('\n🎉 Migration completed successfully!')
-    console.log('\n📝 Next steps:')
-    console.log('1. Update payload.config.ts to use R2 (see r2-config-template.ts)')
-    console.log('2. Deploy to Vercel with R2 env variables')
-    console.log('3. Test uploading new images in admin panel')
-    console.log('4. Once verified, remove public/media/ from git')
-  } else {
-    console.log('\n⚠️  Migration completed with errors. Please review failed uploads.')
+  private getContentType(filePath: string): string {
+    const ext = extname(filePath).toLowerCase()
+    
+    const contentTypes: Record<string, string> = {
+      '.jpg': 'image/jpeg',
+      '.jpeg': 'image/jpeg',
+      '.png': 'image/png',
+      '.webp': 'image/webp',
+      '.gif': 'image/gif',
+      '.svg': 'image/svg+xml',
+    }
+    
+    return contentTypes[ext] || 'application/octet-stream'
   }
 
-  process.exit(failed === 0 ? 0 : 1)
+  private formatBytes(bytes: number): string {
+    if (bytes === 0) return '0 Bytes'
+    
+    const k = 1024
+    const sizes = ['Bytes', 'KB', 'MB', 'GB']
+    const i = Math.floor(Math.log(bytes) / Math.log(k))
+    
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i]
+  }
+
+  private printSummary() {
+    console.log('\n' + '='.repeat(50))
+    console.log('📊 MIGRATION SUMMARY')
+    console.log('='.repeat(50))
+    console.log(`📁 Total files: ${this.totalFiles}`)
+    console.log(`✅ Uploaded: ${this.uploadedFiles}`)
+    console.log(`⏭️  Skipped: ${this.skippedFiles}`)
+    console.log(`❌ Failed: ${this.totalFiles - this.uploadedFiles - this.skippedFiles}`)
+    
+    const successfulResults = this.results.filter(r => r.success)
+    const totalSize = successfulResults.reduce((sum, r) => sum + r.size, 0)
+    console.log(`📦 Total size: ${this.formatBytes(totalSize)}`)
+    
+    console.log('\n🌐 Your images are now available at:')
+    console.log(`   ${publicUrl}/media/`)
+  }
+
+  private async saveResults() {
+    const resultsFile = join(process.cwd(), 'migration-results.json')
+    const fs = await import('fs/promises')
+    
+    await fs.writeFile(resultsFile, JSON.stringify({
+      timestamp: new Date().toISOString(),
+      config: {
+        bucket: bucketName,
+        publicUrl,
+      },
+      summary: {
+        total: this.totalFiles,
+        uploaded: this.uploadedFiles,
+        skipped: this.skippedFiles,
+        failed: this.totalFiles - this.uploadedFiles - this.skippedFiles,
+      },
+      results: this.results,
+    }, null, 2))
+    
+    console.log(`\n💾 Results saved to: migration-results.json`)
+  }
 }
 
-migrateToR2()
-
+// Run migration
+if (import.meta.url === `file://${process.argv[1]}`) {
+  const migration = new R2Migration()
+  migration.run().catch((error) => {
+    console.error('❌ Migration failed:', error)
+    process.exit(1)
+  })
+}
