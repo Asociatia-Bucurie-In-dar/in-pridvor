@@ -38,6 +38,9 @@ export const ArchiveBlock: React.FC<
         meta: true,
         heroImage: true,
         content: true,
+        authors: true,
+        updatedAt: true,
+        createdAt: true,
       },
       ...(flattenedCategories && flattenedCategories.length > 0
         ? {

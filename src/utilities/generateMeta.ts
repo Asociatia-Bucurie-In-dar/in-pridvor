@@ -30,9 +30,9 @@ export const generateMeta = async (args: {
   const title = doc?.meta?.title ? doc?.meta?.title + ' | ' + websiteTitle : websiteTitle
 
   return {
-    description: doc?.meta?.description,
+    description: (doc?.meta && 'description' in doc.meta ? doc.meta.description : undefined) || undefined,
     openGraph: mergeOpenGraph({
-      description: doc?.meta?.description || '',
+      description: (doc?.meta && 'description' in doc.meta ? doc.meta.description : '') || '',
       images: ogImage
         ? [
             {
