@@ -39,7 +39,7 @@
     font-family: var(--font-playfair);
   }
   
-  .article-content > p:not(:empty):first-of-type:first-letter {
+  .article-content-with-dropcap > p:not(:empty):first-of-type:first-letter {
     font-size: 4rem;
     font-weight: bold;
     font-family: var(--font-playfair);

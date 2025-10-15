@@ -15,6 +15,7 @@ import { generateMeta } from '@/utilities/generateMeta'
 import PageClient from './page.client'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
 import { Comments } from '@/components/Comments/Comments'
+import { shouldShowDropCap } from '@/utilities/analyzeContentLength'
 
 export async function generateStaticParams() {
   const payload = await getPayload({ config: configPromise })
@@ -50,6 +51,9 @@ export default async function Post({ params: paramsPromise }: Args) {
 
   if (!post) return <PayloadRedirects url={url} />
 
+  // Determine if this post should show a drop cap (server-side, SEO-friendly)
+  const showDropCap = shouldShowDropCap(post.content)
+
   return (
     <article className="pt-16 pb-16">
       <PageClient />
@@ -64,7 +68,7 @@ export default async function Post({ params: paramsPromise }: Args) {
       <div className="flex flex-col items-center gap-4 pt-8">
         <div className="container">
           <RichText
-            className="max-w-3xl mx-auto article-content"
+            className={`max-w-3xl mx-auto ${showDropCap ? 'article-content-with-dropcap' : ''}`}
             data={post.content}
             enableGutter={false}
           />
