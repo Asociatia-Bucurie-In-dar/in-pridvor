@@ -483,6 +483,14 @@ export interface Post {
     };
     [k: string]: unknown;
   };
+  /**
+   * Enable a large decorative first letter (drop cap) at the beginning of the article content
+   */
+  enableDropCap?: boolean | null;
+  /**
+   * Which paragraph should have the drop cap? (1 = first paragraph, 2 = second paragraph, etc.)
+   */
+  dropCapParagraphIndex?: number | null;
   relatedPosts?: (number | Post)[] | null;
   categories?: (number | Category)[] | null;
   meta?: {
@@ -1104,6 +1112,8 @@ export interface PostsSelect<T extends boolean = true> {
   title?: T;
   heroImage?: T;
   content?: T;
+  enableDropCap?: T;
+  dropCapParagraphIndex?: T;
   relatedPosts?: T;
   categories?: T;
   meta?:

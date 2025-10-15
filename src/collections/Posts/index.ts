@@ -103,6 +103,31 @@ export const Posts: CollectionConfig<'posts'> = {
         {
           fields: [
             {
+              name: 'enableDropCap',
+              type: 'checkbox',
+              defaultValue: true,
+              admin: {
+                description:
+                  'Enable a large decorative first letter (drop cap) at the beginning of the article content',
+                position: 'sidebar',
+              },
+              label: 'Enable Drop Cap',
+            },
+            {
+              name: 'dropCapParagraphIndex',
+              type: 'number',
+              defaultValue: 1,
+              min: 1,
+              max: 10,
+              admin: {
+                description:
+                  'Which paragraph should have the drop cap? (1 = first paragraph, 2 = second paragraph, etc.)',
+                position: 'sidebar',
+                condition: (data) => data.enableDropCap === true,
+              },
+              label: 'Drop Cap Paragraph Index',
+            },
+            {
               name: 'relatedPosts',
               type: 'relationship',
               admin: {

@@ -39,6 +39,7 @@
     font-family: var(--font-playfair);
   }
   
+  /* Default drop cap on first paragraph */
   .article-content-with-dropcap > p:not(:empty):first-of-type:first-letter {
     font-size: 4rem;
     font-weight: bold;
@@ -46,6 +47,62 @@
     float: left;
     margin-right: 0.5rem;
     line-height: 1;
+  }
+
+  /* Dynamic drop cap for specific paragraph indices */
+  .article-content-with-dropcap[data-dropcap-index="1"] > p:not(:empty):nth-of-type(1):first-letter {
+    font-size: 4rem;
+    font-weight: bold;
+    font-family: var(--font-playfair);
+    float: left;
+    margin-right: 0.5rem;
+    line-height: 1;
+  }
+
+  .article-content-with-dropcap[data-dropcap-index="2"] > p:not(:empty):nth-of-type(2):first-letter {
+    font-size: 4rem;
+    font-weight: bold;
+    font-family: var(--font-playfair);
+    float: left;
+    margin-right: 0.5rem;
+    line-height: 1;
+  }
+
+  .article-content-with-dropcap[data-dropcap-index="3"] > p:not(:empty):nth-of-type(3):first-letter {
+    font-size: 4rem;
+    font-weight: bold;
+    font-family: var(--font-playfair);
+    float: left;
+    margin-right: 0.5rem;
+    line-height: 1;
+  }
+
+  .article-content-with-dropcap[data-dropcap-index="4"] > p:not(:empty):nth-of-type(4):first-letter {
+    font-size: 4rem;
+    font-weight: bold;
+    font-family: var(--font-playfair);
+    float: left;
+    margin-right: 0.5rem;
+    line-height: 1;
+  }
+
+  .article-content-with-dropcap[data-dropcap-index="5"] > p:not(:empty):nth-of-type(5):first-letter {
+    font-size: 4rem;
+    font-weight: bold;
+    font-family: var(--font-playfair);
+    float: left;
+    margin-right: 0.5rem;
+    line-height: 1;
+  }
+
+  /* Reset drop cap on other paragraphs when using specific index */
+  .article-content-with-dropcap[data-dropcap-index]:not([data-dropcap-index="1"]) > p:not(:empty):first-of-type:first-letter {
+    font-size: inherit;
+    font-weight: inherit;
+    font-family: inherit;
+    float: none;
+    margin-right: 0;
+    line-height: inherit;
   }
   
   .font-playfair {
