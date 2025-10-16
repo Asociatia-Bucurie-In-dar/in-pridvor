@@ -21,6 +21,16 @@ export const Categories: CollectionConfig = {
       type: 'text',
       required: true,
     },
+    {
+      name: 'parent',
+      type: 'relationship',
+      relationTo: 'categories',
+      admin: {
+        description: 'Select a parent category to create a hierarchy',
+        position: 'sidebar',
+      },
+      label: 'Parent Category',
+    },
     ...slugField(),
   ],
 }

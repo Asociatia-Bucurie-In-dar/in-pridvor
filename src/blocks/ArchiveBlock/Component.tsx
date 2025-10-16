@@ -6,6 +6,7 @@ import React from 'react'
 import RichText from '@/components/RichText'
 
 import { CollectionArchive } from '@/components/CollectionArchive'
+import { getCategoryHierarchyIds } from '@/utilities/getCategoryHierarchy'
 
 export const ArchiveBlock: React.FC<
   ArchiveBlockProps & {
@@ -21,10 +22,23 @@ export const ArchiveBlock: React.FC<
   if (populateBy === 'collection') {
     const payload = await getPayload({ config: configPromise })
 
-    const flattenedCategories = categories?.map((category) => {
-      if (typeof category === 'object') return category.id
-      else return category
-    })
+    let allCategoryIds: number[] = []
+
+    if (categories && categories.length > 0) {
+      // Get all category IDs including subcategories for each selected category
+      const categoryHierarchyPromises = categories.map(async (category) => {
+        const categoryId = typeof category === 'object' ? category.id : category
+        if (categoryId) {
+          return getCategoryHierarchyIds(categoryId)
+        }
+        return []
+      })
+
+      const categoryHierarchies = await Promise.all(categoryHierarchyPromises)
+
+      // Flatten and deduplicate all category IDs
+      allCategoryIds = Array.from(new Set(categoryHierarchies.flat()))
+    }
 
     const fetchedPosts = await payload.find({
       collection: 'posts',
@@ -42,11 +56,11 @@ export const ArchiveBlock: React.FC<
         updatedAt: true,
         createdAt: true,
       },
-      ...(flattenedCategories && flattenedCategories.length > 0
+      ...(allCategoryIds.length > 0
         ? {
             where: {
               categories: {
-                in: flattenedCategories,
+                in: allCategoryIds,
               },
             },
           }

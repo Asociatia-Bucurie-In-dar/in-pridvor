@@ -212,9 +212,12 @@ export interface Page {
 export interface Category {
   id: number;
   title: string;
+  /**
+   * Select a parent category to create a hierarchy
+   */
+  parent?: (number | null) | Category;
   slug?: string | null;
   slugLock?: boolean | null;
-  parent?: (number | null) | Category;
   breadcrumbs?:
     | {
         doc?: (number | null) | Category;
@@ -1235,9 +1238,9 @@ export interface MediaSelect<T extends boolean = true> {
  */
 export interface CategoriesSelect<T extends boolean = true> {
   title?: T;
+  parent?: T;
   slug?: T;
   slugLock?: T;
-  parent?: T;
   breadcrumbs?:
     | T
     | {

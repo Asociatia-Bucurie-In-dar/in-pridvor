@@ -1,11 +1,15 @@
 import type { Metadata } from 'next'
 
 import { PayloadRedirects } from '@/components/PayloadRedirects'
+import { CollectionArchive } from '@/components/CollectionArchive'
+import { Pagination } from '@/components/Pagination'
+import { PageRange } from '@/components/PageRange'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import React, { cache } from 'react'
 
 import { generateMeta } from '@/utilities/generateMeta'
+import { getCategoryHierarchyIds } from '@/utilities/getCategoryHierarchy'
 import PageClient from './page.client'
 
 export async function generateStaticParams() {
@@ -41,6 +45,12 @@ export default async function Category({ params: paramsPromise }: Args) {
 
   if (!category) return <PayloadRedirects url={url} />
 
+  // Get all category IDs (this category + all its subcategories)
+  const categoryIds = await getCategoryHierarchyIds(category.id)
+
+  // Fetch posts from this category and all its subcategories
+  const posts = await queryPostsByCategoryIds(categoryIds)
+
   return (
     <div className="pt-16 pb-16">
       <PageClient />
@@ -49,8 +59,27 @@ export default async function Category({ params: paramsPromise }: Args) {
       <PayloadRedirects disableNotFound url={url} />
 
       <div className="flex flex-col items-center gap-4 pt-8">
+        <div className="container mb-16">
+          <div className="prose dark:prose-invert max-w-none">
+            <h1>{category.title}</h1>
+          </div>
+        </div>
+
+        <div className="container mb-8">
+          <PageRange
+            collection="posts"
+            currentPage={posts.page}
+            limit={12}
+            totalDocs={posts.totalDocs}
+          />
+        </div>
+
+        <CollectionArchive posts={posts.docs} />
+
         <div className="container">
-          <h1>{category.slug}</h1>
+          {posts.totalPages > 1 && posts.page && (
+            <Pagination page={posts.page} totalPages={posts.totalPages} />
+          )}
         </div>
       </div>
     </div>
@@ -83,4 +112,31 @@ const queryCategoryBySlug = cache(async ({ params }: { params: string[] }) => {
   })
 
   return result.docs?.[0] || null
+})
+
+const queryPostsByCategoryIds = cache(async (categoryIds: number[]) => {
+  const payload = await getPayload({ config: configPromise })
+
+  const result = await payload.find({
+    collection: 'posts',
+    depth: 1,
+    limit: 12,
+    overrideAccess: false,
+    select: {
+      title: true,
+      slug: true,
+      categories: true,
+      meta: true,
+      heroImage: true,
+      content: true,
+      publishedAt: true,
+    },
+    where: {
+      categories: {
+        in: categoryIds,
+      },
+    },
+  })
+
+  return result
 })
