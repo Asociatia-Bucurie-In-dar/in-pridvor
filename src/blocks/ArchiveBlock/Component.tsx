@@ -53,6 +53,8 @@ export const ArchiveBlock: React.FC<
         heroImage: true,
         content: true,
         authors: true,
+        populatedAuthors: true,
+        publishedAt: true,
         updatedAt: true,
         createdAt: true,
       },

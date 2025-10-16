@@ -60,7 +60,7 @@ export default async function Category({ params: paramsPromise }: Args) {
 
       <div className="flex flex-col items-center gap-4 pt-8">
         <div className="container mb-16">
-          <div className="prose dark:prose-invert max-w-none">
+          <div className="prose max-w-none">
             <h1>{category.title}</h1>
           </div>
         </div>
@@ -129,6 +129,8 @@ const queryPostsByCategoryIds = cache(async (categoryIds: number[]) => {
       meta: true,
       heroImage: true,
       content: true,
+      authors: true,
+      populatedAuthors: true,
       publishedAt: true,
     },
     where: {

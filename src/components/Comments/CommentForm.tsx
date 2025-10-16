@@ -193,16 +193,14 @@ export function CommentForm({ postId, onCommentSubmitted }: CommentFormProps) {
         </div>
 
         {submitStatus === 'success' && (
-          <div className="p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-md">
-            <p className="text-green-800 dark:text-green-200">
-              Comentariul tău a fost trimis cu succes!
-            </p>
+          <div className="p-4 bg-green-50 border border-green-200 rounded-md">
+            <p className="text-green-800">Comentariul tău a fost trimis cu succes!</p>
           </div>
         )}
 
         {submitStatus === 'error' && (
-          <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-md">
-            <p className="text-red-800 dark:text-red-200">{errorMessage}</p>
+          <div className="p-4 bg-red-50 border border-red-200 rounded-md">
+            <p className="text-red-800">{errorMessage}</p>
           </div>
         )}
 

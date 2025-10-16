@@ -26,6 +26,9 @@ export default async function Page() {
       meta: true,
       heroImage: true,
       content: true,
+      authors: true,
+      populatedAuthors: true,
+      publishedAt: true,
     },
   })
 
@@ -33,7 +36,7 @@ export default async function Page() {
     <div className="pt-24 pb-24">
       <PageClient />
       <div className="container mb-16">
-        <div className="prose dark:prose-invert max-w-none">
+        <div className="prose max-w-none">
           <h1> Toate Rubricile - {websiteTitle}</h1>
         </div>
       </div>
