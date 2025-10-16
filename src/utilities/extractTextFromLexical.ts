@@ -34,13 +34,21 @@ export function extractTextFromLexical(content: any, maxLength: number = 200): s
   }
 
   // Process all root children
-  for (const child of content.root.children) {
+  for (let i = 0; i < content.root.children.length; i++) {
     if (text.length >= maxLength) break
+
+    const child = content.root.children[i]
+
+    // Add space between paragraphs (but not before the first one)
+    if (i > 0 && (child.type === 'paragraph' || child.type === 'heading')) {
+      text += ' '
+    }
+
     extractFromNode(child)
   }
 
-  // Clean up whitespace
-  text = text.replace(/\s+/g, ' ').trim()
+  // Clean up whitespace - preserve single spaces but collapse multiple consecutive spaces
+  text = text.replace(/\s{2,}/g, ' ').trim()
 
   // Truncate and add ellipsis
   if (text.length > maxLength) {
