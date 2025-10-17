@@ -9,7 +9,7 @@ import PageClient from './page.client'
 import { websiteTitle } from '@/utilities/commonInfo'
 
 export const dynamic = 'force-static'
-export const revalidate = 600
+// Removed time-based revalidation - now using on-demand revalidation via hooks
 
 export default async function Page() {
   const payload = await getPayload({ config: configPromise })

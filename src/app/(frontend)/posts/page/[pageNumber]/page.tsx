@@ -10,7 +10,8 @@ import PageClient from './page.client'
 import { notFound } from 'next/navigation'
 import { websiteTitle } from '@/utilities/commonInfo'
 
-export const revalidate = 600
+export const dynamic = 'force-static'
+// Removed time-based revalidation - now using on-demand revalidation via hooks
 
 type Args = {
   params: Promise<{

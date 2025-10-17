@@ -40,7 +40,7 @@ const config = {
         '2xl': '86rem',
         lg: '64rem',
         md: '48rem',
-        sm: '40rem',
+        sm: '48rem',
         xl: '80rem',
       },
     },

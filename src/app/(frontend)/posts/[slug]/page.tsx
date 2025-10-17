@@ -79,6 +79,7 @@ export default async function Post({ params: paramsPromise }: Args) {
               docs={post.relatedPosts.filter((post) => typeof post === 'object')}
             />
           )}
+          <hr className="article-separator" />
           <Comments postId={String(post.id)} />
         </div>
       </div>
