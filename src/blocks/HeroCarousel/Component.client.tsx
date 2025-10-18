@@ -289,11 +289,11 @@ export const HeroCarouselClient: React.FC<HeroCarouselClientProps> = ({
           }
 
           .hero-carousel .swiper-button-next {
-            right: 16px;
+            right: 8px;
           }
 
           .hero-carousel .swiper-button-prev {
-            left: 16px;
+            left: 8px;
           }
 
           .hero-carousel .swiper-button-next svg,
