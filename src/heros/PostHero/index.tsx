@@ -5,6 +5,7 @@ import type { Post } from '@/payload-types'
 
 import { Media } from '@/components/Media'
 import { formatAuthors } from '@/utilities/formatAuthors'
+import { AuthorLinks } from '@/components/AuthorLinks'
 
 export const PostHero: React.FC<{
   post: Post
@@ -40,12 +41,14 @@ export const PostHero: React.FC<{
           </div>
 
           <div className="flex flex-col md:flex-row gap-4 md:gap-16">
-            {hasAuthors && (
+            {hasAuthors && populatedAuthors && (
               <div className="flex flex-col gap-4">
                 <div className="flex flex-col gap-1">
                   <p className="text-sm">Autor</p>
 
-                  <p>{formatAuthors(populatedAuthors)}</p>
+                  <p>
+                    <AuthorLinks authors={populatedAuthors} />
+                  </p>
                 </div>
               </div>
             )}

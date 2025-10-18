@@ -10,6 +10,7 @@ import { Media } from '@/components/Media'
 import { extractTextFromLexical } from '@/utilities/extractTextFromLexical'
 import { formatAuthors } from '@/utilities/formatAuthors'
 import { formatDateTime } from '@/utilities/formatDateTime'
+import { AuthorLinks } from '@/components/AuthorLinks'
 
 export type CardPostData = Pick<
   Post,
@@ -114,10 +115,9 @@ export const Card: React.FC<{
         {(formattedAuthors || formattedDate) && (
           <div className="mt-6 flex items-center gap-x-4">
             <div className="text-sm/6 text-gray-500">
-              {formattedAuthors && (
+              {hasAuthors && populatedAuthors && (
                 <p className="font-semibold text-gray-900">
-                  <span className="absolute inset-0" />
-                  {formattedAuthors}
+                  <AuthorLinks authors={populatedAuthors} />
                 </p>
               )}
               {formattedDate && publishedAt && <time dateTime={publishedAt}>{formattedDate}</time>}
