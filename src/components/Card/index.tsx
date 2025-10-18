@@ -54,14 +54,6 @@ export const Card: React.FC<{
   const formattedAuthors = hasAuthors ? formatAuthors(populatedAuthors) : null
   const formattedDate = publishedAt ? formatDateTime(publishedAt) : null
 
-  // Debug logging
-  console.log('Card Debug:', {
-    cardImage,
-    hasImage: !!cardImage,
-    imageType: typeof cardImage,
-    imageUrl: cardImage && typeof cardImage === 'object' ? cardImage.url : 'N/A',
-  })
-
   return (
     <article className={cn('relative card flex flex-col h-full', className)} ref={card.ref}>
       <Link className="relative w-full" href={href} ref={link.ref}>
@@ -90,7 +82,7 @@ export const Card: React.FC<{
                     <Link
                       href={`/categories/${category.slug}`}
                       key={index}
-                      className="relative z-10 rounded-full bg-gray-50 px-3 py-1.5 font-medium text-sm text-gray-600 hover:bg-gray-100"
+                      className="relative z-10 rounded-full bg-gray-50 px-3 py-1.5 font-semibold text-gray-600 hover:bg-gray-100"
                     >
                       {categoryTitle}
                     </Link>

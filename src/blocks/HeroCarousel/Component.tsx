@@ -60,6 +60,9 @@ export const HeroCarouselBlock: React.FC<
         heroImage: true,
         content: true,
         publishedAt: true,
+        authors: true,
+        updatedAt: true,
+        createdAt: true,
       },
       ...(allCategoryIds.length > 0
         ? {
@@ -87,9 +90,9 @@ export const HeroCarouselBlock: React.FC<
     <div id={`block-${id}`} className="-mt-16">
       <HeroCarouselClient
         posts={posts}
-        autoplayDelay={autoplayDelay}
-        showNavigation={showNavigation}
-        showPagination={showPagination}
+        autoplayDelay={autoplayDelay ?? undefined}
+        showNavigation={showNavigation ?? undefined}
+        showPagination={showPagination ?? undefined}
       />
     </div>
   )

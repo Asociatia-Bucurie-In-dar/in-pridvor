@@ -118,14 +118,14 @@ export const HeroCarouselClient: React.FC<HeroCarouselClientProps> = ({
                     </motion.h1>
 
                     {/* Description - Always visible but subtle */}
-                    {post.meta?.description && (
+                    {post.meta?.title && (
                       <motion.p
                         initial={{ opacity: 0 }}
                         animate={{ opacity: hoveredIndex === index ? 1 : 0.7 }}
                         transition={{ duration: 0.3 }}
                         className="text-base md:text-lg text-white/80 leading-relaxed max-w-3xl mb-4"
                       >
-                        {post.meta.description}
+                        {post.meta.title}
                       </motion.p>
                     )}
 
