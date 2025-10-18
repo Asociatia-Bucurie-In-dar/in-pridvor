@@ -24,6 +24,7 @@ import {
 import type { Header } from '@/payload-types'
 
 import { Logo } from '@/components/Logo/Logo'
+import { DonateModal } from '@/components/DonateModal'
 
 interface HeaderClientProps {
   data: Header
@@ -31,6 +32,7 @@ interface HeaderClientProps {
 
 export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [donateModalOpen, setDonateModalOpen] = useState(false)
   const [isSticky, setIsSticky] = useState(false)
   const [headerHeight, setHeaderHeight] = useState(0)
   const [expandedMobileItems, setExpandedMobileItems] = useState<Set<string>>(new Set())
@@ -254,6 +256,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
             <div className="flex flex-1 justify-end">
               <motion.button
                 type="button"
+                onClick={() => setDonateModalOpen(true)}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 transition={{ duration: 0.2 }}
@@ -422,6 +425,10 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
                 >
                   <button
                     type="button"
+                    onClick={() => {
+                      setMobileMenuOpen(false)
+                      setDonateModalOpen(true)
+                    }}
                     className="flex w-full items-center justify-center text-sm shadow-sm text-black bg-yellow-400 hover:shadow-md focus:outline-hidden focus:ring-4 focus:ring-yellow-300 font-medium rounded-full px-5 py-3 text-center transition-all"
                   >
                     <HeartIcon aria-hidden="true" className="size-5 mr-2" />
@@ -433,6 +440,9 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
           </DialogPanel>
         </Dialog>
       </header>
+
+      {/* Donate Modal */}
+      <DonateModal isOpen={donateModalOpen} onClose={() => setDonateModalOpen(false)} />
     </div>
   )
 }
