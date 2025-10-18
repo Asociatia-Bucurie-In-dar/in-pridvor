@@ -1,6 +1,6 @@
 'use client'
 
-import { Fragment, useState } from 'react'
+import { Fragment, useState, useEffect } from 'react'
 import { Dialog, DialogPanel, DialogTitle, Transition, TransitionChild } from '@headlessui/react'
 import { XMarkIcon, CheckIcon, ClipboardIcon } from '@heroicons/react/24/outline'
 import { HeartIcon, BuildingLibraryIcon, CreditCardIcon } from '@heroicons/react/24/solid'
@@ -18,10 +18,23 @@ export const DonateModal: React.FC<DonateModalProps> = ({ isOpen, onClose }) => 
   const [copiedField, setCopiedField] = useState<string | null>(null)
   const [donationAmount, setDonationAmount] = useState<number>(100)
   const [customAmount, setCustomAmount] = useState<string>('')
+  const [showTabAnimation, setShowTabAnimation] = useState(false)
+
+  // Trigger tab animation when modal opens
+  useEffect(() => {
+    if (isOpen) {
+      setShowTabAnimation(true)
+      // Stop animation after 4 seconds
+      const timer = setTimeout(() => setShowTabAnimation(false), 4000)
+      return () => clearTimeout(timer)
+    } else {
+      setShowTabAnimation(false)
+    }
+  }, [isOpen])
 
   // Bank details - Replace with your actual information
   const bankDetails = {
-    accountName: 'Asociația In Pridvor',
+    accountName: 'Asociația Bucurie în Dar',
     iban: 'RO49AAAA1B31007593840000', // Replace with real IBAN
     bank: 'Banca Transilvania',
     swift: 'BTRLRO22', // If needed for international transfers
@@ -42,7 +55,7 @@ export const DonateModal: React.FC<DonateModalProps> = ({ isOpen, onClose }) => 
     // TODO: Implement Stripe checkout
     // This will redirect to Stripe's hosted checkout page
     console.log('Redirect to Stripe checkout')
-    
+
     // Example implementation:
     // const response = await fetch('/api/create-checkout-session', {
     //   method: 'POST',
@@ -106,7 +119,21 @@ export const DonateModal: React.FC<DonateModalProps> = ({ isOpen, onClose }) => 
                 </div>
 
                 {/* Payment Method Tabs */}
-                <div className="flex gap-2 p-1 bg-gray-100 rounded-lg mb-6">
+                <motion.div
+                  className="flex gap-2 p-1 bg-gray-100 rounded-lg mb-6"
+                  animate={
+                    showTabAnimation
+                      ? {
+                          scale: [1, 1.05, 1],
+                        }
+                      : {}
+                  }
+                  transition={{
+                    duration: 0.8,
+                    repeat: showTabAnimation ? 1 : 0,
+                    repeatType: 'loop',
+                  }}
+                >
                   <button
                     onClick={() => setActiveMethod('iban')}
                     className={`flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-md text-sm font-semibold transition-all ${
@@ -129,7 +156,7 @@ export const DonateModal: React.FC<DonateModalProps> = ({ isOpen, onClose }) => 
                     <CreditCardIcon className="h-5 w-5" />
                     Card Bancar
                   </button>
-                </div>
+                </motion.div>
 
                 {/* IBAN Section */}
                 {activeMethod === 'iban' && (
@@ -217,8 +244,7 @@ export const DonateModal: React.FC<DonateModalProps> = ({ isOpen, onClose }) => 
                         </h4>
                         <ul className="text-xs text-blue-800 space-y-1">
                           <li>• Folosește aceste date pentru transfer bancar</li>
-                          <li>• La detalii adaugă "Donație In Pridvor"</li>
-                          <li>• Verifică că IBAN-ul este corect copiat</li>
+                          <li>• La detalii adaugă "In Pridvor"</li>
                         </ul>
                       </div>
                     </div>
@@ -331,4 +357,3 @@ export const DonateModal: React.FC<DonateModalProps> = ({ isOpen, onClose }) => 
     </Transition>
   )
 }
-
