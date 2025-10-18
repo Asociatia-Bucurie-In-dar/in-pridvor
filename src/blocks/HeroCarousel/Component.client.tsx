@@ -180,8 +180,8 @@ export const HeroCarouselClient: React.FC<HeroCarouselClientProps> = ({
         .hero-carousel .swiper-button-next,
         .hero-carousel .swiper-button-prev {
           color: white;
-          width: 50px;
-          height: 50px;
+          width: 48px;
+          height: 48px;
           background: rgba(255, 255, 255, 0.1);
           backdrop-filter: blur(10px);
           border-radius: 50%;
@@ -189,16 +189,30 @@ export const HeroCarouselClient: React.FC<HeroCarouselClientProps> = ({
           z-index: 20;
         }
 
+        .hero-carousel .swiper-button-next {
+          right: 24px;
+        }
+
+        .hero-carousel .swiper-button-prev {
+          left: 24px;
+        }
+
         .hero-carousel .swiper-button-next:hover,
         .hero-carousel .swiper-button-prev:hover {
           background: rgba(255, 255, 255, 0.2);
-          transform: scale(1.1);
+          transform: scale(1.05);
         }
 
         .hero-carousel .swiper-button-next::after,
         .hero-carousel .swiper-button-prev::after {
-          font-size: 20px;
-          font-weight: bold;
+          font-size: 13px !important;
+          font-weight: 600 !important;
+        }
+
+        .hero-carousel .swiper-button-next svg,
+        .hero-carousel .swiper-button-prev svg {
+          width: 50% !important;
+          height: 50% !important;
         }
 
         .hero-carousel .swiper-pagination-bullet {
@@ -223,9 +237,18 @@ export const HeroCarouselClient: React.FC<HeroCarouselClientProps> = ({
             height: 40px;
           }
 
-          .hero-carousel .swiper-button-next::after,
-          .hero-carousel .swiper-button-prev::after {
-            font-size: 16px;
+          .hero-carousel .swiper-button-next {
+            right: 16px;
+          }
+
+          .hero-carousel .swiper-button-prev {
+            left: 16px;
+          }
+
+          .hero-carousel .swiper-button-next svg,
+          .hero-carousel .swiper-button-prev svg {
+            width: 45% !important;
+            height: 45% !important;
           }
         }
       `}</style>
