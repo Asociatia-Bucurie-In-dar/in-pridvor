@@ -218,7 +218,7 @@ export const DonateModal: React.FC<DonateModalProps> = ({ isOpen, onClose }) => 
                           <label className="block text-xs font-medium text-gray-500 mb-2">
                             Conturi bancare
                           </label>
-                          {bankDetails.accounts.map((account, index) => (
+                          {bankDetails.accounts.map((account) => (
                             <div
                               key={account.currency}
                               className="border border-yellow-200 rounded-lg p-3 bg-yellow-50"
