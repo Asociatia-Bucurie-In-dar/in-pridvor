@@ -46,7 +46,7 @@ export const HeroCarouselClient: React.FC<HeroCarouselClientProps> = ({
         speed={800}
         slidesPerView={1.15}
         centeredSlides={true}
-        spaceBetween={20}
+        spaceBetween={10}
         initialSlide={shouldLoop ? posts.length : 0}
         autoplay={{
           delay: autoplayDelay,
@@ -67,15 +67,15 @@ export const HeroCarouselClient: React.FC<HeroCarouselClientProps> = ({
         breakpoints={{
           640: {
             slidesPerView: 1.15,
-            spaceBetween: 20,
+            spaceBetween: 10,
           },
           768: {
             slidesPerView: 1.2,
-            spaceBetween: 24,
+            spaceBetween: 12,
           },
           1024: {
-            slidesPerView: 1.25,
-            spaceBetween: 30,
+            slidesPerView: 1.35,
+            spaceBetween: 16,
           },
         }}
         className="h-full w-full hero-carousel"
