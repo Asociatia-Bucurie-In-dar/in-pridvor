@@ -124,13 +124,17 @@ export function CommentForm({ postId, onCommentSubmitted }: CommentFormProps) {
   }
 
   return (
-    <div className="mt-8 p-6 bg-card border border-border rounded-lg">
-      <h3 className="text-2xl font-semibold mb-4 font-playfair">Lasă un comentariu</h3>
+    <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8 transition-all duration-200 hover:shadow-md">
+      <h3 className="text-2xl font-semibold mb-6 font-playfair text-gray-900">
+        Lasă un comentariu
+      </h3>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           <div>
-            <Label htmlFor="name">Nume *</Label>
+            <Label htmlFor="name" className="text-gray-700 font-medium mb-2 block">
+              Nume *
+            </Label>
             <Input
               id="name"
               type="text"
@@ -141,13 +145,16 @@ export function CommentForm({ postId, onCommentSubmitted }: CommentFormProps) {
                   message: 'Numele nu poate depăși 100 de caractere',
                 },
               })}
-              className={errors.name ? 'border-red-500' : ''}
+              className={errors.name ? 'border-red-500' : 'border-gray-300 focus:border-gray-400'}
+              placeholder="Numele tău"
             />
-            {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>}
+            {errors.name && <p className="text-red-500 text-sm mt-1.5">{errors.name.message}</p>}
           </div>
 
           <div>
-            <Label htmlFor="email">Email *</Label>
+            <Label htmlFor="email" className="text-gray-700 font-medium mb-2 block">
+              Email *
+            </Label>
             <Input
               id="email"
               type="email"
@@ -158,14 +165,17 @@ export function CommentForm({ postId, onCommentSubmitted }: CommentFormProps) {
                   message: 'Adresa de email nu este validă',
                 },
               })}
-              className={errors.email ? 'border-red-500' : ''}
+              className={errors.email ? 'border-red-500' : 'border-gray-300 focus:border-gray-400'}
+              placeholder="email@exemplu.ro"
             />
-            {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>}
+            {errors.email && <p className="text-red-500 text-sm mt-1.5">{errors.email.message}</p>}
           </div>
         </div>
 
         <div>
-          <Label htmlFor="comment">Comentariu *</Label>
+          <Label htmlFor="comment" className="text-gray-700 font-medium mb-2 block">
+            Comentariu *
+          </Label>
           <Textarea
             id="comment"
             rows={5}
@@ -176,37 +186,48 @@ export function CommentForm({ postId, onCommentSubmitted }: CommentFormProps) {
                 message: 'Comentariul nu poate depăși 1000 de caractere',
               },
             })}
-            className={errors.comment ? 'border-red-500' : ''}
+            className={errors.comment ? 'border-red-500' : 'border-gray-300 focus:border-gray-400'}
+            placeholder="Scrie comentariul tău aici..."
           />
-          {errors.comment && <p className="text-red-500 text-sm mt-1">{errors.comment.message}</p>}
+          {errors.comment && (
+            <p className="text-red-500 text-sm mt-1.5">{errors.comment.message}</p>
+          )}
         </div>
 
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-2 py-2">
           <Checkbox
             id="rememberMe"
             checked={rememberMe}
             onCheckedChange={(checked) => setValue('rememberMe', checked as boolean)}
           />
-          <Label htmlFor="rememberMe" className="text-sm font-normal cursor-pointer">
+          <Label htmlFor="rememberMe" className="text-sm font-normal cursor-pointer text-gray-600">
             Salvează numele și emailul meu pentru următorul comentariu
           </Label>
         </div>
 
         {submitStatus === 'success' && (
-          <div className="p-4 bg-green-50 border border-green-200 rounded-md">
-            <p className="text-green-800">Comentariul tău a fost trimis cu succes!</p>
+          <div className="p-4 bg-green-50 border border-green-200 rounded-xl">
+            <p className="text-green-800 font-medium">
+              ✓ Comentariul tău a fost trimis cu succes! Va fi afișat după aprobare.
+            </p>
           </div>
         )}
 
         {submitStatus === 'error' && (
-          <div className="p-4 bg-red-50 border border-red-200 rounded-md">
-            <p className="text-red-800">{errorMessage}</p>
+          <div className="p-4 bg-red-50 border border-red-200 rounded-xl">
+            <p className="text-red-800 font-medium">✕ {errorMessage}</p>
           </div>
         )}
 
-        <Button type="submit" disabled={isSubmitting} className="w-full md:w-auto">
-          {isSubmitting ? 'Se trimite...' : 'Trimite comentariu'}
-        </Button>
+        <div className="pt-2">
+          <Button
+            type="submit"
+            disabled={isSubmitting}
+            className="w-full md:w-auto bg-gray-900 hover:bg-gray-800 text-white px-8 py-2.5 rounded-lg font-medium transition-colors duration-200"
+          >
+            {isSubmitting ? 'Se trimite...' : 'Trimite comentariu'}
+          </Button>
+        </div>
       </form>
     </div>
   )

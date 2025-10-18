@@ -43,7 +43,11 @@ export async function Comments({ postId }: CommentsProps) {
   }))
 
   return (
-    <div className="max-w-3xl mx-auto mt-12">
+    <div className="max-w-3xl mx-auto mt-16 mb-12">
+      {/* <div className="mb-8">
+        <h2 className="text-3xl font-bold font-playfair text-gray-900 mb-2">Comentarii</h2>
+        <div className="h-1 w-20 bg-gray-900 rounded-full"></div>
+      </div> */}
       <CommentList comments={comments} />
       <CommentFormWrapper postId={postId} />
     </div>
