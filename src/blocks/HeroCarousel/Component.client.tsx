@@ -8,6 +8,7 @@ import type { Post } from '@/payload-types'
 import { Media } from '@/components/Media'
 import Link from 'next/link'
 import { formatDateTime } from '@/utilities/formatDateTime'
+import { extractTextFromLexical } from '@/utilities/extractTextFromLexical'
 
 // Import Swiper styles
 import 'swiper/css'
@@ -82,20 +83,23 @@ export const HeroCarouselClient: React.FC<HeroCarouselClientProps> = ({
               {/* Content Container */}
               <Link
                 href={`/posts/${post.slug}`}
-                className="absolute inset-0 flex items-end cursor-pointer"
+                className="absolute inset-0 flex items-end cursor-pointer z-10"
               >
-                <div className="container mx-auto px-4 md:px-6 lg:px-8 pb-12 md:pb-16 lg:pb-20 relative z-10">
+                <div className="container mx-auto px-4 md:px-6 lg:px-8 pb-12 md:pb-16 lg:pb-20 relative">
                   <motion.div
                     initial={{ opacity: 0, y: 30 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8, delay: 0.2 }}
+                    animate={{
+                      opacity: 1,
+                      y: hoveredIndex === index ? -20 : 0,
+                    }}
+                    transition={{ duration: 0.5, ease: 'easeOut' }}
                     className="max-w-4xl"
                   >
                     {/* Date */}
                     <motion.div
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
-                      transition={{ duration: 0.6, delay: 0.4 }}
+                      transition={{ duration: 0.6, delay: 0.2 }}
                       className="mb-3 md:mb-4"
                     >
                       <time className="text-sm md:text-base text-white/80 font-light tracking-wider uppercase">
@@ -113,24 +117,38 @@ export const HeroCarouselClient: React.FC<HeroCarouselClientProps> = ({
                       {post.title}
                     </motion.h1>
 
-                    {/* Description - Animated on Hover */}
+                    {/* Description - Always visible but subtle */}
+                    {post.meta?.description && (
+                      <motion.p
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: hoveredIndex === index ? 1 : 0.7 }}
+                        transition={{ duration: 0.3 }}
+                        className="text-base md:text-lg text-white/80 leading-relaxed max-w-3xl mb-4"
+                      >
+                        {post.meta.description}
+                      </motion.p>
+                    )}
+
+                    {/* Article Content Preview - Shown on Hover */}
                     <AnimatePresence>
-                      {hoveredIndex === index && post.meta?.description && (
+                      {hoveredIndex === index && post.content && (
                         <motion.div
-                          initial={{ opacity: 0, height: 0, y: 20 }}
-                          animate={{ opacity: 1, height: 'auto', y: 0 }}
-                          exit={{ opacity: 0, height: 0, y: 10 }}
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: 'auto' }}
+                          exit={{ opacity: 0, height: 0 }}
                           transition={{ duration: 0.4, ease: 'easeInOut' }}
                           className="overflow-hidden"
                         >
-                          <p className="text-base md:text-lg lg:text-xl text-white/90 leading-relaxed max-w-3xl">
-                            {post.meta.description}
-                          </p>
+                          <div className="border-l-4 border-white/30 pl-4 mb-6">
+                            <p className="text-sm md:text-base text-white/75 leading-relaxed line-clamp-3 max-w-3xl">
+                              {extractTextFromLexical(post.content).substring(0, 200)}...
+                            </p>
+                          </div>
                           <motion.div
                             initial={{ opacity: 0, x: -10 }}
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ duration: 0.3, delay: 0.2 }}
-                            className="mt-6 inline-flex items-center text-white font-medium group"
+                            className="inline-flex items-center text-white font-medium group"
                           >
                             <span className="border-b-2 border-white pb-1">Citește articolul</span>
                             <svg
@@ -168,6 +186,7 @@ export const HeroCarouselClient: React.FC<HeroCarouselClientProps> = ({
           backdrop-filter: blur(10px);
           border-radius: 50%;
           transition: all 0.3s ease;
+          z-index: 20;
         }
 
         .hero-carousel .swiper-button-next:hover,
@@ -188,6 +207,7 @@ export const HeroCarouselClient: React.FC<HeroCarouselClientProps> = ({
           background: white;
           opacity: 0.5;
           transition: all 0.3s ease;
+          z-index: 20;
         }
 
         .hero-carousel .swiper-pagination-bullet-active {
