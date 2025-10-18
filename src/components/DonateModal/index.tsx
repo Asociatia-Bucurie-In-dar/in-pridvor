@@ -32,13 +32,23 @@ export const DonateModal: React.FC<DonateModalProps> = ({ isOpen, onClose }) => 
     }
   }, [isOpen])
 
-  // Bank details - Replace with your actual information
+  // Bank details
   const bankDetails = {
-    accountName: 'Asociația Bucurie în Dar',
-    iban: 'RO49AAAA1B31007593840000', // Replace with real IBAN
+    accountName: 'ASOCIATIA BUCURIE IN DAR',
     bank: 'Banca Transilvania',
-    swift: 'BTRLRO22', // If needed for international transfers
-    currency: 'RON',
+    swift: 'BTRLRO22',
+    accounts: [
+      {
+        iban: 'RO31BTRLRONCRT0610749705',
+        currency: 'RON',
+        label: 'Lei (RON)',
+      },
+      {
+        iban: 'RO35BTRLEURCRT0610749703',
+        currency: 'EUR',
+        label: 'Euro (EUR)',
+      },
+    ],
   }
 
   const copyToClipboard = async (text: string, field: string) => {
@@ -195,29 +205,6 @@ export const DonateModal: React.FC<DonateModalProps> = ({ isOpen, onClose }) => 
                           </div>
                         </div>
 
-                        {/* IBAN */}
-                        <div className="border border-yellow-200 rounded-lg p-3 bg-yellow-50">
-                          <label className="block text-xs font-medium text-yellow-800 mb-1">
-                            IBAN
-                          </label>
-                          <div className="flex items-center justify-between gap-2">
-                            <p className="text-sm font-mono font-bold text-yellow-900">
-                              {bankDetails.iban}
-                            </p>
-                            <button
-                              onClick={() => copyToClipboard(bankDetails.iban, 'iban')}
-                              className="p-1.5 rounded-md hover:bg-yellow-200 transition-colors"
-                              title="Copiază IBAN"
-                            >
-                              {copiedField === 'iban' ? (
-                                <CheckIcon className="h-4 w-4 text-green-600" />
-                              ) : (
-                                <ClipboardIcon className="h-4 w-4 text-yellow-700" />
-                              )}
-                            </button>
-                          </div>
-                        </div>
-
                         {/* Bank */}
                         <div className="border border-gray-200 rounded-lg p-3 bg-gray-50">
                           <label className="block text-xs font-medium text-gray-500 mb-1">
@@ -226,26 +213,71 @@ export const DonateModal: React.FC<DonateModalProps> = ({ isOpen, onClose }) => 
                           <p className="text-sm font-semibold text-gray-900">{bankDetails.bank}</p>
                         </div>
 
-                        {/* Currency */}
+                        {/* IBAN Accounts */}
+                        <div className="space-y-2">
+                          <label className="block text-xs font-medium text-gray-500 mb-2">
+                            Conturi bancare
+                          </label>
+                          {bankDetails.accounts.map((account, index) => (
+                            <div
+                              key={account.currency}
+                              className="border border-yellow-200 rounded-lg p-3 bg-yellow-50"
+                            >
+                              <div className="flex items-center justify-between mb-2">
+                                <span className="text-xs font-medium text-yellow-800">
+                                  {account.label}
+                                </span>
+                                <span className="text-xs text-yellow-700 font-semibold">
+                                  {account.currency}
+                                </span>
+                              </div>
+                              <div className="flex items-center justify-between gap-2">
+                                <p className="text-sm font-mono font-bold text-yellow-900">
+                                  {account.iban}
+                                </p>
+                                <button
+                                  onClick={() =>
+                                    copyToClipboard(
+                                      account.iban,
+                                      `iban-${account.currency.toLowerCase()}`,
+                                    )
+                                  }
+                                  className="p-1.5 rounded-md hover:bg-yellow-200 transition-colors"
+                                  title="Copiază IBAN"
+                                >
+                                  {copiedField === `iban-${account.currency.toLowerCase()}` ? (
+                                    <CheckIcon className="h-4 w-4 text-green-600" />
+                                  ) : (
+                                    <ClipboardIcon className="h-4 w-4 text-yellow-700" />
+                                  )}
+                                </button>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+
+                        {/* SWIFT */}
                         <div className="border border-gray-200 rounded-lg p-3 bg-gray-50">
                           <label className="block text-xs font-medium text-gray-500 mb-1">
-                            Monedă
+                            SWIFT
                           </label>
-                          <p className="text-sm font-semibold text-gray-900">
-                            {bankDetails.currency}
-                          </p>
+                          <div className="flex items-center justify-between gap-2">
+                            <p className="text-sm font-mono font-semibold text-gray-900">
+                              {bankDetails.swift}
+                            </p>
+                            <button
+                              onClick={() => copyToClipboard(bankDetails.swift, 'swift')}
+                              className="p-1.5 rounded-md hover:bg-gray-200 transition-colors"
+                              title="Copiază SWIFT"
+                            >
+                              {copiedField === 'swift' ? (
+                                <CheckIcon className="h-4 w-4 text-green-600" />
+                              ) : (
+                                <ClipboardIcon className="h-4 w-4 text-gray-600" />
+                              )}
+                            </button>
+                          </div>
                         </div>
-                      </div>
-
-                      {/* Instructions */}
-                      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                        <h4 className="text-sm font-semibold text-blue-900 mb-2">
-                          📝 Instrucțiuni
-                        </h4>
-                        <ul className="text-xs text-blue-800 space-y-1">
-                          <li>• Folosește aceste date pentru transfer bancar</li>
-                          <li>• La detalii adaugă "In Pridvor"</li>
-                        </ul>
                       </div>
                     </div>
                   </motion.div>
@@ -342,11 +374,17 @@ export const DonateModal: React.FC<DonateModalProps> = ({ isOpen, onClose }) => 
 
                 {/* Footer */}
                 <div className="mt-6 pt-6 border-t border-gray-200">
-                  <p className="text-xs text-center text-gray-500">
-                    Donațiile susțin jurnalismul independent și de calitate.{' '}
-                    <a href="/about" className="text-yellow-600 hover:text-yellow-700 underline">
-                      Află mai multe
+                  <p className="text-sm text-center text-gray-500">
+                    Proiect inițiat de{' '}
+                    <a
+                      href="https://www.bucurieindar.ro"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-yellow-600 hover:text-yellow-700 underline"
+                    >
+                      Asociația Bucurie în Dar
                     </a>
+                    .
                   </p>
                 </div>
               </DialogPanel>
