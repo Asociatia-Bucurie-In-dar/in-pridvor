@@ -25,6 +25,7 @@ export const AuthorLinks: React.FC<AuthorLinksProps> = ({ authors, className = '
   // Single author
   if (authorNames.length === 1) {
     const author = authors[0]
+    if (!author) return null
     return (
       <Link
         href={`/authors/${toKebabCase(author.name || '')}`}
@@ -37,45 +38,54 @@ export const AuthorLinks: React.FC<AuthorLinksProps> = ({ authors, className = '
 
   // Two authors
   if (authorNames.length === 2) {
+    const author1 = authors[0]
+    const author2 = authors[1]
+    if (!author1 || !author2) return null
     return (
       <span className={className}>
         <Link
-          href={`/authors/${toKebabCase(authors[0].name || '')}`}
+          href={`/authors/${toKebabCase(author1.name || '')}`}
           className="relative z-10 hover:underline"
         >
-          {authors[0].name}
+          {author1.name}
         </Link>
         {' and '}
         <Link
-          href={`/authors/${toKebabCase(authors[1].name || '')}`}
+          href={`/authors/${toKebabCase(author2.name || '')}`}
           className="relative z-10 hover:underline"
         >
-          {authors[1].name}
+          {author2.name}
         </Link>
       </span>
     )
   }
 
   // Three or more authors
+  const lastAuthor = authors[authors.length - 1]
+  if (!lastAuthor) return null
+
   return (
     <span className={className}>
-      {authors.slice(0, -1).map((author, index) => (
-        <React.Fragment key={index}>
-          <Link
-            href={`/authors/${toKebabCase(author.name || '')}`}
-            className="relative z-10 hover:underline"
-          >
-            {author.name}
-          </Link>
-          {index < authors.length - 2 ? ', ' : ''}
-        </React.Fragment>
-      ))}
+      {authors.slice(0, -1).map((author, index) => {
+        if (!author) return null
+        return (
+          <React.Fragment key={index}>
+            <Link
+              href={`/authors/${toKebabCase(author.name || '')}`}
+              className="relative z-10 hover:underline"
+            >
+              {author.name}
+            </Link>
+            {index < authors.length - 2 ? ', ' : ''}
+          </React.Fragment>
+        )
+      })}
       {', and '}
       <Link
-        href={`/authors/${toKebabCase(authors[authors.length - 1].name || '')}`}
+        href={`/authors/${toKebabCase(lastAuthor.name || '')}`}
         className="relative z-10 hover:underline"
       >
-        {authors[authors.length - 1].name}
+        {lastAuthor.name}
       </Link>
     </span>
   )
