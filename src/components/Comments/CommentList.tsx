@@ -25,12 +25,12 @@ export function CommentList({ comments }: CommentListProps) {
 
   return (
     <div className="mb-8">
-      {/* <div className="flex items-center gap-3 mb-6">
+      <div className="flex items-center gap-3 mb-6">
         <h3 className="text-xl font-semibold font-playfair text-gray-900">
           {comments.length} {comments.length === 1 ? 'Comentariu' : 'Comentarii'}
         </h3>
         <div className="flex-1 h-px bg-gray-200"></div>
-      </div> */}
+      </div>
 
       <div className="space-y-4">
         {comments.map((comment) => (

@@ -63,7 +63,7 @@ export const Card: React.FC<{
   })
 
   return (
-    <article className={cn('card flex flex-col h-full', className)} ref={card.ref}>
+    <article className={cn('relative card flex flex-col h-full', className)} ref={card.ref}>
       <Link className="relative w-full" href={href} ref={link.ref}>
         <div className="relative aspect-video w-full rounded-lg bg-gray-100 overflow-hidden">
           {cardImage && typeof cardImage !== 'string' ? (
