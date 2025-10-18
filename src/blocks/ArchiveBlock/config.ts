@@ -12,6 +12,15 @@ export const Archive: Block = {
   interfaceName: 'ArchiveBlock',
   fields: [
     {
+      name: 'useCustomCategoryHeader',
+      type: 'checkbox',
+      label: 'Use Custom Category Header',
+      defaultValue: false,
+      admin: {
+        description: 'Enable elegant category header (uses first selected category)',
+      },
+    },
+    {
       name: 'introContent',
       type: 'richText',
       editor: lexicalEditor({
@@ -25,6 +34,10 @@ export const Archive: Block = {
         },
       }),
       label: 'Intro Content',
+      admin: {
+        condition: (_, siblingData) => siblingData.useCustomCategoryHeader !== true,
+        description: 'Rich text intro content (hidden when using custom category header)',
+      },
     },
     {
       name: 'populateBy',

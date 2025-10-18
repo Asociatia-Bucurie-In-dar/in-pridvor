@@ -531,6 +531,13 @@ export interface MediaBlock {
  * via the `definition` "ArchiveBlock".
  */
 export interface ArchiveBlock {
+  /**
+   * Enable elegant category header (uses first selected category)
+   */
+  useCustomCategoryHeader?: boolean | null;
+  /**
+   * Rich text intro content (hidden when using custom category header)
+   */
   introContent?: {
     root: {
       type: string;
@@ -1129,6 +1136,7 @@ export interface MediaBlockSelect<T extends boolean = true> {
  * via the `definition` "ArchiveBlock_select".
  */
 export interface ArchiveBlockSelect<T extends boolean = true> {
+  useCustomCategoryHeader?: T;
   introContent?: T;
   populateBy?: T;
   relationTo?: T;

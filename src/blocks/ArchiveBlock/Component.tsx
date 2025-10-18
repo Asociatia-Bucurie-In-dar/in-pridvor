@@ -1,4 +1,4 @@
-import type { Post, ArchiveBlock as ArchiveBlockProps } from '@/payload-types'
+import type { Post, ArchiveBlock as ArchiveBlockProps, Category } from '@/payload-types'
 
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
@@ -7,13 +7,22 @@ import RichText from '@/components/RichText'
 
 import { CollectionArchive } from '@/components/CollectionArchive'
 import { getCategoryHierarchyIds } from '@/utilities/getCategoryHierarchy'
+import { CategoryHeader } from './CategoryHeader'
 
 export const ArchiveBlock: React.FC<
   ArchiveBlockProps & {
     id?: string
   }
 > = async (props) => {
-  const { id, categories, introContent, limit: limitFromProps, populateBy, selectedDocs } = props
+  const {
+    id,
+    categories,
+    introContent,
+    limit: limitFromProps,
+    populateBy,
+    selectedDocs,
+    useCustomCategoryHeader,
+  } = props
 
   const limit = limitFromProps || 3
 
@@ -80,13 +89,28 @@ export const ArchiveBlock: React.FC<
     }
   }
 
+  // Get the first category for the custom header
+  const firstCategory =
+    categories && categories.length > 0
+      ? typeof categories[0] === 'object'
+        ? (categories[0] as Category)
+        : null
+      : null
+
   return (
     <div className="my-16" id={`block-${id}`}>
-      {introContent && (
+      {useCustomCategoryHeader && firstCategory ? (
+        <div className="mb-8">
+          <CategoryHeader
+            categoryTitle={firstCategory.title || 'Untitled'}
+            categorySlug={firstCategory.slug || null}
+          />
+        </div>
+      ) : introContent ? (
         <div className="container mb-16">
           <RichText className="ml-0 max-w-3xl" data={introContent} enableGutter={false} />
         </div>
-      )}
+      ) : null}
       <CollectionArchive posts={posts} />
     </div>
   )
