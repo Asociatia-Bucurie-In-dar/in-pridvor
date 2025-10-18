@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react'
-import { Autoplay, EffectFade, Pagination, Navigation } from 'swiper/modules'
+import { Autoplay, Pagination, Navigation } from 'swiper/modules'
 import { motion } from 'framer-motion'
 import type { Post } from '@/payload-types'
 import { Media } from '@/components/Media'
@@ -12,7 +12,6 @@ import { extractTextFromLexical } from '@/utilities/extractTextFromLexical'
 
 // Import Swiper styles
 import 'swiper/css'
-import 'swiper/css/effect-fade'
 import 'swiper/css/pagination'
 import 'swiper/css/navigation'
 
@@ -30,24 +29,32 @@ export const HeroCarouselClient: React.FC<HeroCarouselClientProps> = ({
   showPagination = true,
 }) => {
   const [activeIndex, setActiveIndex] = React.useState<number>(0)
+  const [swiperInstance, setSwiperInstance] = React.useState<any>(null)
 
   if (!posts || posts.length === 0) {
     return null
   }
 
+  // Duplicate posts array for seamless looping with peek effect
+  const displayPosts = posts.length >= 3 ? [...posts, ...posts, ...posts] : posts
+  const shouldLoop = posts.length >= 3
+
   return (
-    <div className="relative w-full h-[500px] md:h-[600px] lg:h-[700px] overflow-hidden bg-black">
+    <div className="relative w-full h-[500px] md:h-[600px] lg:h-[700px] overflow-visible bg-black">
       <Swiper
-        modules={[Autoplay, EffectFade, Pagination, Navigation]}
-        effect="fade"
-        speed={1000}
+        modules={[Autoplay, Pagination, Navigation]}
+        speed={800}
+        slidesPerView={1.15}
+        centeredSlides={true}
+        spaceBetween={20}
+        initialSlide={shouldLoop ? posts.length : 0}
         autoplay={{
           delay: autoplayDelay,
           disableOnInteraction: false,
           pauseOnMouseEnter: true,
         }}
         pagination={
-          showPagination
+          showPagination && !shouldLoop
             ? {
                 clickable: true,
                 dynamicBullets: true,
@@ -55,21 +62,71 @@ export const HeroCarouselClient: React.FC<HeroCarouselClientProps> = ({
             : false
         }
         navigation={showNavigation}
-        loop={posts.length > 1}
-        className="h-full w-full hero-carousel"
-        onSlideChange={(swiper) => {
-          setActiveIndex(swiper.realIndex)
+        loop={false}
+        slideToClickedSlide={true}
+        breakpoints={{
+          640: {
+            slidesPerView: 1.15,
+            spaceBetween: 20,
+          },
+          768: {
+            slidesPerView: 1.2,
+            spaceBetween: 24,
+          },
+          1024: {
+            slidesPerView: 1.25,
+            spaceBetween: 30,
+          },
         }}
-        onInit={(swiper) => {
-          setActiveIndex(swiper.realIndex)
+        className="h-full w-full hero-carousel"
+        onSwiper={(swiper) => {
+          setSwiperInstance(swiper)
+          if (shouldLoop) {
+            setActiveIndex(0)
+          }
+        }}
+        onSlideChange={(swiper) => {
+          if (shouldLoop) {
+            const totalSlides = posts.length
+            const currentIndex = swiper.activeIndex
+
+            // Calculate the real index within the original posts array
+            const realIndex = currentIndex % totalSlides
+            setActiveIndex(realIndex)
+
+            // Infinite loop logic: jump to middle set when at edges
+            if (currentIndex <= 1) {
+              swiper.slideTo(totalSlides + currentIndex, 0)
+              // Restart autoplay after jump
+              setTimeout(() => {
+                if (swiper.autoplay) {
+                  swiper.autoplay.start()
+                }
+              }, 100)
+            } else if (currentIndex >= totalSlides * 2 - 1) {
+              swiper.slideTo(totalSlides + (currentIndex % totalSlides), 0)
+              // Restart autoplay after jump
+              setTimeout(() => {
+                if (swiper.autoplay) {
+                  swiper.autoplay.start()
+                }
+              }, 100)
+            }
+          } else {
+            setActiveIndex(swiper.activeIndex)
+          }
         }}
       >
-        {posts.map((post, index) => {
-          const isActive = index === activeIndex
+        {displayPosts.map((post, index) => {
+          const realIndex = index % posts.length
+          const isActive = realIndex === activeIndex
 
           return (
-            <SwiperSlide key={post.id}>
-              <div className="relative w-full h-full">
+            <SwiperSlide key={`${post.id}-${index}`}>
+              <div
+                className="relative w-full h-full transition-opacity duration-500"
+                style={{ opacity: isActive ? 1 : 0.5 }}
+              >
                 {/* Background Image with Overlay */}
                 <div className="absolute inset-0">
                   {post.heroImage && typeof post.heroImage === 'object' && (
@@ -159,6 +216,14 @@ export const HeroCarouselClient: React.FC<HeroCarouselClientProps> = ({
       </Swiper>
 
       <style jsx global>{`
+        .hero-carousel {
+          overflow: visible !important;
+        }
+
+        .hero-carousel .swiper-wrapper {
+          align-items: center;
+        }
+
         .hero-carousel .swiper-button-next,
         .hero-carousel .swiper-button-prev {
           color: white;
