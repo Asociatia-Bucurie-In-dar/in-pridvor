@@ -40,7 +40,7 @@ export const HeroCarouselClient: React.FC<HeroCarouselClientProps> = ({
   const shouldLoop = posts.length >= 3
 
   return (
-    <div className="relative w-full h-[500px] md:h-[600px] lg:h-[700px] overflow-visible bg-black">
+    <div className="relative w-full h-[500px] md:h-[600px] lg:h-[700px] overflow-hidden bg-black">
       <Swiper
         modules={[Autoplay, Pagination, Navigation]}
         speed={800}
@@ -217,11 +217,15 @@ export const HeroCarouselClient: React.FC<HeroCarouselClientProps> = ({
 
       <style jsx global>{`
         .hero-carousel {
-          overflow: visible !important;
+          overflow: hidden !important;
         }
 
         .hero-carousel .swiper-wrapper {
           align-items: center;
+        }
+
+        .hero-carousel .swiper-slide {
+          overflow: hidden;
         }
 
         .hero-carousel .swiper-button-next,
