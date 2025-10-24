@@ -1,5 +1,5 @@
 import { getPayload } from 'payload'
-import config from '../src/payload.config'
+import config from '../src/payload.config.ts'
 import type { Post, Category } from '../src/payload-types'
 import { createRequire } from 'module'
 

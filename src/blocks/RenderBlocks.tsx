@@ -8,6 +8,7 @@ import { ContentBlock } from '@/blocks/Content/Component'
 import { FormBlock } from '@/blocks/Form/Component'
 import { MediaBlock } from '@/blocks/MediaBlock/Component'
 import { HeroCarouselBlock } from '@/blocks/HeroCarousel/Component'
+import { VideoEmbedBlock } from '@/blocks/VideoEmbed/Component'
 
 const blockComponents = {
   archive: ArchiveBlock,
@@ -16,6 +17,7 @@ const blockComponents = {
   formBlock: FormBlock,
   mediaBlock: MediaBlock,
   heroCarousel: HeroCarouselBlock,
+  videoEmbed: VideoEmbedBlock,
 }
 
 export const RenderBlocks: React.FC<{

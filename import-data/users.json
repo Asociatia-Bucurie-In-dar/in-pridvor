@@ -1,0 +1,14 @@
+[
+  {
+    "name": "adminpdv",
+    "email": "adminpdv@email.com",
+    "password": "TempPassword123!",
+    "role": "user"
+  },
+  {
+    "name": "George Olteanu",
+    "email": "george.olteanu@email.com",
+    "password": "TempPassword123!",
+    "role": "user"
+  }
+]
