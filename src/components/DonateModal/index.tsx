@@ -14,11 +14,13 @@ interface DonateModalProps {
 type PaymentMethod = 'iban' | 'stripe'
 
 export const DonateModal: React.FC<DonateModalProps> = ({ isOpen, onClose }) => {
+  const isCardEnabled = process.env.NEXT_PUBLIC_ENABLE_CARD_DONATIONS === 'true'
   const [activeMethod, setActiveMethod] = useState<PaymentMethod>('iban')
   const [copiedField, setCopiedField] = useState<string | null>(null)
   const [donationAmount, setDonationAmount] = useState<number>(100)
   const [customAmount, setCustomAmount] = useState<string>('')
   const [showTabAnimation, setShowTabAnimation] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
 
   // Trigger tab animation when modal opens
   useEffect(() => {
@@ -31,6 +33,13 @@ export const DonateModal: React.FC<DonateModalProps> = ({ isOpen, onClose }) => 
       setShowTabAnimation(false)
     }
   }, [isOpen])
+
+  // Ensure we never stay on Stripe when disabled
+  useEffect(() => {
+    if (!isCardEnabled && activeMethod === 'stripe') {
+      setActiveMethod('iban')
+    }
+  }, [isCardEnabled, activeMethod])
 
   // Bank details
   const bankDetails = {
@@ -62,18 +71,32 @@ export const DonateModal: React.FC<DonateModalProps> = ({ isOpen, onClose }) => 
   }
 
   const handleStripeCheckout = async () => {
-    // TODO: Implement Stripe checkout
-    // This will redirect to Stripe's hosted checkout page
-    console.log('Redirect to Stripe checkout')
+    if (donationAmount < 10) {
+      alert('Suma minimă este 10 RON')
+      return
+    }
 
-    // Example implementation:
-    // const response = await fetch('/api/create-checkout-session', {
-    //   method: 'POST',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify({ amount: selectedAmount }),
-    // })
-    // const { url } = await response.json()
-    // window.location.href = url
+    setIsLoading(true)
+    try {
+      const response = await fetch('/api/donate/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ amount: donationAmount }),
+      })
+
+      const { url, error } = await response.json()
+
+      if (error) {
+        throw new Error(error)
+      }
+
+      window.location.href = url
+    } catch (error) {
+      console.error('Checkout error:', error)
+      alert('A apărut o eroare. Te rugăm să încerci din nou.')
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -129,44 +152,46 @@ export const DonateModal: React.FC<DonateModalProps> = ({ isOpen, onClose }) => 
                 </div>
 
                 {/* Payment Method Tabs */}
-                <motion.div
-                  className="flex gap-2 p-1 bg-gray-100 rounded-lg mb-6"
-                  animate={
-                    showTabAnimation
-                      ? {
-                          scale: [1, 1.05, 1],
-                        }
-                      : {}
-                  }
-                  transition={{
-                    duration: 0.8,
-                    repeat: showTabAnimation ? 1 : 0,
-                    repeatType: 'loop',
-                  }}
-                >
-                  <button
-                    onClick={() => setActiveMethod('iban')}
-                    className={`flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-md text-sm font-semibold transition-all ${
-                      activeMethod === 'iban'
-                        ? 'bg-white text-gray-900 shadow-sm'
-                        : 'text-gray-600 hover:text-gray-900'
-                    }`}
+                {isCardEnabled && (
+                  <motion.div
+                    className="flex gap-2 p-1 bg-gray-100 rounded-lg mb-6"
+                    animate={
+                      showTabAnimation
+                        ? {
+                            scale: [1, 1.05, 1],
+                          }
+                        : {}
+                    }
+                    transition={{
+                      duration: 0.8,
+                      repeat: showTabAnimation ? 1 : 0,
+                      repeatType: 'loop',
+                    }}
                   >
-                    <BuildingLibraryIcon className="h-5 w-5" />
-                    Transfer Bancar
-                  </button>
-                  <button
-                    onClick={() => setActiveMethod('stripe')}
-                    className={`flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-md text-sm font-semibold transition-all ${
-                      activeMethod === 'stripe'
-                        ? 'bg-white text-gray-900 shadow-sm'
-                        : 'text-gray-600 hover:text-gray-900'
-                    }`}
-                  >
-                    <CreditCardIcon className="h-5 w-5" />
-                    Card Bancar
-                  </button>
-                </motion.div>
+                    <button
+                      onClick={() => setActiveMethod('iban')}
+                      className={`flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-md text-sm font-semibold transition-all ${
+                        activeMethod === 'iban'
+                          ? 'bg-white text-gray-900 shadow-sm'
+                          : 'text-gray-600 hover:text-gray-900'
+                      }`}
+                    >
+                      <BuildingLibraryIcon className="h-5 w-5" />
+                      Transfer Bancar
+                    </button>
+                    <button
+                      onClick={() => setActiveMethod('stripe')}
+                      className={`flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-md text-sm font-semibold transition-all ${
+                        activeMethod === 'stripe'
+                          ? 'bg-white text-gray-900 shadow-sm'
+                          : 'text-gray-600 hover:text-gray-900'
+                      }`}
+                    >
+                      <CreditCardIcon className="h-5 w-5" />
+                      Card Bancar
+                    </button>
+                  </motion.div>
+                )}
 
                 {/* IBAN Section */}
                 {activeMethod === 'iban' && (
@@ -205,19 +230,8 @@ export const DonateModal: React.FC<DonateModalProps> = ({ isOpen, onClose }) => 
                           </div>
                         </div>
 
-                        {/* Bank */}
-                        <div className="border border-gray-200 rounded-lg p-3 bg-gray-50">
-                          <label className="block text-xs font-medium text-gray-500 mb-1">
-                            Bancă
-                          </label>
-                          <p className="text-sm font-semibold text-gray-900">{bankDetails.bank}</p>
-                        </div>
-
                         {/* IBAN Accounts */}
                         <div className="space-y-2">
-                          <label className="block text-xs font-medium text-gray-500 mb-2">
-                            Conturi bancare
-                          </label>
                           {bankDetails.accounts.map((account) => (
                             <div
                               key={account.currency}
@@ -284,7 +298,7 @@ export const DonateModal: React.FC<DonateModalProps> = ({ isOpen, onClose }) => 
                 )}
 
                 {/* Stripe Section */}
-                {activeMethod === 'stripe' && (
+                {isCardEnabled && activeMethod === 'stripe' && (
                   <motion.div
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -351,10 +365,14 @@ export const DonateModal: React.FC<DonateModalProps> = ({ isOpen, onClose }) => 
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
                         onClick={handleStripeCheckout}
-                        className="w-full flex items-center justify-center gap-2 bg-yellow-400 hover:bg-yellow-500 text-black font-semibold py-3 px-4 rounded-lg transition-colors shadow-sm hover:shadow-md"
+                        disabled={isLoading}
+                        aria-disabled={isLoading}
+                        className={`w-full flex items-center justify-center gap-2 bg-yellow-400 hover:bg-yellow-500 text-black font-semibold py-3 px-4 rounded-lg transition-colors shadow-sm hover:shadow-md ${
+                          isLoading ? 'opacity-70 cursor-not-allowed' : ''
+                        }`}
                       >
                         <CreditCardIcon className="h-5 w-5" />
-                        Donează cu Cardul
+                        {isLoading ? 'Se încarcă…' : 'Donează cu Cardul'}
                       </motion.button>
 
                       {/* Security Badge */}
@@ -374,7 +392,7 @@ export const DonateModal: React.FC<DonateModalProps> = ({ isOpen, onClose }) => 
 
                 {/* Footer */}
                 <div className="mt-6 pt-6 border-t border-gray-200">
-                  <p className="text-sm text-center text-gray-500">
+                  <p className="text-xs text-center text-gray-500">
                     Proiect inițiat de{' '}
                     <a
                       href="https://www.bucurieindar.ro"

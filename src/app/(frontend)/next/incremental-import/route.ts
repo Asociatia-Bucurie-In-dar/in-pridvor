@@ -4,6 +4,7 @@ import { headers } from 'next/headers'
 import { XMLParser } from 'fast-xml-parser'
 import path from 'path'
 import { htmlToLexical } from '@/utilities/htmlToLexical'
+import { formatSlug } from '@/fields/slug/formatSlug'
 
 export const maxDuration = 300 // This function can run for a maximum of 5 minutes
 
@@ -126,7 +127,9 @@ export async function POST(request: Request): Promise<Response> {
     posts.forEach((post: any) => {
       if (post['wp:post_type'] === 'post' && post['wp:status'] === 'publish') {
         const title = post.title || 'Untitled'
-        const slug = post['wp:post_name'] || title.toLowerCase().replace(/[^a-z0-9]+/g, '-')
+        // Always normalize slug using our formatter so Romanian characters are handled correctly
+        const rawSlug = post['wp:post_name'] || title
+        const slug = formatSlug(rawSlug)
 
         // Skip if post already exists
         if (existingSlugs.has(slug)) {

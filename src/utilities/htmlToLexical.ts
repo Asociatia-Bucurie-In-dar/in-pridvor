@@ -124,12 +124,8 @@ function parseHtmlNode(node: Node, format = 0): (LexicalTextNode | LexicalElemen
       return results
     }
 
-    // Handle line breaks
+    // Handle line breaks: ignore and let surrounding paragraphs handle flow
     if (tagName === 'br') {
-      results.push({
-        type: 'linebreak',
-        version: 1,
-      } as any)
       return results
     }
 
@@ -140,27 +136,8 @@ function parseHtmlNode(node: Node, format = 0): (LexicalTextNode | LexicalElemen
       return results
     }
 
-    // Handle horizontal rules
+    // Handle horizontal rules: skip for minimal compatibility
     if (tagName === 'hr') {
-      // Create a horizontal rule paragraph with special character
-      results.push({
-        type: 'paragraph',
-        children: [
-          {
-            type: 'text',
-            detail: 0,
-            format: 0,
-            mode: 'normal',
-            style: '',
-            text: '---',
-            version: 1,
-          },
-        ],
-        direction: 'ltr',
-        format: 'center',
-        indent: 0,
-        version: 1,
-      })
       return results
     }
 
@@ -215,20 +192,17 @@ function parseHtmlNode(node: Node, format = 0): (LexicalTextNode | LexicalElemen
       return results
     }
 
-    // Handle links
+    // Handle links: unwrap into plain text to avoid validation issues
     if (tagName === 'a') {
       const children: LexicalTextNode[] = []
       node.childNodes.forEach((child) => {
         const parsed = parseHtmlNode(child, newFormat)
-        // Only include text nodes in links
         parsed.forEach((item) => {
           if (item.type === 'text') {
             children.push(item as LexicalTextNode)
           }
         })
       })
-
-      // If no children, add empty text node
       if (children.length === 0) {
         children.push({
           type: 'text',
@@ -240,27 +214,8 @@ function parseHtmlNode(node: Node, format = 0): (LexicalTextNode | LexicalElemen
           version: 1,
         })
       }
-
-      const href = element.getAttribute('href') || ''
-
-      // Only create autolink if we have a valid URL
-      // Skip internal anchors (#), empty hrefs, and mailto links for now
-      if (href && href !== '#' && href.startsWith('http')) {
-        results.push({
-          type: 'autolink',
-          children,
-          direction: 'ltr',
-          format: '',
-          indent: 0,
-          version: 1,
-          url: href,
-        })
-        return results
-      } else {
-        // For invalid URLs or anchors, just return the text without the link
-        results.push(...children)
-        return results
-      }
+      results.push(...children)
+      return results
     }
 
     // Handle divs and other containers

@@ -5,6 +5,7 @@ import { XMLParser } from 'fast-xml-parser'
 import fs from 'fs'
 import path from 'path'
 import { htmlToLexical } from '@/utilities/htmlToLexical'
+import { formatSlug } from '@/fields/slug/formatSlug'
 
 export const maxDuration = 300 // This function can run for a maximum of 5 minutes
 
@@ -45,9 +46,59 @@ export async function POST(): Promise<Response> {
     })
 
     const xmlData = parser.parse(xmlContent)
-    const posts = xmlData.rss.channel.item || []
+    const items = xmlData.rss.channel.item || []
 
-    payload.logger.info(`📊 Found ${posts.length} items in XML`)
+    payload.logger.info(`📊 Found ${items.length} items in XML`)
+
+    // Build lookup maps from XML: by slug, by normalized title, by image filename (thumbnail)
+    const contentBySlug = new Map<string, string>()
+    const contentByTitle = new Map<string, string>()
+    const contentByImageBase = new Map<string, string>()
+
+    // Map attachment ID -> filename base
+    const attachmentIdToFilenameBase = new Map<string, string>()
+
+    // First pass: gather attachments
+    items.forEach((item: any) => {
+      if (item['wp:post_type'] === 'attachment' && item['wp:attachment_url']) {
+        const id = item['wp:post_id']
+        const url = item['wp:attachment_url'] as string
+        const filename = url.split('/').pop() || ''
+        const base = filename.split('.').slice(0, -1).join('.') || filename
+        if (id) attachmentIdToFilenameBase.set(id, base.toLowerCase())
+      }
+    })
+
+    // Second pass: gather published posts
+    items.forEach((item: any) => {
+      if (item['wp:post_type'] === 'post' && item['wp:status'] === 'publish') {
+        const title = item.title || ''
+        const xmlSlug = formatSlug(item['wp:post_name'] || title)
+        const content = item['content:encoded'] || item.description || ''
+
+        if (xmlSlug) contentBySlug.set(xmlSlug, content)
+        if (title) contentByTitle.set(formatSlug(title), content)
+
+        // Thumbnail -> filename base mapping
+        const postmeta = Array.isArray(item['wp:postmeta'])
+          ? item['wp:postmeta']
+          : item['wp:postmeta']
+            ? [item['wp:postmeta']]
+            : []
+        const thumb = postmeta.find(
+          (m: any) => m['wp:meta_key'] === '_thumbnail_id' && m['wp:meta_value'],
+        )
+        const thumbId = thumb?.['wp:meta_value']
+        if (thumbId && attachmentIdToFilenameBase.has(thumbId)) {
+          const base = attachmentIdToFilenameBase.get(thumbId) as string
+          contentByImageBase.set(base, content)
+        }
+      }
+    })
+
+    payload.logger.info(
+      `🔍 Built content maps: bySlug=${contentBySlug.size}, byTitle=${contentByTitle.size}, byImage=${contentByImageBase.size}`,
+    )
 
     // Get all existing posts
     const existingPosts = await payload.find({
@@ -58,6 +109,21 @@ export async function POST(): Promise<Response> {
     })
 
     payload.logger.info(`📋 Found ${existingPosts.totalDocs} posts in database`)
+
+    // Preload media to resolve heroImage filename bases
+    const allMedia = await payload.find({
+      collection: 'media',
+      limit: 0,
+      depth: 0,
+      req: payloadReq,
+    })
+    const mediaIdToBase = new Map<string | number, string>()
+    allMedia.docs.forEach((m: any) => {
+      if (m?.filename) {
+        const base = (m.filename as string).split('/').pop()!.split('.').slice(0, -1).join('.')
+        mediaIdToBase.set(m.id, base.toLowerCase())
+      }
+    })
 
     // Create a map of slug -> HTML content from XML
     const contentMap = new Map<string, string>()
@@ -88,11 +154,28 @@ export async function POST(): Promise<Response> {
           continue
         }
 
-        const htmlContent = contentMap.get(post.slug)
+        // Lookup content by multiple strategies
+        const slugCurrent = typeof post.slug === 'string' ? post.slug : ''
+        const normalizedSlug = formatSlug(slugCurrent || (post.title as string) || '')
+        const normalizedTitle = formatSlug((post.title as string) || '')
+
+        let htmlContent: string | undefined = undefined
+        htmlContent = htmlContent || (slugCurrent ? contentBySlug.get(slugCurrent) : undefined)
+        htmlContent = htmlContent || contentBySlug.get(normalizedSlug)
+        htmlContent = htmlContent || contentByTitle.get(normalizedTitle)
+
+        // Try via hero image filename base
+        if (!htmlContent && (post as any).heroImage) {
+          const heroId = (post as any).heroImage
+          const base = mediaIdToBase.get(heroId)
+          if (base) htmlContent = contentByImageBase.get(base)
+        }
 
         if (!htmlContent) {
           skipped++
-          payload.logger.warn(`⚠️ No content found in XML for slug: "${post.slug}"`)
+          payload.logger.warn(
+            `⚠️ No content found in XML for post id=${post.id}, slug="${post.slug}", title="${post.title}"`,
+          )
           continue
         }
 
