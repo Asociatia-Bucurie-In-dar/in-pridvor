@@ -25,7 +25,7 @@ type LinkType = (options?: {
   appearances?: LinkAppearances[] | false
   disableLabel?: boolean
   overrides?: Partial<GroupField>
-  relationTo?: ('pages' | 'categories')[]
+  relationTo?: string[]
 }) => Field
 
 export const link: LinkType = ({
@@ -87,7 +87,7 @@ export const link: LinkType = ({
         condition: (_, siblingData) => siblingData?.type === 'reference',
       },
       label: 'Document to link to',
-      relationTo,
+      relationTo: relationTo as any,
       required: true,
     },
     {

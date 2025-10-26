@@ -70,7 +70,7 @@ export default async function Post({ params: paramsPromise }: Args) {
           <RichText
             className={`max-w-3xl mx-auto ${showDropCap ? 'article-content-with-dropcap' : ''}`}
             data-dropcap-index={showDropCap ? dropCapIndex : undefined}
-            data={post.content}
+            data={post.content as any}
             enableGutter={false}
           />
           {post.relatedPosts && post.relatedPosts.length > 0 && (

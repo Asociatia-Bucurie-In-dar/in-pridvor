@@ -91,7 +91,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
   }
 
   // Animation variants
-  const menuItemVariants = {
+  const menuItemVariants: any = {
     hidden: { opacity: 0, x: -20 },
     visible: (i: number) => ({
       opacity: 1,
@@ -104,7 +104,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
     }),
   }
 
-  const subItemVariants = {
+  const subItemVariants: any = {
     hidden: { opacity: 0, height: 0 },
     visible: {
       opacity: 1,
@@ -124,7 +124,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
     },
   }
 
-  const desktopPopoverItemVariants = {
+  const desktopPopoverItemVariants: any = {
     hidden: { opacity: 0, y: -10 },
     visible: (i: number) => ({
       opacity: 1,
