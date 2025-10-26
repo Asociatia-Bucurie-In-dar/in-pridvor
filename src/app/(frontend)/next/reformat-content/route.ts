@@ -128,7 +128,7 @@ export async function POST(): Promise<Response> {
     // Create a map of slug -> HTML content from XML
     const contentMap = new Map<string, string>()
 
-    posts.forEach((post: any) => {
+    items.forEach((post: any) => {
       if (post['wp:post_type'] === 'post' && post['wp:status'] === 'publish') {
         const slug = post['wp:post_name']
         const content = post['content:encoded'] || post.description || ''

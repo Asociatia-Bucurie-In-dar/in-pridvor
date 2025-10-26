@@ -1,10 +1,7 @@
-import { Metadata } from 'next'
+'use client'
+
 import Link from 'next/link'
 import { XCircleIcon } from '@heroicons/react/24/solid'
-
-export const metadata: Metadata = {
-  title: 'Donație anulată',
-}
 
 export default function DonateCancelledPage() {
   return (
