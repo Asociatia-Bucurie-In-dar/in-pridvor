@@ -10,9 +10,10 @@ function buildCategoryTree(categories: Category[]) {
   const byParent = new Map<number | 'root', Category[]>()
   const getParentKey = (c: Category) => {
     const p = c.parent
-    if (!p) return 'root' as const
-    if (typeof p === 'object') return (p.id ?? 'root') as number | 'root'
-    return p as number
+    if (p === null || p === undefined) return 'root' as const
+    if (typeof p === 'object' && p.id) return p.id as number
+    if (typeof p === 'number') return p as number
+    return 'root' as const
   }
 
   for (const c of categories) {
@@ -38,8 +39,6 @@ function toCategoryNavItems(categories: Category[]) {
 
   for (const parent of roots) {
     const firstLevel = childrenOf(parent.id)
-
-    if (firstLevel.length === 0) continue
 
     const sublinks: NonNullable<NonNullable<Header['navItems']>[number]['sublinks']> = []
 

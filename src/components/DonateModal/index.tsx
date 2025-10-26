@@ -140,7 +140,6 @@ export const DonateModal: React.FC<DonateModalProps> = ({ isOpen, onClose }) => 
                       >
                         Susține În Pridvor și oameni în nevoie.
                       </DialogTitle>
-                      <p className="text-sm text-gray-500">Mulțumim pentru sprijin!</p>
                     </div>
                   </div>
                   <button
