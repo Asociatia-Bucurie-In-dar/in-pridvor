@@ -15,14 +15,15 @@ export const Header: GlobalConfig = {
       fields: [
         link({
           appearances: false,
+          relationTo: ['pages'],
         }),
-        // now an array of sublinks
         {
           name: 'sublinks',
           type: 'array',
           fields: [
             link({
               appearances: false,
+              relationTo: ['pages'],
               overrides: {
                 label: 'Sublink',
               },

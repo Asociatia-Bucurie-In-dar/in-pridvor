@@ -25,9 +25,15 @@ type LinkType = (options?: {
   appearances?: LinkAppearances[] | false
   disableLabel?: boolean
   overrides?: Partial<GroupField>
+  relationTo?: ('pages' | 'categories')[]
 }) => Field
 
-export const link: LinkType = ({ appearances, disableLabel = false, overrides = {} } = {}) => {
+export const link: LinkType = ({
+  appearances,
+  disableLabel = false,
+  overrides = {},
+  relationTo = ['pages', 'categories'],
+} = {}) => {
   const linkResult: GroupField = {
     name: 'link',
     type: 'group',
@@ -81,7 +87,7 @@ export const link: LinkType = ({ appearances, disableLabel = false, overrides = 
         condition: (_, siblingData) => siblingData?.type === 'reference',
       },
       label: 'Document to link to',
-      relationTo: ['pages', 'categories'],
+      relationTo,
       required: true,
     },
     {
