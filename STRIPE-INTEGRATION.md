@@ -55,7 +55,7 @@ export async function POST(request: NextRequest) {
             currency: 'ron',
             product_data: {
               name: 'Donație In Pridvor',
-              description: 'Susține jurnalismul local independent',
+              description: 'Susține În Pridvor',
             },
             unit_amount: Math.round(amount * 100), // Convert to cents
           },
@@ -144,7 +144,7 @@ export default function DonateSuccessPage() {
           Mulțumim!
         </h1>
         <p className="text-gray-600 mb-8">
-          Donația ta susține jurnalismul local independent. Îți mulțumim pentru încredere!
+          Donația ta susține În Pridvor și oameni în nevoie. Îți mulțumim!
         </p>
         <Link
           href="/"

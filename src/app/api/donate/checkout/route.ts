@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
             currency: 'ron',
             product_data: {
               name: 'Donație In Pridvor',
-              description: 'Susține jurnalismul local independent',
+              description: 'Susține În Pridvor și oameni în nevoie.',
             },
             unit_amount: Math.round(amount * 100),
           },

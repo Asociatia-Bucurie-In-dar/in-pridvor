@@ -138,7 +138,7 @@ export const DonateModal: React.FC<DonateModalProps> = ({ isOpen, onClose }) => 
                         as="h3"
                         className="text-xl font-bold text-gray-900 font-playfair"
                       >
-                        Susține jurnalismul local
+                        Susține În Pridvor și oameni în nevoie.
                       </DialogTitle>
                       <p className="text-sm text-gray-500">Mulțumim pentru sprijin!</p>
                     </div>

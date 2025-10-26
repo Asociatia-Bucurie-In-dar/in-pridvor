@@ -15,7 +15,7 @@ export default function DonateSuccessPage() {
         </div>
         <h1 className="text-3xl font-bold text-gray-900 mb-4 font-playfair">Mulțumim!</h1>
         <p className="text-gray-600 mb-8">
-          Donația ta susține jurnalismul local independent. Îți mulțumim pentru încredere!
+          Donația ta susține În Pridvor și oameni în nevoie. Îți mulțumim!
         </p>
         <Link
           href="/"
