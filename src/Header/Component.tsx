@@ -23,11 +23,38 @@ function buildCategoryTree(categories: Category[]) {
     else byParent.set(key, [c])
   }
 
-  const sortByTitle = (arr: Category[]) => arr.sort((a, b) => a.title.localeCompare(b.title))
+  // Sort top-level categories by `displayOrder` (number). Lower values appear first.
+  // If `displayOrder` is equal or missing, fall back to `createdAt`, then `title` for deterministic order.
+  const sortRootsByDisplayOrder = (arr: Category[]) =>
+    arr.sort((a, b) => {
+      const aOrder = typeof (a as any).displayOrder === 'number' ? (a as any).displayOrder : 0
+      const bOrder = typeof (b as any).displayOrder === 'number' ? (b as any).displayOrder : 0
 
-  const roots = sortByTitle([...(byParent.get('root') ?? [])])
+      if (aOrder !== bOrder) return aOrder - bOrder
 
-  const childrenOf = (parentId: number) => sortByTitle([...(byParent.get(parentId) ?? [])])
+      const aTime = a.createdAt ? new Date(a.createdAt).getTime() : 0
+      const bTime = b.createdAt ? new Date(b.createdAt).getTime() : 0
+      if (aTime !== bTime) return aTime - bTime
+
+      return (a.title || '').localeCompare(b.title || '')
+    })
+
+  // Keep child categories sorted by creation date (oldest-first). If createdAt missing, fall back to title.
+  const sortByCreatedAt = (arr: Category[], desc = false) =>
+    arr.sort((a, b) => {
+      const aTime = a.createdAt ? new Date(a.createdAt).getTime() : 0
+      const bTime = b.createdAt ? new Date(b.createdAt).getTime() : 0
+
+      if (aTime !== bTime) {
+        return desc ? bTime - aTime : aTime - bTime
+      }
+
+      return (a.title || '').localeCompare(b.title || '')
+    })
+
+  const roots = sortRootsByDisplayOrder([...(byParent.get('root') ?? [])])
+
+  const childrenOf = (parentId: number) => sortByCreatedAt([...(byParent.get(parentId) ?? [])])
 
   return { roots, childrenOf }
 }

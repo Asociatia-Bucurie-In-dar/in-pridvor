@@ -33,6 +33,17 @@ export const Categories: CollectionConfig = {
       label: 'Parent Category',
     },
     ...slugField(),
+    {
+      name: 'displayOrder',
+      type: 'number',
+      required: false,
+      admin: {
+        description:
+          'Controls order of top-level categories in the header. Lower numbers appear first. Leave empty for default ordering.',
+        position: 'sidebar',
+      },
+      defaultValue: 0,
+    },
   ],
   hooks: {
     afterChange: [revalidateCategory],
