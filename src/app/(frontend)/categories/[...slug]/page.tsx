@@ -61,7 +61,7 @@ export default async function Category({ params: paramsPromise }: Args) {
       <div className="flex flex-col items-center gap-4 pt-8">
         <div className="container mb-16">
           <div className="prose max-w-none">
-            <h1>{category.title}</h1>
+            <h1>Rubrica: {category.title}</h1>
           </div>
         </div>
 
