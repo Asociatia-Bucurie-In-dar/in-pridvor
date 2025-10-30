@@ -144,10 +144,14 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
           <Logo loading="eager" priority="high" width={525} height={525} />
         </Link>
 
-        <motion.div whileHover={{ scale: 1.1 }} transition={{ duration: 0.2 }}>
+        <motion.div
+          whileHover={{ scale: 1.1 }}
+          transition={{ duration: 0.2 }}
+          className="absolute top-6 right-6 hidden lg:block z-20"
+        >
           <Link
             href={'/search'}
-            className="hover:text-gray-700 hover:text-yellow-600 absolute top-6 right-6 hidden lg:block z-20"
+            className="hover:text-gray-700 hover:text-yellow-600 cursor-pointer"
           >
             <MagnifyingGlassIcon aria-hidden="true" className="size-6" />
           </Link>

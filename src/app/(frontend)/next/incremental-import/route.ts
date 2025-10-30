@@ -221,19 +221,62 @@ export async function POST(request: Request): Promise<Response> {
     })
 
     // Second pass: parse posts
+    const parsedSlugs = new Map<string, number>() // Track slugs to handle conflicts
+    
     posts.forEach((post: any) => {
       if (post['wp:post_type'] === 'post' && post['wp:status'] === 'publish') {
         const title = post.title || 'Untitled'
         // Always normalize slug using our formatter so Romanian characters are handled correctly
-        const rawSlug = post['wp:post_name'] || title
-        const slug = formatSlug(rawSlug)
-
-        // Skip if post already exists
-        if (existingSlugs.has(slug)) {
-          return
+        let rawSlug = post['wp:post_name'] || title
+        
+        // Decode URL-encoded slugs (e.g., %e2%88%92 becomes the actual character)
+        try {
+          rawSlug = decodeURIComponent(rawSlug)
+        } catch (e) {
+          // If decoding fails, use the raw slug as-is
+          payload.logger.warn(`   ⚠️  Failed to decode slug "${rawSlug}" for post "${title}", using as-is`)
         }
+        
+        let slug = formatSlug(rawSlug)
 
-        const content = post['content:encoded'] || post.description || ''
+        // Handle slug conflicts by appending WordPress ID or a number
+        if (existingSlugs.has(slug) || parsedSlugs.has(slug)) {
+          const wpPostId = post['wp:post_id']
+          if (wpPostId) {
+            slug = `${slug}-${wpPostId}`
+          } else {
+            let counter = 1
+            let newSlug = `${slug}-${counter}`
+            while (existingSlugs.has(newSlug) || parsedSlugs.has(newSlug)) {
+              counter++
+              newSlug = `${slug}-${counter}`
+            }
+            slug = newSlug
+          }
+          
+          if (existingSlugs.has(slug)) {
+            let counter = 1
+            let newSlug = `${slug}-${counter}`
+            while (existingSlugs.has(newSlug) || parsedSlugs.has(newSlug)) {
+              counter++
+              newSlug = `${slug}-${counter}`
+            }
+            slug = newSlug
+          }
+          
+          payload.logger.info(`   🔄 Resolved slug conflict for "${title}": using slug "${slug}"`)
+        }
+        
+        parsedSlugs.set(slug, 1)
+
+        let content = post['content:encoded'] || post.description || ''
+        
+        // Ensure content is not empty (required field)
+        if (!content || content.trim().length === 0) {
+          payload.logger.warn(`⚠️  Post "${title}" has empty content, using placeholder`)
+          content = '<p>No content available.</p>'
+        }
+        
         const publishedDate = post.pubDate || new Date().toISOString()
 
         // Extract categories from XML
@@ -488,9 +531,14 @@ export async function POST(request: Request): Promise<Response> {
         }
       } catch (error: any) {
         errors++
-        const errorMessage = `Failed to import "${post.title}": ${error.message || error}`
+        const errorMessage = `Failed to import "${post.title}" (slug: ${post.slug}): ${error.message || error}`
         errorsList.push(errorMessage)
         payload.logger.error(errorMessage)
+        
+        // Log more details for debugging
+        if (error.stack) {
+          payload.logger.error(`   Stack: ${error.stack}`)
+        }
       }
     }
 
