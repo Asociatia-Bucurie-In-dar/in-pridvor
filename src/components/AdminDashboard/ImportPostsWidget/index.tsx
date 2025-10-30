@@ -10,6 +10,8 @@ interface IncrementalResult {
   errors: number
   totalInXml: number
   errorList: string[]
+  unmatchedCategoriesReport?: string[]
+  postsWithUnmatchedCategories?: number
 }
 
 interface ReformatResult {
@@ -57,6 +59,8 @@ export const ImportPostsWidget: React.FC = () => {
           errors: data.errors,
           totalInXml: data.totalInXml,
           errorList: data.errorList || [],
+          unmatchedCategoriesReport: data.unmatchedCategoriesReport || [],
+          postsWithUnmatchedCategories: data.postsWithUnmatchedCategories || 0,
         })
         setSelectedFile(null) // Clear file after successful import
         toast.success('Incremental import completed!')
@@ -281,6 +285,31 @@ export const ImportPostsWidget: React.FC = () => {
               ℹ️ No new articles found in the XML file. All articles already exist in your database.
             </div>
           )}
+
+          {incrementalResult.unmatchedCategoriesReport &&
+            incrementalResult.unmatchedCategoriesReport.length > 0 && (
+              <div
+                style={{
+                  marginTop: '15px',
+                  padding: '10px',
+                  backgroundColor: '#fff3cd',
+                  border: '1px solid #ffc107',
+                  borderRadius: '4px',
+                }}
+              >
+                <h5 style={{ margin: '0 0 10px 0', color: '#856404', fontSize: '14px' }}>
+                  ⚠️ Categories Not Found ({incrementalResult.postsWithUnmatchedCategories}{' '}
+                  {incrementalResult.postsWithUnmatchedCategories === 1 ? 'post' : 'posts'})
+                </h5>
+                <div style={{ color: '#856404', fontSize: '12px', whiteSpace: 'pre-wrap' }}>
+                  {incrementalResult.unmatchedCategoriesReport.join('\n')}
+                </div>
+                <p style={{ margin: '10px 0 0 0', color: '#856404', fontSize: '12px' }}>
+                  These categories from WordPress don't exist in your database. These posts were
+                  imported without categories. You can manually assign categories later.
+                </p>
+              </div>
+            )}
         </div>
       )}
 

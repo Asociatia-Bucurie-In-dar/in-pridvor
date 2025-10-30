@@ -273,29 +273,38 @@ export function htmlToLexical(html: string): LexicalRootNode {
     // Extract video URLs before cleaning
     const videoUrls: string[] = []
 
-    // Find YouTube URLs in the HTML
+    // Find YouTube URLs in the HTML (also match URLs missing 'h' from https)
     const youtubePatterns = [
-      /https?:\/\/(?:www\.)?youtube\.com\/watch\?v=([a-zA-Z0-9_-]{11})/g,
-      /https?:\/\/youtu\.be\/([a-zA-Z0-9_-]{11})/g,
-      /https?:\/\/(?:www\.)?youtube\.com\/embed\/([a-zA-Z0-9_-]{11})/g,
+      /https?:\/\/(?:www\.)?youtube\.com\/watch\?v=([a-zA-Z0-9_-]{11})/gi,
+      /https?:\/\/youtu\.be\/([a-zA-Z0-9_-]{11})/gi,
+      /https?:\/\/(?:www\.)?youtube\.com\/embed\/([a-zA-Z0-9_-]{11})/gi,
+      /ttps?:\/\/(?:www\.)?youtube\.com\/watch\?v=([a-zA-Z0-9_-]{11})/gi, // Handle missing 'h' case
     ]
 
     for (const pattern of youtubePatterns) {
       const matches = html.matchAll(pattern)
       for (const match of matches) {
-        videoUrls.push(match[0])
+        // Fix URLs missing 'h' from https
+        let url = match[0]
+        if (url.startsWith('ttps://')) {
+          url = 'h' + url
+        }
+        videoUrls.push(url)
       }
     }
 
     // Find Vimeo URLs
-    const vimeoPattern = /https?:\/\/(?:www\.)?vimeo\.com\/(\d+)/g
+    const vimeoPattern = /https?:\/\/(?:www\.)?vimeo\.com\/(\d+)/gi
     const vimeoMatches = html.matchAll(vimeoPattern)
     for (const match of vimeoMatches) {
       videoUrls.push(match[0])
     }
 
-    // Clean up the HTML
-    const cleanHtml = html
+    // Remove duplicate URLs
+    const uniqueVideoUrls = [...new Set(videoUrls)]
+
+    // Clean up the HTML and remove video URLs from text
+    let cleanHtml = html
       .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
       .replace(/<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/gi, '')
       // Remove WordPress block comments (including embeds)
@@ -309,7 +318,22 @@ export function htmlToLexical(html: string): LexicalRootNode {
       .replace(/<figcaption[^>]*>.*?<\/figcaption>/gi, '')
       // Remove empty paragraphs
       .replace(/<p>\s*<\/p>/gi, '')
-      .trim()
+
+    // Remove video URLs from content (they'll be added as blocks)
+    uniqueVideoUrls.forEach((videoUrl) => {
+      // Escape special regex characters in URL
+      const escapedUrl = videoUrl.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+      // Also handle URLs with missing 'h'
+      const escapedUrlAlt = videoUrl.replace(/^h/, '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+      
+      // Remove from text (including links)
+      cleanHtml = cleanHtml.replace(new RegExp(`<a[^>]*>${escapedUrl}<\/a>`, 'gi'), '')
+      cleanHtml = cleanHtml.replace(new RegExp(`<a[^>]*>${escapedUrlAlt}<\/a>`, 'gi'), '')
+      cleanHtml = cleanHtml.replace(new RegExp(escapedUrl, 'gi'), '')
+      cleanHtml = cleanHtml.replace(new RegExp(escapedUrlAlt, 'gi'), '')
+    })
+
+    cleanHtml = cleanHtml.trim()
 
     // Parse HTML
     const dom = new JSDOM(cleanHtml)
@@ -342,27 +366,16 @@ export function htmlToLexical(html: string): LexicalRootNode {
       }
     })
 
-    // TODO: Add video embed blocks properly
-    // For now, add video URLs as paragraphs with links
-    videoUrls.forEach((videoUrl) => {
+    // Add video embed blocks for YouTube/Vimeo URLs
+    uniqueVideoUrls.forEach((videoUrl) => {
       children.push({
-        type: 'paragraph',
-        children: [
-          {
-            type: 'text',
-            detail: 0,
-            format: 0,
-            mode: 'normal',
-            style: '',
-            text: `🎬 Video: ${videoUrl}`,
-            version: 1,
-          },
-        ],
-        direction: 'ltr',
-        format: '',
-        indent: 0,
+        type: 'block',
+        blockType: 'videoEmbed',
+        fields: {
+          url: videoUrl,
+        },
         version: 1,
-      })
+      } as any)
     })
 
     // If no children, add an empty paragraph

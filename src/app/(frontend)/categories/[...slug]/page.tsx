@@ -40,8 +40,21 @@ type Args = {
 
 export default async function Category({ params: paramsPromise }: Args) {
   const { slug } = await paramsPromise
+  
+  let categorySlug = slug
+  let pageNumber = 1
+  
+  if (slug.length >= 3 && slug[slug.length - 2] === 'page') {
+    const pageStr = slug[slug.length - 1]
+    const parsedPage = Number(pageStr)
+    if (Number.isInteger(parsedPage) && parsedPage > 0) {
+      pageNumber = parsedPage
+      categorySlug = slug.slice(0, -2)
+    }
+  }
+  
   const url = '/' + slug.join('/')
-  const category = await queryCategoryBySlug({ params: slug })
+  const category = await queryCategoryBySlug({ params: categorySlug })
 
   if (!category) return <PayloadRedirects url={url} />
 
@@ -49,7 +62,9 @@ export default async function Category({ params: paramsPromise }: Args) {
   const categoryIds = await getCategoryHierarchyIds(category.id)
 
   // Fetch posts from this category and all its subcategories
-  const posts = await queryPostsByCategoryIds(categoryIds)
+  const posts = await queryPostsByCategoryIds(categoryIds, pageNumber)
+  
+  const categoryBasePath = `/categories/${categorySlug.join('/')}`
 
   return (
     <div className="pt-16 pb-16">
@@ -78,7 +93,7 @@ export default async function Category({ params: paramsPromise }: Args) {
 
         <div className="container">
           {posts.totalPages > 1 && posts.page && (
-            <Pagination page={posts.page} totalPages={posts.totalPages} />
+            <Pagination page={posts.page} totalPages={posts.totalPages} basePath={categoryBasePath} />
           )}
         </div>
       </div>
@@ -88,7 +103,13 @@ export default async function Category({ params: paramsPromise }: Args) {
 
 export async function generateMetadata({ params: paramsPromise }: Args): Promise<Metadata> {
   const { slug } = await paramsPromise
-  const post = await queryCategoryBySlug({ params: slug })
+  
+  let categorySlug = slug
+  if (slug.length >= 3 && slug[slug.length - 2] === 'page') {
+    categorySlug = slug.slice(0, -2)
+  }
+  
+  const post = await queryCategoryBySlug({ params: categorySlug })
 
   return generateMeta({ doc: post })
 }
@@ -114,13 +135,14 @@ const queryCategoryBySlug = cache(async ({ params }: { params: string[] }) => {
   return result.docs?.[0] || null
 })
 
-const queryPostsByCategoryIds = cache(async (categoryIds: number[]) => {
+const queryPostsByCategoryIds = cache(async (categoryIds: number[], page: number = 1) => {
   const payload = await getPayload({ config: configPromise })
 
   const result = await payload.find({
     collection: 'posts',
     depth: 1,
     limit: 12,
+    page,
     overrideAccess: false,
     select: {
       title: true,

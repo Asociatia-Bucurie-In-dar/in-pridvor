@@ -106,7 +106,7 @@ export const Posts: CollectionConfig<'posts'> = {
             {
               name: 'enableDropCap',
               type: 'checkbox',
-              defaultValue: true,
+              defaultValue: false,
               admin: {
                 description:
                   'Enable a large decorative first letter (drop cap) at the beginning of the article content',
