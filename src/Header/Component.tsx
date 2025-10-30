@@ -39,8 +39,8 @@ function buildCategoryTree(categories: Category[]) {
       return (a.title || '').localeCompare(b.title || '')
     })
 
-  // Keep child categories sorted by creation date (oldest-first). If createdAt missing, fall back to title.
-  const sortByCreatedAt = (arr: Category[], desc = false) =>
+  // Keep child categories sorted by creation date (newest-first). If createdAt missing, fall back to title.
+  const sortByCreatedAt = (arr: Category[], desc = true) =>
     arr.sort((a, b) => {
       const aTime = a.createdAt ? new Date(a.createdAt).getTime() : 0
       const bTime = b.createdAt ? new Date(b.createdAt).getTime() : 0
@@ -54,7 +54,7 @@ function buildCategoryTree(categories: Category[]) {
 
   const roots = sortRootsByDisplayOrder([...(byParent.get('root') ?? [])])
 
-  const childrenOf = (parentId: number) => sortByCreatedAt([...(byParent.get(parentId) ?? [])])
+  const childrenOf = (parentId: number) => sortByCreatedAt([...(byParent.get(parentId) ?? [])], true)
 
   return { roots, childrenOf }
 }
