@@ -54,7 +54,8 @@ function buildCategoryTree(categories: Category[]) {
 
   const roots = sortRootsByDisplayOrder([...(byParent.get('root') ?? [])])
 
-  const childrenOf = (parentId: number) => sortByCreatedAt([...(byParent.get(parentId) ?? [])], false)
+  const childrenOf = (parentId: number) =>
+    sortByCreatedAt([...(byParent.get(parentId) ?? [])], false)
 
   return { roots, childrenOf }
 }
@@ -73,7 +74,7 @@ function toCategoryNavItems(categories: Category[]) {
       sublinks.push({
         id: `cat-${child.id}`,
         link: {
-          url: child.slug ? `categories/${child.slug}` : '/',
+          url: child.slug ? `/categories/${child.slug}` : '/',
           label: child.title,
         },
       })
@@ -83,7 +84,7 @@ function toCategoryNavItems(categories: Category[]) {
         sublinks.push({
           id: `cat-${grand.id}`,
           link: {
-            url: grand.slug ? `categories/${grand.slug}` : '/',
+            url: grand.slug ? `/categories/${grand.slug}` : '/',
             label: `— ${grand.title}`,
           },
         })
@@ -93,7 +94,7 @@ function toCategoryNavItems(categories: Category[]) {
     result.push({
       id: `cat-${parent.id}`,
       link: {
-        url: parent.slug ? `categories/${parent.slug}` : '/',
+        url: parent.slug ? `/categories/${parent.slug}` : '/',
         label: parent.title,
       },
       sublinks: sublinks.length ? sublinks : null,
