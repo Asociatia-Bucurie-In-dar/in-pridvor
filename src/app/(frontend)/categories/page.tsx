@@ -3,6 +3,7 @@ import type { Metadata } from 'next/types'
 import { CollectionArchive } from '@/components/CollectionArchive'
 import { PageRange } from '@/components/PageRange'
 import { Pagination } from '@/components/Pagination'
+import { TitleBar } from '@/components/TitleBar'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import PageClient from './page.client'
@@ -33,13 +34,9 @@ export default async function Page() {
   })
 
   return (
-    <div className="pt-24 pb-24">
+    <div className="pb-24">
       <PageClient />
-      <div className="container mb-16">
-        <div className="prose max-w-none">
-          <h1> Toate Rubricile - {websiteTitle}</h1>
-        </div>
-      </div>
+      <TitleBar title={`Toate Rubricile - ${websiteTitle}`} />
 
       <div className="container mb-8">
         <PageRange

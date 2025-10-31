@@ -9,6 +9,7 @@ import { FormBlock } from '@/blocks/Form/Component'
 import { MediaBlock } from '@/blocks/MediaBlock/Component'
 import { HeroCarouselBlock } from '@/blocks/HeroCarousel/Component'
 import { VideoEmbedBlock } from '@/blocks/VideoEmbed/Component'
+import { TitleBarBlock } from '@/blocks/TitleBar/Component'
 
 const blockComponents = {
   archive: ArchiveBlock,
@@ -18,6 +19,7 @@ const blockComponents = {
   mediaBlock: MediaBlock,
   heroCarousel: HeroCarouselBlock,
   videoEmbed: VideoEmbedBlock,
+  titleBar: TitleBarBlock,
 }
 
 export const RenderBlocks: React.FC<{
@@ -37,8 +39,7 @@ export const RenderBlocks: React.FC<{
             const Block = blockComponents[blockType]
 
             if (Block) {
-              // Don't add margin wrapper for heroCarousel
-              if (blockType === 'heroCarousel') {
+              if (blockType === 'heroCarousel' || blockType === 'titleBar') {
                 return (
                   <Fragment key={index}>
                     {/* @ts-expect-error there may be some mismatch between the expected types here */}

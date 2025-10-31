@@ -4,6 +4,7 @@ import { PayloadRedirects } from '@/components/PayloadRedirects'
 import { CollectionArchive } from '@/components/CollectionArchive'
 import { Pagination } from '@/components/Pagination'
 import { PageRange } from '@/components/PageRange'
+import { TitleBar } from '@/components/TitleBar'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import React, { cache } from 'react'
@@ -48,18 +49,14 @@ export default async function Author({ params: paramsPromise }: Args) {
   const posts = await queryPostsByAuthorId(author.id)
 
   return (
-    <div className="pt-16 pb-16">
+    <div className="pb-16">
       <PageClient />
 
       {/* Allows redirects for valid pages too */}
       <PayloadRedirects disableNotFound url={url} />
 
-      <div className="flex flex-col items-center gap-4 pt-8">
-        <div className="container mb-16">
-          <div className="prose max-w-none text-center">
-            <h1 className="text-4xl lg:text-5xl">{author.name}</h1>
-          </div>
-        </div>
+      <div className="flex flex-col items-center gap-4">
+        <TitleBar prefix="Autor" title={author.name || ''} />
 
         <div className="container mb-8">
           <PageRange

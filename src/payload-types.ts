@@ -191,7 +191,15 @@ export interface Page {
       | null;
     media?: (number | null) | Media;
   };
-  layout: (HeroCarouselBlock | CallToActionBlock | ContentBlock | MediaBlock | ArchiveBlock | FormBlock)[];
+  layout: (
+    | HeroCarouselBlock
+    | CallToActionBlock
+    | ContentBlock
+    | MediaBlock
+    | ArchiveBlock
+    | FormBlock
+    | TitleBarBlock
+  )[];
   meta?: {
     title?: string | null;
     /**
@@ -782,6 +790,20 @@ export interface Form {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TitleBarBlock".
+ */
+export interface TitleBarBlock {
+  title: string;
+  /**
+   * Optional prefix text before the title (e.g., "Rubrica:")
+   */
+  prefix?: string | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'titleBar';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "comments".
  */
 export interface Comment {
@@ -1055,6 +1077,7 @@ export interface PagesSelect<T extends boolean = true> {
         mediaBlock?: T | MediaBlockSelect<T>;
         archive?: T | ArchiveBlockSelect<T>;
         formBlock?: T | FormBlockSelect<T>;
+        titleBar?: T | TitleBarBlockSelect<T>;
       };
   meta?:
     | T
@@ -1168,6 +1191,16 @@ export interface FormBlockSelect<T extends boolean = true> {
   form?: T;
   enableIntro?: T;
   introContent?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TitleBarBlock_select".
+ */
+export interface TitleBarBlockSelect<T extends boolean = true> {
+  title?: T;
+  prefix?: T;
   id?: T;
   blockName?: T;
 }

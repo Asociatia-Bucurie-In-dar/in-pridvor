@@ -4,6 +4,7 @@ import { PayloadRedirects } from '@/components/PayloadRedirects'
 import { CollectionArchive } from '@/components/CollectionArchive'
 import { Pagination } from '@/components/Pagination'
 import { PageRange } from '@/components/PageRange'
+import { TitleBar } from '@/components/TitleBar'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import React, { cache } from 'react'
@@ -25,10 +26,12 @@ export async function generateStaticParams() {
     },
   })
 
-  const params = categories.docs.map(({ slug }) => {
-    const segments = slug?.split('/') || []
-    return segments.filter((segment) => segment !== 'categories' && segment !== '')
-  }).filter((segments) => segments.length > 0)
+  const params = categories.docs
+    .map(({ slug }) => {
+      const segments = slug?.split('/') || []
+      return segments.filter((segment) => segment !== 'categories' && segment !== '')
+    })
+    .filter((segments) => segments.length > 0)
 
   return params
 }
@@ -41,10 +44,10 @@ type Args = {
 
 export default async function Category({ params: paramsPromise }: Args) {
   const { slug } = await paramsPromise
-  
+
   let categorySlug = slug
   let pageNumber = 1
-  
+
   if (slug.length >= 3 && slug[slug.length - 2] === 'page') {
     const pageStr = slug[slug.length - 1]
     const parsedPage = Number(pageStr)
@@ -53,7 +56,7 @@ export default async function Category({ params: paramsPromise }: Args) {
       categorySlug = slug.slice(0, -2)
     }
   }
-  
+
   const url = '/' + slug.join('/')
   const category = await queryCategoryBySlug({ params: categorySlug })
 
@@ -64,23 +67,19 @@ export default async function Category({ params: paramsPromise }: Args) {
 
   // Fetch posts from this category and all its subcategories
   const posts = await queryPostsByCategoryIds(categoryIds, pageNumber)
-  
+
   const filteredCategorySlug = categorySlug.filter((segment) => segment !== 'categories')
   const categoryBasePath = `/categories/${filteredCategorySlug.join('/')}`
 
   return (
-    <div className="pt-16 pb-16">
+    <div className="pb-16">
       <PageClient />
 
       {/* Allows redirects for valid pages too */}
       <PayloadRedirects disableNotFound url={url} />
 
-      <div className="flex flex-col items-center gap-4 pt-8">
-        <div className="container mb-16">
-          <div className="prose max-w-none">
-            <h1>Rubrica: {category.title}</h1>
-          </div>
-        </div>
+      <div className="flex flex-col items-center gap-4">
+        <TitleBar title={category.title} prefix="Rubrica" />
 
         <div className="container mb-8">
           <PageRange
@@ -95,7 +94,11 @@ export default async function Category({ params: paramsPromise }: Args) {
 
         <div className="container">
           {posts.totalPages > 1 && posts.page && (
-            <Pagination page={posts.page} totalPages={posts.totalPages} basePath={categoryBasePath} />
+            <Pagination
+              page={posts.page}
+              totalPages={posts.totalPages}
+              basePath={categoryBasePath}
+            />
           )}
         </div>
       </div>
@@ -105,12 +108,12 @@ export default async function Category({ params: paramsPromise }: Args) {
 
 export async function generateMetadata({ params: paramsPromise }: Args): Promise<Metadata> {
   const { slug } = await paramsPromise
-  
+
   let categorySlug = slug
   if (slug.length >= 3 && slug[slug.length - 2] === 'page') {
     categorySlug = slug.slice(0, -2)
   }
-  
+
   const post = await queryCategoryBySlug({ params: categorySlug })
 
   return generateMeta({ doc: post })
@@ -118,7 +121,7 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
 
 const queryCategoryBySlug = cache(async ({ params }: { params: string[] }) => {
   const filteredParams = params.filter((segment) => segment !== 'categories')
-  
+
   if (filteredParams.length === 0) {
     return null
   }
