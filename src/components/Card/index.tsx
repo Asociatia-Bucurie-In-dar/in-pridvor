@@ -19,6 +19,7 @@ export type CardPostData = Pick<
   | 'meta'
   | 'title'
   | 'heroImage'
+  | 'heroImageAlignment'
   | 'content'
   | 'publishedAt'
   | 'populatedAuthors'
@@ -35,12 +36,32 @@ export const Card: React.FC<{
   const { card, link } = useClickableCard({})
   const { className, doc, relationTo, showCategories, title: titleFromProps } = props
 
-  const { slug, categories, meta, title, heroImage, content, publishedAt, populatedAuthors } =
+  const { slug, categories, meta, title, heroImage, heroImageAlignment, content, publishedAt, populatedAuthors } =
     doc || {}
   const { image: metaImage } = meta || {}
 
   // Use heroImage first, fall back to meta image
   const cardImage = heroImage || metaImage
+
+  // Determine image alignment class
+  const alignment = heroImageAlignment || 'centered'
+  const getAlignmentClass = (align: string) => {
+    switch (align) {
+      case 'top':
+        return 'object-top'
+      case 'upper-center':
+        return 'object-[50%_25%]'
+      case 'centered':
+        return 'object-center'
+      case 'lower-center':
+        return 'object-[50%_75%]'
+      case 'bottom':
+        return 'object-bottom'
+      default:
+        return 'object-center'
+    }
+  }
+  const alignmentClass = getAlignmentClass(alignment)
 
   const hasCategories = categories && Array.isArray(categories) && categories.length > 0
   const titleToUse = titleFromProps || title
@@ -60,7 +81,12 @@ export const Card: React.FC<{
       <Link className="relative w-full" href={href} ref={link.ref}>
         <div className="relative aspect-video w-full rounded-lg bg-gray-100 overflow-hidden">
           {cardImage && typeof cardImage !== 'string' ? (
-            <Media resource={cardImage} size="33vw" fill imgClassName="object-cover" />
+            <Media
+              resource={cardImage}
+              size="33vw"
+              fill
+              imgClassName={`object-cover ${alignmentClass}`}
+            />
           ) : (
             <div className="flex items-center justify-center h-full">
               <span className="text-gray-400 text-sm">No image</span>

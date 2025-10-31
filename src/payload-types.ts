@@ -368,6 +368,10 @@ export interface Post {
   id: number;
   title: string;
   heroImage?: (number | null) | Media;
+  /**
+   * How to position the hero image vertically
+   */
+  heroImageAlignment?: ('top' | 'upper-center' | 'centered' | 'lower-center' | 'bottom') | null;
   content: {
     root: {
       type: string;
@@ -1211,6 +1215,7 @@ export interface TitleBarBlockSelect<T extends boolean = true> {
 export interface PostsSelect<T extends boolean = true> {
   title?: T;
   heroImage?: T;
+  heroImageAlignment?: T;
   content?: T;
   enableDropCap?: T;
   dropCapParagraphIndex?: T;

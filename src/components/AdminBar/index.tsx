@@ -12,6 +12,7 @@ import './index.scss'
 
 import { getClientSideURL } from '@/utilities/getURL'
 import { ArrowRight } from 'lucide-react'
+import { useAdmin } from '@/contexts/AdminContext'
 
 const baseClass = 'admin-bar'
 
@@ -38,6 +39,7 @@ export const AdminBar: React.FC<{
   const { adminBarProps } = props || {}
   const segments = useSelectedLayoutSegments()
   const [show, setShow] = useState(false)
+  const { setUser } = useAdmin()
   const collection = (
     collectionLabels[segments?.[0] as keyof typeof collectionLabels] ? segments[0] : 'posts'
   ) as keyof typeof collectionLabels
@@ -45,7 +47,8 @@ export const AdminBar: React.FC<{
 
   const onAuthChange = React.useCallback((user: PayloadMeUser) => {
     setShow(Boolean(user?.id))
-  }, [])
+    setUser(user)
+  }, [setUser])
 
   return (
     <div

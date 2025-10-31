@@ -11,10 +11,12 @@ import RichText from '@/components/RichText'
 import type { Post } from '@/payload-types'
 
 import { PostHero } from '@/heros/PostHero'
+import { PostHeroEditable } from '@/components/PostHeroEditable'
 import { generateMeta } from '@/utilities/generateMeta'
 import PageClient from './page.client'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
 import { Comments } from '@/components/Comments/Comments'
+import { DropCapHandler } from '@/components/DropCapHandler'
 
 export async function generateStaticParams() {
   const payload = await getPayload({ config: configPromise })
@@ -63,10 +65,16 @@ export default async function Post({ params: paramsPromise }: Args) {
 
       {draft && <LivePreviewListener />}
 
-      <PostHero post={post} />
+      <PostHeroEditable post={post} showDropCap={showDropCap} dropCapIndex={dropCapIndex} />
 
       <div className="flex flex-col items-center gap-4 pt-8">
         <div className="container">
+          {showDropCap && (
+            <DropCapHandler
+              containerSelector=".article-content-with-dropcap"
+              dropCapIndex={dropCapIndex}
+            />
+          )}
           <RichText
             className={`max-w-3xl mx-auto ${showDropCap ? 'article-content-with-dropcap' : ''}`}
             data-dropcap-index={showDropCap ? dropCapIndex : undefined}

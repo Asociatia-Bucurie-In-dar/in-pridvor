@@ -28,6 +28,7 @@ export default async function Page({ searchParams: searchParamsPromise }: Args) 
       categories: true,
       meta: true,
       heroImage: true,
+      heroImageAlignment: true,
       content: true,
       authors: true,
       populatedAuthors: true,

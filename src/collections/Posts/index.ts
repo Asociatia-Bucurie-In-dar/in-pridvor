@@ -38,6 +38,7 @@ export const Posts: CollectionConfig<'posts'> = {
     slug: true,
     categories: true,
     heroImage: true,
+    heroImageAlignment: true,
     content: true,
     meta: {
       image: true,
@@ -79,6 +80,37 @@ export const Posts: CollectionConfig<'posts'> = {
               name: 'heroImage',
               type: 'upload',
               relationTo: 'media',
+            },
+            {
+              name: 'heroImageAlignment',
+              type: 'select',
+              defaultValue: 'centered',
+              options: [
+                {
+                  label: 'Top',
+                  value: 'top',
+                },
+                {
+                  label: 'Upper Center',
+                  value: 'upper-center',
+                },
+                {
+                  label: 'Centered',
+                  value: 'centered',
+                },
+                {
+                  label: 'Lower Center',
+                  value: 'lower-center',
+                },
+                {
+                  label: 'Bottom',
+                  value: 'bottom',
+                },
+              ],
+              admin: {
+                description: 'How to position the hero image vertically',
+                position: 'sidebar',
+              },
             },
             {
               name: 'content',

@@ -60,6 +60,7 @@ export const ArchiveBlock: React.FC<
         categories: true,
         meta: true,
         heroImage: true,
+        heroImageAlignment: true,
         content: true,
         authors: true,
         populatedAuthors: true,

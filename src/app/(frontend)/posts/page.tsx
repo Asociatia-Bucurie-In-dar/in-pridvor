@@ -27,6 +27,7 @@ export default async function Page() {
       categories: true,
       meta: true,
       heroImage: true,
+      heroImageAlignment: true,
       content: true,
       authors: true,
       populatedAuthors: true,
