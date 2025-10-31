@@ -55,7 +55,7 @@ function findAuthorInContent(content: string, authorName: string, normalizedAuth
     const firstName = nameParts[0]
     const lastName = nameParts[nameParts.length - 1]
     
-    if (normalizedContent.includes(firstName) && normalizedContent.includes(lastName)) {
+    if (firstName && lastName && normalizedContent.includes(firstName) && normalizedContent.includes(lastName)) {
       const firstNameIndex = normalizedContent.indexOf(firstName)
       const lastNameIndex = normalizedContent.indexOf(lastName)
       

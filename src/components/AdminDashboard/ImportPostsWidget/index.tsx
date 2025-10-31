@@ -370,9 +370,9 @@ export const ImportPostsWidget: React.FC = () => {
       <h4 style={{ margin: '0 0 10px 0', color: '#666' }}>✍️ Author Assignment</h4>
       <div style={{ marginBottom: '20px' }}>
         <p style={{ margin: '0 0 10px 0', color: '#666', fontSize: '14px' }}>
-          Search each article's content for author names and assign matching authors. Uses fuzzy
-          matching for Romanian characters (ă, â, î, ș, ț). Posts without matches will default to
-          "Anca Stanciu".
+          Search each article&apos;s content for author names and assign matching authors. Uses
+          fuzzy matching for Romanian characters (ă, â, î, ș, ț). Posts without matches will default
+          to &quot;Anca Stanciu&quot;.
         </p>
         <Button onClick={handleAssignAuthors} disabled={isAssigningAuthors}>
           {isAssigningAuthors ? 'Assigning...' : '✍️ Assign Authors'}
@@ -477,8 +477,8 @@ export const ImportPostsWidget: React.FC = () => {
                   {incrementalResult.unmatchedCategoriesReport.join('\n')}
                 </div>
                 <p style={{ margin: '10px 0 0 0', color: '#856404', fontSize: '12px' }}>
-                  These categories from WordPress don't exist in your database. These posts were
-                  imported without categories. You can manually assign categories later.
+                  These categories from WordPress don&apos;t exist in your database. These posts
+                  were imported without categories. You can manually assign categories later.
                 </p>
               </div>
             )}
