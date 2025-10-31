@@ -4,7 +4,7 @@
 
 ### 1. **DonateModal Component** (`/src/components/DonateModal/index.tsx`)
 A professional donation modal with:
-- ✅ **Two payment methods** (IBAN and Stripe)
+- ✅ **Two payment methods** (IBAN and Netopia Payments)
 - ✅ **Tab-based interface** for switching between methods
 - ✅ **Beautiful animations** using Framer Motion
 - ✅ **Copy-to-clipboard** buttons for bank details
@@ -18,15 +18,16 @@ A professional donation modal with:
 - ✅ Smooth transitions between mobile menu and modal
 - ✅ State management for modal open/close
 
-### 3. **Stripe Integration Guide** (`/STRIPE-INTEGRATION.md`)
+### 3. **Netopia Payments Integration Guide** (`/NETOPIA-INTEGRATION.md`)
 Complete step-by-step instructions for:
-- ✅ Installing dependencies
+- ✅ Creating a Point of Sale (POS) in Netopia
+- ✅ Generating API keys
 - ✅ Setting up environment variables
 - ✅ Creating API routes
 - ✅ Handling success/cancel pages
-- ✅ Testing with Stripe test cards
+- ✅ Testing with Netopia sandbox
 - ✅ Security best practices
-- ✅ Optional webhook setup
+- ✅ IPN (Instant Payment Notification) setup
 
 ## 🎯 Best Practices Followed
 
@@ -40,7 +41,7 @@ Based on research of top donation platforms (Wikipedia, Patreon, major charities
 
 ### ✅ Multiple Payment Options
 - **IBAN/Bank Transfer**: For traditional donors, no fees
-- **Stripe/Card**: For quick, instant donations, better UX
+- **Netopia Payments/Card**: For quick, instant donations, better UX (Romanian payment processor)
 
 ### ✅ User Experience
 - Clear, simple interface
@@ -50,10 +51,11 @@ Based on research of top donation platforms (Wikipedia, Patreon, major charities
 - Accessibility considerations
 
 ### ✅ Security
-- Stripe handles all card processing (PCI compliant)
+- Netopia Payments handles all card processing (PCI compliant)
 - No sensitive data stored locally
 - Environment variables for API keys
 - Secure server-side processing
+- SHA-256 signature verification for IPN
 
 ## 📋 TODO: Next Steps
 
@@ -70,13 +72,13 @@ Based on research of top donation platforms (Wikipedia, Patreon, major charities
    }
    ```
 
-2. **Implement Stripe** (Optional but recommended):
-   - Follow instructions in `STRIPE-INTEGRATION.md`
-   - Sign up for Stripe account
-   - Install dependencies: `pnpm add stripe @stripe/stripe-js`
-   - Create API routes
+2. **Implement Netopia Payments** (Optional but recommended):
+   - Follow instructions in `NETOPIA-INTEGRATION.md`
+   - Sign up for Netopia Payments account
+   - Create a Point of Sale (POS) in Netopia admin
+   - Generate API keys and POS signature
    - Add environment variables
-   - Test with Stripe test cards
+   - Test with Netopia sandbox environment
 
 ### Optional Enhancements:
 
@@ -87,7 +89,7 @@ Based on research of top donation platforms (Wikipedia, Patreon, major charities
 
 2. **Recurring Donations**:
    - Add monthly/yearly subscription options
-   - Use Stripe Subscriptions API
+   - Use Netopia Payments recurring payment features
 
 3. **Social Sharing**:
    - Share donation success on social media
@@ -134,7 +136,7 @@ Based on research of top donation platforms (Wikipedia, Patreon, major charities
 - Never commit `.env.local` to git
 - Use test keys in development
 - Use live keys only in production
-- Regular security audits for Stripe integration
+- Regular security audits for Netopia Payments integration
 
 ## 📊 Why Modal-Only Approach?
 
@@ -173,21 +175,21 @@ Before going live, test:
 - [ ] Modal opens on mobile menu donate button
 - [ ] IBAN section displays correctly
 - [ ] Copy buttons work for all fields
-- [ ] Stripe section displays correctly
+- [ ] Netopia Payments section displays correctly
 - [ ] Preset amounts (50, 100, 200) work
 - [ ] Custom amount input works
 - [ ] Modal closes properly (X button and backdrop click)
 - [ ] Responsive on all screen sizes
 - [ ] Animations are smooth
 - [ ] **Bank details are correct and updated**
-- [ ] Tab switching between IBAN/Stripe works
+- [ ] Tab switching between IBAN/Netopia works
 
 ## 🌟 Success Metrics to Track
 
 Once live, monitor:
 - Click-through rate on donate button
 - Modal open rate
-- Payment method preference (IBAN vs Stripe)
+- Payment method preference (IBAN vs Netopia Payments)
 - Average donation amount
 - Completion rate
 - Device breakdown (mobile vs desktop)
@@ -205,7 +207,7 @@ Once live, monitor:
 ## 🆘 Support
 
 If you need help:
-- **Stripe Issues**: Check `STRIPE-INTEGRATION.md`
+- **Netopia Payments Issues**: Check `NETOPIA-INTEGRATION.md`
 - **Technical Issues**: Review code comments
 - **Design Changes**: Modify Tailwind classes in components
 
@@ -214,7 +216,9 @@ If you need help:
 ```
 ✅ Created:
 - /src/components/DonateModal/index.tsx (separate, reusable component)
-- /STRIPE-INTEGRATION.md (complete setup guide)
+- /NETOPIA-INTEGRATION.md (complete setup guide)
+- /src/app/api/donate/checkout/route.ts (Netopia checkout API)
+- /src/app/api/donate/ipn/route.ts (Netopia IPN handler)
 - /DONATION-IMPLEMENTATION-SUMMARY.md (this file)
 
 ✅ Modified:
@@ -229,6 +233,6 @@ If you need help:
 
 1. **Update bank details** in DonateModal component
 2. **Test the modal** by clicking donate buttons
-3. **Optionally implement Stripe** following the guide
+3. **Set up Netopia Payments** following the guide in `NETOPIA-INTEGRATION.md`
 4. **Go live** and start accepting donations! 🎉
 

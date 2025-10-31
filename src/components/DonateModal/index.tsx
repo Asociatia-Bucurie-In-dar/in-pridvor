@@ -11,7 +11,7 @@ interface DonateModalProps {
   onClose: () => void
 }
 
-type PaymentMethod = 'iban' | 'stripe'
+type PaymentMethod = 'iban' | 'netopia'
 
 export const DonateModal: React.FC<DonateModalProps> = ({ isOpen, onClose }) => {
   const isCardEnabled = process.env.NEXT_PUBLIC_ENABLE_CARD_DONATIONS === 'true'
@@ -34,9 +34,8 @@ export const DonateModal: React.FC<DonateModalProps> = ({ isOpen, onClose }) => 
     }
   }, [isOpen])
 
-  // Ensure we never stay on Stripe when disabled
   useEffect(() => {
-    if (!isCardEnabled && activeMethod === 'stripe') {
+    if (!isCardEnabled && activeMethod === 'netopia') {
       setActiveMethod('iban')
     }
   }, [isCardEnabled, activeMethod])
@@ -70,31 +69,26 @@ export const DonateModal: React.FC<DonateModalProps> = ({ isOpen, onClose }) => 
     }
   }
 
-  const handleStripeCheckout = async () => {
+  const handleNetopiaCheckout = async (e?: React.MouseEvent) => {
+    if (e) {
+      e.preventDefault()
+      e.stopPropagation()
+    }
+
     if (donationAmount < 10) {
       alert('Suma minimă este 10 RON')
       return
     }
 
     setIsLoading(true)
+    
+    const redirectUrl = `/api/donate/redirect?amount=${donationAmount}`
+    
     try {
-      const response = await fetch('/api/donate/checkout', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ amount: donationAmount }),
-      })
-
-      const { url, error } = await response.json()
-
-      if (error) {
-        throw new Error(error)
-      }
-
-      window.location.href = url
+      window.location.assign(redirectUrl)
     } catch (error) {
       console.error('Checkout error:', error)
       alert('A apărut o eroare. Te rugăm să încerci din nou.')
-    } finally {
       setIsLoading(false)
     }
   }
@@ -179,9 +173,9 @@ export const DonateModal: React.FC<DonateModalProps> = ({ isOpen, onClose }) => 
                       Transfer Bancar
                     </button>
                     <button
-                      onClick={() => setActiveMethod('stripe')}
+                      onClick={() => setActiveMethod('netopia')}
                       className={`flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-md text-sm font-semibold transition-all ${
-                        activeMethod === 'stripe'
+                        activeMethod === 'netopia'
                           ? 'bg-white text-gray-900 shadow-sm'
                           : 'text-gray-600 hover:text-gray-900'
                       }`}
@@ -296,8 +290,7 @@ export const DonateModal: React.FC<DonateModalProps> = ({ isOpen, onClose }) => 
                   </motion.div>
                 )}
 
-                {/* Stripe Section */}
-                {isCardEnabled && activeMethod === 'stripe' && (
+                {isCardEnabled && activeMethod === 'netopia' && (
                   <motion.div
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -305,7 +298,7 @@ export const DonateModal: React.FC<DonateModalProps> = ({ isOpen, onClose }) => 
                   >
                     <div className="space-y-4">
                       <p className="text-sm text-gray-600">
-                        Donează rapid și sigur cu cardul tău bancar prin Stripe.
+                        Donează rapid și sigur cu cardul tău bancar prin Netopia Payments.
                       </p>
 
                       {/* Suggested Amounts */}
@@ -359,11 +352,11 @@ export const DonateModal: React.FC<DonateModalProps> = ({ isOpen, onClose }) => 
                         </div>
                       </div>
 
-                      {/* Stripe Button */}
                       <motion.button
+                        type="button"
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
-                        onClick={handleStripeCheckout}
+                        onClick={handleNetopiaCheckout}
                         disabled={isLoading}
                         aria-disabled={isLoading}
                         className={`w-full flex items-center justify-center gap-2 bg-yellow-400 hover:bg-yellow-500 text-black font-semibold py-3 px-4 rounded-lg transition-colors shadow-sm hover:shadow-md ${
@@ -374,7 +367,6 @@ export const DonateModal: React.FC<DonateModalProps> = ({ isOpen, onClose }) => 
                         {isLoading ? 'Se încarcă…' : 'Donează cu Cardul'}
                       </motion.button>
 
-                      {/* Security Badge */}
                       <div className="flex items-center justify-center gap-2 text-xs text-gray-500">
                         <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
                           <path
@@ -383,7 +375,7 @@ export const DonateModal: React.FC<DonateModalProps> = ({ isOpen, onClose }) => 
                             clipRule="evenodd"
                           />
                         </svg>
-                        Plăți securizate prin Stripe
+                        Plăți securizate prin Netopia Payments
                       </div>
                     </div>
                   </motion.div>
