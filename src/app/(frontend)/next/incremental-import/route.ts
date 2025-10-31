@@ -6,7 +6,7 @@ import path from 'path'
 import { htmlToLexical } from '@/utilities/htmlToLexical'
 import { formatSlug } from '@/fields/slug/formatSlug'
 
-export const maxDuration = 1000 // This function can run for a maximum of 5 minutes
+export const maxDuration = 300 // This function can run for a maximum of 5 minutes
 
 interface ParsedPost {
   title: string

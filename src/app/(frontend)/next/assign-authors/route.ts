@@ -2,7 +2,7 @@ import { getPayload, createLocalReq } from 'payload'
 import config from '@payload-config'
 import { headers } from 'next/headers'
 
-export const maxDuration = 1000
+export const maxDuration = 300
 
 function normalizeForMatching(text: string): string {
   if (!text) return ''
