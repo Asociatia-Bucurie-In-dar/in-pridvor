@@ -195,7 +195,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
                         item.link.url ||
                         (typeof item.link.reference?.value === 'object' &&
                         'slug' in item.link.reference.value
-                          ? 'categories/' + item.link.reference.value.slug
+                          ? '/categories/' + item.link.reference.value.slug
                           : '/')
                       }
                       className="text-md text-gray-800 hover:text-yellow-600 font-playfair transition-colors"
@@ -234,7 +234,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
                                     subItem.link.url ||
                                     (typeof subItem.link.reference?.value === 'object' &&
                                     'slug' in subItem.link.reference.value
-                                      ? 'categories/' + subItem.link.reference.value.slug
+                                      ? '/categories/' + subItem.link.reference.value.slug
                                       : '/')
                                   }
                                   className="block font-medium font-playfair text-gray-900 group-hover:text-yellow-600 transition-colors"
@@ -349,7 +349,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
                                 item.link.url ||
                                 (typeof item.link.reference?.value === 'object' &&
                                 'slug' in item.link.reference.value
-                                  ? 'categories/' + item.link.reference.value.slug
+                                  ? '/categories/' + item.link.reference.value.slug
                                   : '/')
                               }
                               className="flex-1 rounded-lg px-3 py-2 text-base font-semibold text-gray-900 hover:bg-gray-50 font-playfair transition-colors"
@@ -400,7 +400,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
                                           subItem.link.url ||
                                           (typeof subItem.link.reference?.value === 'object' &&
                                           'slug' in subItem.link.reference.value
-                                            ? 'categories/' + subItem.link.reference.value.slug
+                                            ? '/categories/' + subItem.link.reference.value.slug
                                             : '/')
                                         }
                                         className="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-yellow-600 font-playfair transition-colors"

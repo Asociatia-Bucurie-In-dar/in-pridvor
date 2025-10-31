@@ -26,8 +26,9 @@ export async function generateStaticParams() {
   })
 
   const params = categories.docs.map(({ slug }) => {
-    return slug?.split('/') || []
-  })
+    const segments = slug?.split('/') || []
+    return segments.filter((segment) => segment !== 'categories' && segment !== '')
+  }).filter((segments) => segments.length > 0)
 
   return params
 }
@@ -64,7 +65,8 @@ export default async function Category({ params: paramsPromise }: Args) {
   // Fetch posts from this category and all its subcategories
   const posts = await queryPostsByCategoryIds(categoryIds, pageNumber)
   
-  const categoryBasePath = `/categories/${categorySlug.join('/')}`
+  const filteredCategorySlug = categorySlug.filter((segment) => segment !== 'categories')
+  const categoryBasePath = `/categories/${filteredCategorySlug.join('/')}`
 
   return (
     <div className="pt-16 pb-16">
@@ -115,22 +117,42 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
 }
 
 const queryCategoryBySlug = cache(async ({ params }: { params: string[] }) => {
-  // gat last array item
-  const slug = params[params.length - 1]
+  const filteredParams = params.filter((segment) => segment !== 'categories')
+  
+  if (filteredParams.length === 0) {
+    return null
+  }
+
+  const fullSlug = filteredParams.join('/')
+  const lastSegment = filteredParams[filteredParams.length - 1]
 
   const payload = await getPayload({ config: configPromise })
 
-  const result = await payload.find({
+  let result = await payload.find({
     collection: 'categories',
     limit: 1,
     overrideAccess: false,
     pagination: false,
     where: {
       slug: {
-        equals: slug,
+        equals: fullSlug,
       },
     },
   })
+
+  if (result.docs.length === 0 && filteredParams.length > 1) {
+    result = await payload.find({
+      collection: 'categories',
+      limit: 1,
+      overrideAccess: false,
+      pagination: false,
+      where: {
+        slug: {
+          equals: lastSegment,
+        },
+      },
+    })
+  }
 
   return result.docs?.[0] || null
 })

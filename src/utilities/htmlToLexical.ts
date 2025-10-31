@@ -193,29 +193,51 @@ function parseHtmlNode(node: Node, format = 0): (LexicalTextNode | LexicalElemen
       return results
     }
 
-    // Handle links: unwrap into plain text to avoid validation issues
+    // Handle links: convert to Lexical link nodes
     if (tagName === 'a') {
-      const children: LexicalTextNode[] = []
+      const href = element.getAttribute('href') || ''
+      const target = element.getAttribute('target')
+      const newTab = target === '_blank'
+      
+      const linkChildren: LexicalTextNode[] = []
       node.childNodes.forEach((child) => {
         const parsed = parseHtmlNode(child, newFormat)
         parsed.forEach((item) => {
           if (item.type === 'text') {
-            children.push(item as LexicalTextNode)
+            linkChildren.push(item as LexicalTextNode)
           }
         })
       })
-      if (children.length === 0) {
-        children.push({
+      
+      if (linkChildren.length === 0) {
+        linkChildren.push({
           type: 'text',
           detail: 0,
           format: newFormat,
           mode: 'normal',
           style: '',
-          text: '',
+          text: href,
           version: 1,
         })
       }
-      results.push(...children)
+      
+      if (href) {
+        results.push({
+          type: 'link',
+          children: linkChildren,
+          direction: 'ltr',
+          fields: {
+            linkType: 'custom',
+            url: href,
+            newTab: newTab || undefined,
+          },
+          format: '',
+          indent: 0,
+          version: 3,
+        } as any)
+      } else {
+        results.push(...linkChildren)
+      }
       return results
     }
 
