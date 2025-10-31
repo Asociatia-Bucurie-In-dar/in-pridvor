@@ -392,7 +392,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
                                   variants={subItemVariants}
                                   className="overflow-hidden"
                                 >
-                                  <div className="ml-4 mt-2 space-y-1 border-l-2 border-yellow-200 pl-3">
+                                  <div className="ml-4 mt-2 space-y-1 border-l-2 border-yellow-400 pl-3">
                                     {item.sublinks.map((subItem) => (
                                       <Link
                                         key={subItem.id}
