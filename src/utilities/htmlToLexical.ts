@@ -385,16 +385,23 @@ export function htmlToLexical(html: string): LexicalRootNode {
     // Sort video matches by position (order they appear in HTML)
     videoMatches.sort((a, b) => a.position - b.position)
 
-    // Get unique normalized URLs and track which ones should be inserted at the beginning
-    const uniqueNormalizedUrls = [...new Set(videoMatches.map((m) => m.normalizedUrl))]
+    // Track which videos we've already processed to avoid duplicates
+    const processedVideoUrls = new Set<string>()
     const earlyVideos: string[] = []
     const laterVideos: string[] = []
 
     videoMatches.forEach((match) => {
+      // Skip if we've already processed this video URL
+      if (processedVideoUrls.has(match.normalizedUrl)) {
+        return
+      }
+      
+      processedVideoUrls.add(match.normalizedUrl)
+      
       // If video is found within first 500 characters, treat it as "early"
-      if (match.position < 500 && !earlyVideos.includes(match.normalizedUrl)) {
+      if (match.position < 500) {
         earlyVideos.push(match.normalizedUrl)
-      } else if (!laterVideos.includes(match.normalizedUrl)) {
+      } else {
         laterVideos.push(match.normalizedUrl)
       }
     })
@@ -452,17 +459,23 @@ export function htmlToLexical(html: string): LexicalRootNode {
 
     const children: LexicalElementNode[] = []
 
+    // Track all inserted videos to prevent duplicates
+    const insertedVideoUrls = new Set<string>()
+
     // Insert early videos at the beginning
     earlyVideos.forEach((videoUrl) => {
-      children.push({
-        type: 'block',
-        fields: {
-          blockType: 'videoEmbed',
-          url: videoUrl,
-        },
-        format: '',
-        version: 2,
-      } as any)
+      if (!insertedVideoUrls.has(videoUrl)) {
+        children.push({
+          type: 'block',
+          fields: {
+            blockType: 'videoEmbed',
+            url: videoUrl,
+          },
+          format: '',
+          version: 2,
+        } as any)
+        insertedVideoUrls.add(videoUrl)
+      }
     })
 
     // Process each child node (content)
@@ -490,16 +503,20 @@ export function htmlToLexical(html: string): LexicalRootNode {
     })
 
     // Add remaining video blocks at the end (videos that were not early)
+    // Only add videos that haven't been inserted yet
     laterVideos.forEach((videoUrl) => {
-      children.push({
-        type: 'block',
-        fields: {
-          blockType: 'videoEmbed',
-          url: videoUrl,
-        },
-        format: '',
-        version: 2,
-      } as any)
+      if (!insertedVideoUrls.has(videoUrl)) {
+        children.push({
+          type: 'block',
+          fields: {
+            blockType: 'videoEmbed',
+            url: videoUrl,
+          },
+          format: '',
+          version: 2,
+        } as any)
+        insertedVideoUrls.add(videoUrl)
+      }
     })
 
     // If no children, add an empty paragraph
