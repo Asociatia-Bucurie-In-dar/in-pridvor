@@ -292,28 +292,60 @@ export function htmlToLexical(html: string): LexicalRootNode {
 
     for (const pattern of youtubePatterns) {
       pattern.lastIndex = 0
-      let match
+      let match: RegExpExecArray | null
       while ((match = pattern.exec(html)) !== null) {
-        let url = match[0]
+        // Extract the full URL including any parameters (like &t=6s)
+        // We need to capture the URL up to the next space or HTML tag
+        const matchStart = match.index || 0
+        const urlMatch = html.substring(matchStart)
+
+        // Find where the URL ends (space, newline, quote, bracket, or HTML tag)
+        const urlEndMatch = urlMatch.match(/[\s<>"']/)
+        const fullUrl =
+          urlEndMatch && urlEndMatch.index !== undefined
+            ? urlMatch.substring(0, urlEndMatch.index)
+            : urlMatch.split(/[\s<>"']/)[0] || match[0]
+
+        if (!fullUrl) continue
+
+        let url = fullUrl
         if (url.startsWith('ttps://')) {
           url = 'h' + url
         }
 
         const videoId = match[1]
-        if (videoId) {
-          const normalizedUrl = `https://www.youtube.com/watch?v=${videoId}`
-          
-          // Check if this URL is already in our list at this position
-          const existingMatch = videoMatches.find(
-            (m) => m.position === match.index && m.normalizedUrl === normalizedUrl,
-          )
-          
-          if (!existingMatch) {
-            videoMatches.push({
-              url: match[0],
-              normalizedUrl,
-              position: match.index || 0,
-            })
+        if (videoId && match.index !== undefined) {
+          try {
+            // Normalize to standard watch URL format (we'll preserve params in the normalized URL for embedding)
+            const urlObj = new URL(url.startsWith('http') ? url : `https://${url}`)
+            const normalizedUrl = `https://www.youtube.com/watch?v=${videoId}${urlObj.search.replace(/^\?/, '&').replace(/^&/, '?')}`
+
+            // Check if this URL is already in our list at this position
+            const existingMatch = videoMatches.find(
+              (m) => m.position === match!.index && m.normalizedUrl === normalizedUrl,
+            )
+
+            if (!existingMatch) {
+              videoMatches.push({
+                url: fullUrl, // Store full URL for removal
+                normalizedUrl,
+                position: match.index,
+              })
+            }
+          } catch (urlError) {
+            // If URL parsing fails, use basic normalized URL
+            const normalizedUrl = `https://www.youtube.com/watch?v=${videoId}`
+            const existingMatch = videoMatches.find(
+              (m) => m.position === match!.index && m.normalizedUrl === normalizedUrl,
+            )
+
+            if (!existingMatch) {
+              videoMatches.push({
+                url: fullUrl,
+                normalizedUrl,
+                position: match.index,
+              })
+            }
           }
         }
       }
@@ -321,19 +353,31 @@ export function htmlToLexical(html: string): LexicalRootNode {
 
     // Find Vimeo URLs
     const vimeoPattern = /https?:\/\/(?:www\.)?vimeo\.com\/(\d+)/gi
-    let vimeoMatch
     vimeoPattern.lastIndex = 0
+    let vimeoMatch: RegExpExecArray | null
     while ((vimeoMatch = vimeoPattern.exec(html)) !== null) {
-      const url = vimeoMatch[0]
+      // Extract the full URL including any parameters
+      const matchStart = vimeoMatch.index || 0
+      const urlMatch = html.substring(matchStart)
+
+      // Find where the URL ends
+      const urlEndMatch = urlMatch.match(/[\s<>"']/)
+      const fullUrl =
+        urlEndMatch && urlEndMatch.index !== undefined
+          ? urlMatch.substring(0, urlEndMatch.index)
+          : urlMatch.split(/[\s<>"']/)[0] || vimeoMatch[0]
+
+      if (!fullUrl || vimeoMatch.index === undefined) continue
+
       const existingMatch = videoMatches.find(
-        (m) => m.position === vimeoMatch.index && m.normalizedUrl === url,
+        (m) => m.position === vimeoMatch!.index && m.normalizedUrl === fullUrl,
       )
-      
+
       if (!existingMatch) {
         videoMatches.push({
-          url: vimeoMatch[0],
-          normalizedUrl: url,
-          position: vimeoMatch.index || 0,
+          url: fullUrl, // Store full URL for removal
+          normalizedUrl: fullUrl,
+          position: vimeoMatch.index,
         })
       }
     }
@@ -341,8 +385,19 @@ export function htmlToLexical(html: string): LexicalRootNode {
     // Sort video matches by position (order they appear in HTML)
     videoMatches.sort((a, b) => a.position - b.position)
 
-    // Get unique normalized URLs (in case same video appears multiple times, we'll insert once)
+    // Get unique normalized URLs and track which ones should be inserted at the beginning
     const uniqueNormalizedUrls = [...new Set(videoMatches.map((m) => m.normalizedUrl))]
+    const earlyVideos: string[] = []
+    const laterVideos: string[] = []
+
+    videoMatches.forEach((match) => {
+      // If video is found within first 500 characters, treat it as "early"
+      if (match.position < 500 && !earlyVideos.includes(match.normalizedUrl)) {
+        earlyVideos.push(match.normalizedUrl)
+      } else if (!laterVideos.includes(match.normalizedUrl)) {
+        laterVideos.push(match.normalizedUrl)
+      }
+    })
 
     // Clean up the HTML and remove video URLs from text
     let cleanHtml = html
@@ -356,15 +411,37 @@ export function htmlToLexical(html: string): LexicalRootNode {
       .replace(/<figcaption[^>]*>.*?<\/figcaption>/gi, '')
       .replace(/<p>\s*<\/p>/gi, '')
 
-    // Remove video URLs from content
-    uniqueNormalizedUrls.forEach((videoUrl) => {
-      const escapedUrl = videoUrl.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
-      const escapedUrlAlt = videoUrl.replace(/^h/, '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+    // Remove video URLs from content - use the original full URLs including parameters
+    videoMatches.forEach((videoMatch) => {
+      // Escape special regex characters in the original URL (including parameters like &t=6s)
+      const escapedUrl = videoMatch.url.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+      const escapedUrlAlt = videoMatch.url.replace(/^h/, '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 
+      // Also escape the normalized URL (without params) for removal
+      const escapedNormalized = videoMatch.normalizedUrl.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+      const escapedNormalizedAlt = videoMatch.normalizedUrl
+        .replace(/^h/, '')
+        .replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+
+      // Remove from links
       cleanHtml = cleanHtml.replace(new RegExp(`<a[^>]*>${escapedUrl}<\/a>`, 'gi'), '')
       cleanHtml = cleanHtml.replace(new RegExp(`<a[^>]*>${escapedUrlAlt}<\/a>`, 'gi'), '')
+      cleanHtml = cleanHtml.replace(new RegExp(`<a[^>]*>${escapedNormalized}<\/a>`, 'gi'), '')
+      cleanHtml = cleanHtml.replace(new RegExp(`<a[^>]*>${escapedNormalizedAlt}<\/a>`, 'gi'), '')
+
+      // Remove from plain text (full URL with params)
       cleanHtml = cleanHtml.replace(new RegExp(escapedUrl, 'gi'), '')
       cleanHtml = cleanHtml.replace(new RegExp(escapedUrlAlt, 'gi'), '')
+
+      // Also remove normalized URL (in case params were stripped elsewhere)
+      cleanHtml = cleanHtml.replace(new RegExp(escapedNormalized, 'gi'), '')
+      cleanHtml = cleanHtml.replace(new RegExp(escapedNormalizedAlt, 'gi'), '')
+
+      // Remove common YouTube URL parameters that might be left behind
+      cleanHtml = cleanHtml.replace(/&t=\d+[smh]?/gi, '')
+      cleanHtml = cleanHtml.replace(/&amp;t=\d+[smh]?/gi, '')
+      cleanHtml = cleanHtml.replace(/&start=\d+/gi, '')
+      cleanHtml = cleanHtml.replace(/&amp;start=\d+/gi, '')
     })
 
     cleanHtml = cleanHtml.trim()
@@ -374,111 +451,21 @@ export function htmlToLexical(html: string): LexicalRootNode {
     const body = dom.window.document.body
 
     const children: LexicalElementNode[] = []
-    let currentTextPosition = 0
-    let videoInsertIndex = 0
 
-    // Create a map of positions in the cleaned HTML to track where videos should go
-    // We'll approximate positions by tracking text length as we parse
-    
-    // First, let's parse the content and build a mapping of approximate positions
-    const parseAndInsertVideos = (node: Node, textOffset: number = 0): number => {
-      let textLength = 0
-
-      if (node.nodeType === 3) {
-        // Text node
-        const textContent = node.textContent || ''
-        textLength = textContent.length
-        return textLength
-      }
-
-      if (node.nodeType === 1) {
-        // Element node
-        let nodeTextLength = 0
-        
-        // Check if we should insert a video block before this node
-        // Approximate position in original HTML based on accumulated text
-        const approximatePosition = currentTextPosition + textOffset
-
-        // Check if we have a video that should be inserted around here
-        // We'll check if we're near a video position (within reasonable distance)
-        if (videoInsertIndex < videoMatches.length) {
-          const nextVideo = videoMatches[videoInsertIndex]
-          // If we've parsed enough text to be near where the video was in original HTML
-          // Note: This is approximate since we're comparing original HTML position with parsed text position
-          const isNearVideo = Math.abs(approximatePosition - nextVideo.position) < 100
-
-          if (isNearVideo) {
-            // Insert video block
-            children.push({
-              type: 'block',
-              fields: {
-                blockType: 'videoEmbed',
-                url: nextVideo.normalizedUrl,
-              },
-              format: '',
-              version: 2,
-            } as any)
-            videoInsertIndex++
-          }
-        }
-
-        // Parse child nodes
-        for (let i = 0; i < node.childNodes.length; i++) {
-          const child = node.childNodes[i]
-          const childTextLength = parseAndInsertVideos(child, nodeTextLength)
-          nodeTextLength += childTextLength
-        }
-
-        // Try to parse this node using parseHtmlNode
-        try {
-          const parsed = parseHtmlNode(node as Element)
-          parsed.forEach((item) => {
-            if (item && item.type === 'text') {
-              children.push({
-                type: 'paragraph',
-                children: [item as LexicalTextNode],
-                direction: 'ltr',
-                format: '',
-                indent: 0,
-                textFormat: 0,
-                version: 1,
-              })
-            } else if (item) {
-              children.push(item as LexicalElementNode)
-            }
-          })
-        } catch (parseError) {
-          // If parseHtmlNode doesn't handle this node type, just count text
-          const textContent = node.textContent || ''
-          nodeTextLength = textContent.length
-        }
-
-        return nodeTextLength
-      }
-
-      return 0
-    }
-
-    // Simpler approach: Insert videos at the beginning if they were at the beginning
-    // Otherwise, try to maintain relative order
-    
-    // Check if first video is near the beginning (< 500 chars)
-    const firstVideoIsEarly = videoMatches.length > 0 && videoMatches[0].position < 500
-
-    if (firstVideoIsEarly && videoInsertIndex < videoMatches.length) {
+    // Insert early videos at the beginning
+    earlyVideos.forEach((videoUrl) => {
       children.push({
         type: 'block',
         fields: {
           blockType: 'videoEmbed',
-          url: videoMatches[videoInsertIndex].normalizedUrl,
+          url: videoUrl,
         },
         format: '',
         version: 2,
       } as any)
-      videoInsertIndex++
-    }
+    })
 
-    // Process each child node
+    // Process each child node (content)
     body.childNodes.forEach((node) => {
       try {
         const parsed = parseHtmlNode(node)
@@ -502,24 +489,18 @@ export function htmlToLexical(html: string): LexicalRootNode {
       }
     })
 
-    // Add remaining video blocks at the end (if we haven't inserted them yet)
-    // But only if they weren't early videos
-    while (videoInsertIndex < videoMatches.length) {
-      const video = videoMatches[videoInsertIndex]
-      // Skip if this was the early video we already inserted
-      if (!(firstVideoIsEarly && videoInsertIndex === 0 && video.position < 500)) {
-        children.push({
-          type: 'block',
-          fields: {
-            blockType: 'videoEmbed',
-            url: video.normalizedUrl,
-          },
-          format: '',
-          version: 2,
-        } as any)
-      }
-      videoInsertIndex++
-    }
+    // Add remaining video blocks at the end (videos that were not early)
+    laterVideos.forEach((videoUrl) => {
+      children.push({
+        type: 'block',
+        fields: {
+          blockType: 'videoEmbed',
+          url: videoUrl,
+        },
+        format: '',
+        version: 2,
+      } as any)
+    })
 
     // If no children, add an empty paragraph
     if (children.length === 0) {
