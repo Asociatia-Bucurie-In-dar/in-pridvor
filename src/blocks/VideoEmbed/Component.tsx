@@ -8,8 +8,10 @@ export type VideoEmbedBlockProps = {
 function getYouTubeEmbedUrl(url: string): string | null {
   // Extract YouTube video ID from various URL formats
   const patterns = [
-    /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/,
-    /youtube\.com\/watch\?.*v=([a-zA-Z0-9_-]{11})/,
+    /youtube\.com\/watch\?.*?[&?]v=([a-zA-Z0-9_-]{11})/, // Handles query params before v=
+    /youtube\.com\/watch\?v=([a-zA-Z0-9_-]{11})/, // Direct v= after watch?
+    /youtu\.be\/([a-zA-Z0-9_-]{11})/, // Short URLs
+    /youtube\.com\/embed\/([a-zA-Z0-9_-]{11})/, // Embed URLs
   ]
 
   for (const pattern of patterns) {

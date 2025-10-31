@@ -9,6 +9,7 @@ interface IncrementalResult {
   skipped: number
   errors: number
   totalInXml: number
+  parsedPosts?: number
   errorList: string[]
   unmatchedCategoriesReport?: string[]
   postsWithUnmatchedCategories?: number
@@ -23,13 +24,34 @@ interface ReformatResult {
   errorList: string[]
 }
 
+interface CleanupResult {
+  success: boolean
+  totalCleaned: number
+  details: Record<string, number>
+  message: string
+}
+
+interface AssignAuthorsResult {
+  success: boolean
+  updated: number
+  total: number
+  alreadyCorrect: number
+  noMatch: number
+  matchingDetails?: string[]
+  message?: string
+}
+
 export const ImportPostsWidget: React.FC = () => {
   const [isIncrementalImporting, setIsIncrementalImporting] = useState(false)
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [isReformatting, setIsReformatting] = useState(false)
+  const [isCleaning, setIsCleaning] = useState(false)
+  const [isAssigningAuthors, setIsAssigningAuthors] = useState(false)
 
   const [incrementalResult, setIncrementalResult] = useState<IncrementalResult | null>(null)
   const [reformatResult, setReformatResult] = useState<ReformatResult | null>(null)
+  const [cleanupResult, setCleanupResult] = useState<CleanupResult | null>(null)
+  const [assignAuthorsResult, setAssignAuthorsResult] = useState<AssignAuthorsResult | null>(null)
 
   const handleIncrementalImport = async () => {
     if (!selectedFile) {
@@ -58,6 +80,7 @@ export const ImportPostsWidget: React.FC = () => {
           skipped: data.skipped,
           errors: data.errors,
           totalInXml: data.totalInXml,
+          parsedPosts: data.parsedPosts,
           errorList: data.errorList || [],
           unmatchedCategoriesReport: data.unmatchedCategoriesReport || [],
           postsWithUnmatchedCategories: data.postsWithUnmatchedCategories || 0,
@@ -158,6 +181,119 @@ export const ImportPostsWidget: React.FC = () => {
     }
   }
 
+  const handleCleanup = async () => {
+    if (
+      !confirm(
+        'This will remove orphaned posts from the database (ghost posts that appear in admin but have no actual data). Continue?',
+      )
+    ) {
+      return
+    }
+
+    setIsCleaning(true)
+    setCleanupResult(null)
+
+    try {
+      const response = await fetch('/next/cleanup-orphaned-posts', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+
+      const data = await response.json()
+
+      if (response.ok) {
+        setCleanupResult({
+          success: true,
+          totalCleaned: data.totalCleaned || 0,
+          details: data.details || {},
+          message: data.message || 'Cleanup completed',
+        })
+        toast.success('Orphaned posts cleanup completed!')
+      } else {
+        setCleanupResult({
+          success: false,
+          totalCleaned: 0,
+          details: {},
+          message: data.message || 'Cleanup failed',
+        })
+        toast.error(`Cleanup failed: ${data.message || 'Unknown error'}`)
+      }
+    } catch (error: any) {
+      console.error('Cleanup error:', error)
+      setCleanupResult({
+        success: false,
+        totalCleaned: 0,
+        details: {},
+        message: error instanceof Error ? error.message : 'Unknown error',
+      })
+      toast.error(`Cleanup failed: ${error.message || 'Unknown error'}`)
+    } finally {
+      setIsCleaning(false)
+    }
+  }
+
+  const handleAssignAuthors = async () => {
+    if (
+      !confirm(
+        'This will search each article\'s content for author names and assign matching authors. Posts without matches will default to "Anca Stanciu". Continue?',
+      )
+    ) {
+      return
+    }
+
+    setIsAssigningAuthors(true)
+    setAssignAuthorsResult(null)
+
+    try {
+      const response = await fetch('/next/assign-authors', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+
+      const data = await response.json()
+
+      if (response.ok) {
+        setAssignAuthorsResult({
+          success: true,
+          updated: data.updated || 0,
+          total: data.total || 0,
+          alreadyCorrect: data.alreadyCorrect || 0,
+          noMatch: data.noMatch || 0,
+          matchingDetails: data.matchingDetails || [],
+          message: data.message,
+        })
+        toast.success('Author assignment completed!')
+      } else {
+        setAssignAuthorsResult({
+          success: false,
+          updated: 0,
+          total: 0,
+          alreadyCorrect: 0,
+          noMatch: 0,
+          message: data.message || 'Author assignment failed',
+        })
+        toast.error(`Author assignment failed: ${data.message || 'Unknown error'}`)
+      }
+    } catch (error: any) {
+      console.error('Assign authors error:', error)
+      setAssignAuthorsResult({
+        success: false,
+        updated: 0,
+        total: 0,
+        alreadyCorrect: 0,
+        noMatch: 0,
+        message: error instanceof Error ? error.message : 'Unknown error',
+      })
+      toast.error(`Author assignment failed: ${error.message || 'Unknown error'}`)
+    } finally {
+      setIsAssigningAuthors(false)
+    }
+  }
+
   return (
     <div
       style={{
@@ -228,6 +364,36 @@ export const ImportPostsWidget: React.FC = () => {
         </Button>
       </div>
 
+      <hr style={{ margin: '20px 0', border: 'none', borderTop: '1px solid #e1e5e9' }} />
+
+      {/* Assign Authors Section */}
+      <h4 style={{ margin: '0 0 10px 0', color: '#666' }}>✍️ Author Assignment</h4>
+      <div style={{ marginBottom: '20px' }}>
+        <p style={{ margin: '0 0 10px 0', color: '#666', fontSize: '14px' }}>
+          Search each article's content for author names and assign matching authors. Uses fuzzy
+          matching for Romanian characters (ă, â, î, ș, ț). Posts without matches will default to
+          "Anca Stanciu".
+        </p>
+        <Button onClick={handleAssignAuthors} disabled={isAssigningAuthors}>
+          {isAssigningAuthors ? 'Assigning...' : '✍️ Assign Authors'}
+        </Button>
+      </div>
+
+      <hr style={{ margin: '20px 0', border: 'none', borderTop: '1px solid #e1e5e9' }} />
+
+      {/* Cleanup Section */}
+      <h4 style={{ margin: '0 0 10px 0', color: '#666' }}>🧹 Database Cleanup</h4>
+      <div style={{ marginBottom: '20px' }}>
+        <p style={{ margin: '0 0 10px 0', color: '#666', fontSize: '14px' }}>
+          Remove orphaned posts from the database (ghost posts that appear in admin but have no
+          actual data). This cleans up related tables: posts_rels, _posts_v_rels, _posts_v,
+          comments, redirects, locked documents, and search index.
+        </p>
+        <Button onClick={handleCleanup} disabled={isCleaning}>
+          {isCleaning ? 'Cleaning...' : '🧹 Cleanup Orphaned Posts'}
+        </Button>
+      </div>
+
       {/* Results Display */}
       {incrementalResult && (
         <div
@@ -252,8 +418,14 @@ export const ImportPostsWidget: React.FC = () => {
           </h4>
 
           <div style={{ marginBottom: '10px', fontSize: '14px' }}>
-            <strong>Total posts in XML:</strong> {incrementalResult.totalInXml}
+            <strong>Total published posts in XML:</strong> {incrementalResult.totalInXml}
             <br />
+            {incrementalResult.parsedPosts !== undefined && (
+              <>
+                <strong>Successfully parsed:</strong> {incrementalResult.parsedPosts}
+                <br />
+              </>
+            )}
             <strong>Already existing (skipped):</strong> {incrementalResult.skipped}
             <br />
             <strong>New posts imported:</strong> {incrementalResult.imported}
@@ -366,6 +538,131 @@ export const ImportPostsWidget: React.FC = () => {
             <div style={{ marginTop: '10px', color: '#2e7d32', fontSize: '14px' }}>
               ✨ Successfully reformatted {reformatResult.updated} posts with proper HTML
               formatting! Bold, italic, paragraphs, lists, and line breaks are now preserved.
+            </div>
+          )}
+        </div>
+      )}
+
+      {cleanupResult && (
+        <div
+          style={{
+            marginTop: '15px',
+            padding: '15px',
+            border: `1px solid ${cleanupResult.success ? '#4CAF50' : '#f44336'}`,
+            borderRadius: '4px',
+            backgroundColor: cleanupResult.success ? '#e8f5e9' : '#ffebee',
+          }}
+        >
+          <h4
+            style={{
+              color: cleanupResult.success ? '#2e7d32' : '#c62828',
+              margin: '0 0 10px 0',
+              fontSize: '16px',
+            }}
+          >
+            {cleanupResult.success ? '✅ Orphaned Posts Cleanup Complete!' : '❌ Cleanup Failed'}
+          </h4>
+
+          <div style={{ marginBottom: '10px', fontSize: '14px' }}>
+            <strong>Total cleaned:</strong> {cleanupResult.totalCleaned} records
+            <br />
+            {cleanupResult.success && cleanupResult.totalCleaned > 0 && (
+              <>
+                <strong>Details:</strong>
+                <ul style={{ margin: '5px 0', paddingLeft: '20px' }}>
+                  {Object.entries(cleanupResult.details).map(([table, count]) => (
+                    <li key={table}>
+                      {table}: {count} records
+                    </li>
+                  ))}
+                </ul>
+              </>
+            )}
+          </div>
+
+          <div
+            style={{
+              marginTop: '10px',
+              color: cleanupResult.success ? '#2e7d32' : '#c62828',
+              fontSize: '14px',
+            }}
+          >
+            {cleanupResult.message}
+          </div>
+
+          {cleanupResult.success && cleanupResult.totalCleaned > 0 && (
+            <div style={{ marginTop: '10px', color: '#2e7d32', fontSize: '12px' }}>
+              💡 Next steps: Refresh the admin panel to see the changes. If issues persist, restart
+              the Next.js dev server.
+            </div>
+          )}
+        </div>
+      )}
+
+      {assignAuthorsResult && (
+        <div
+          style={{
+            marginTop: '15px',
+            padding: '15px',
+            border: `1px solid ${assignAuthorsResult.success ? '#4CAF50' : '#f44336'}`,
+            borderRadius: '4px',
+            backgroundColor: assignAuthorsResult.success ? '#e8f5e9' : '#ffebee',
+          }}
+        >
+          <h4
+            style={{
+              color: assignAuthorsResult.success ? '#2e7d32' : '#c62828',
+              margin: '0 0 10px 0',
+              fontSize: '16px',
+            }}
+          >
+            {assignAuthorsResult.success
+              ? '✅ Author Assignment Complete!'
+              : '❌ Author Assignment Failed'}
+          </h4>
+
+          <div style={{ marginBottom: '10px', fontSize: '14px' }}>
+            <strong>Total posts processed:</strong> {assignAuthorsResult.total}
+            <br />
+            <strong>Posts updated:</strong> {assignAuthorsResult.updated}
+            <br />
+            <strong>Posts already correct:</strong> {assignAuthorsResult.alreadyCorrect}
+            <br />
+            <strong>Posts with no match (defaulted):</strong> {assignAuthorsResult.noMatch}
+          </div>
+
+          {assignAuthorsResult.success &&
+            assignAuthorsResult.matchingDetails &&
+            assignAuthorsResult.matchingDetails.length > 0 && (
+              <div style={{ marginTop: '10px' }}>
+                <strong style={{ fontSize: '14px' }}>Sample assignments (first 20):</strong>
+                <ul
+                  style={{
+                    margin: '5px 0',
+                    paddingLeft: '20px',
+                    fontSize: '12px',
+                    maxHeight: '200px',
+                    overflowY: 'auto',
+                  }}
+                >
+                  {assignAuthorsResult.matchingDetails.slice(0, 20).map((detail, index) => (
+                    <li key={index} style={{ marginBottom: '3px' }}>
+                      {detail}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+          {assignAuthorsResult.message && (
+            <div
+              style={{
+                marginTop: '10px',
+                color: assignAuthorsResult.success ? '#2e7d32' : '#c62828',
+                fontSize: '14px',
+              }}
+            >
+              {assignAuthorsResult.message}
             </div>
           )}
         </div>

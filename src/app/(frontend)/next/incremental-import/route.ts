@@ -6,7 +6,7 @@ import path from 'path'
 import { htmlToLexical } from '@/utilities/htmlToLexical'
 import { formatSlug } from '@/fields/slug/formatSlug'
 
-export const maxDuration = 300 // This function can run for a maximum of 5 minutes
+export const maxDuration = 1000 // This function can run for a maximum of 5 minutes
 
 interface ParsedPost {
   title: string
@@ -104,13 +104,19 @@ export async function POST(request: Request): Promise<Response> {
     payload.logger.info(`📂 Found ${allCategories.docs.length} categories in database`)
 
     // Create category maps and track newly created categories
-    const categoryMapBySlug = new Map<string, { id: number | string; title: string; slug: string }>()
-    const categoryMapByTitle = new Map<string, { id: number | string; title: string; slug: string }>()
+    const categoryMapBySlug = new Map<
+      string,
+      { id: number | string; title: string; slug: string }
+    >()
+    const categoryMapByTitle = new Map<
+      string,
+      { id: number | string; title: string; slug: string }
+    >()
     const createdCategoriesInSession = new Map<string, number | string>() // category title -> id
 
     for (const category of allCategories.docs) {
       const slug = category.slug || formatSlug(category.title || '')
-      const categoryId = typeof category.id === 'number' ? category.id : category.id.toString()
+      const categoryId = typeof category.id === 'number' ? category.id : String(category.id)
 
       categoryMapBySlug.set(slug.toLowerCase().trim(), {
         id: categoryId,
@@ -126,9 +132,7 @@ export async function POST(request: Request): Promise<Response> {
     }
 
     // Helper function to get or create a category
-    async function getOrCreateCategory(
-      categoryName: string,
-    ): Promise<number | string | null> {
+    async function getOrCreateCategory(categoryName: string): Promise<number | string | null> {
       if (!categoryName || typeof categoryName !== 'string') {
         return null
       }
@@ -154,7 +158,9 @@ export async function POST(request: Request): Promise<Response> {
 
       // Category doesn't exist - create it
       try {
-        payload.logger.info(`   ➕ Creating new category: "${categoryName}" (slug: "${categorySlug}")`)
+        payload.logger.info(
+          `   ➕ Creating new category: "${categoryName}" (slug: "${categorySlug}")`,
+        )
         const newCategory = await payload.create({
           collection: 'categories',
           data: {
@@ -164,9 +170,7 @@ export async function POST(request: Request): Promise<Response> {
         })
 
         const newCategoryId =
-          typeof newCategory.id === 'number'
-            ? newCategory.id
-            : parseInt(String(newCategory.id), 10)
+          typeof newCategory.id === 'number' ? newCategory.id : parseInt(String(newCategory.id), 10)
 
         if (!isNaN(newCategoryId)) {
           const newCategorySlug = newCategory.slug || formatSlug(categoryName)
@@ -222,123 +226,154 @@ export async function POST(request: Request): Promise<Response> {
 
     // Second pass: parse posts
     const parsedSlugs = new Map<string, number>() // Track slugs to handle conflicts
-    
+
     posts.forEach((post: any) => {
-      if (post['wp:post_type'] === 'post' && post['wp:status'] === 'publish') {
-        const title = post.title || 'Untitled'
-        // Always normalize slug using our formatter so Romanian characters are handled correctly
-        let rawSlug = post['wp:post_name'] || title
-        
-        // Decode URL-encoded slugs (e.g., %e2%88%92 becomes the actual character)
-        try {
-          rawSlug = decodeURIComponent(rawSlug)
-        } catch (e) {
-          // If decoding fails, use the raw slug as-is
-          payload.logger.warn(`   ⚠️  Failed to decode slug "${rawSlug}" for post "${title}", using as-is`)
+      // Log all post types and statuses for debugging
+      const postType = post['wp:post_type']
+      const postStatus = post['wp:status']
+
+      // Import published posts, but also log what we're skipping
+      if (postType === 'post') {
+        if (postStatus !== 'publish') {
+          const title = post.title || 'Untitled'
+          payload.logger.info(`⏭️  Skipping post "${title}" with status: ${postStatus}`)
+          return
         }
-        
-        let slug = formatSlug(rawSlug)
-
-        // Handle slug conflicts by appending WordPress ID or a number
-        if (existingSlugs.has(slug) || parsedSlugs.has(slug)) {
-          const wpPostId = post['wp:post_id']
-          if (wpPostId) {
-            slug = `${slug}-${wpPostId}`
-          } else {
-            let counter = 1
-            let newSlug = `${slug}-${counter}`
-            while (existingSlugs.has(newSlug) || parsedSlugs.has(newSlug)) {
-              counter++
-              newSlug = `${slug}-${counter}`
-            }
-            slug = newSlug
-          }
-          
-          if (existingSlugs.has(slug)) {
-            let counter = 1
-            let newSlug = `${slug}-${counter}`
-            while (existingSlugs.has(newSlug) || parsedSlugs.has(newSlug)) {
-              counter++
-              newSlug = `${slug}-${counter}`
-            }
-            slug = newSlug
-          }
-          
-          payload.logger.info(`   🔄 Resolved slug conflict for "${title}": using slug "${slug}"`)
-        }
-        
-        parsedSlugs.set(slug, 1)
-
-        let content = post['content:encoded'] || post.description || ''
-        
-        // Ensure content is not empty (required field)
-        if (!content || content.trim().length === 0) {
-          payload.logger.warn(`⚠️  Post "${title}" has empty content, using placeholder`)
-          content = '<p>No content available.</p>'
-        }
-        
-        const publishedDate = post.pubDate || new Date().toISOString()
-
-        // Extract categories from XML
-        // XML structure: { text: "Category Title", domain: "category", nicename: "category-slug" }
-        const categories = Array.isArray(post.category)
-          ? post.category
-              .filter((cat: any) => {
-                const domain = cat?.['@_domain'] || cat?.domain
-                return domain === 'category'
-              })
-              .map((cat: any) => {
-                // Prefer text (title) over nicename (slug) for matching
-                return cat?.text || cat?.['#text'] || cat?.['@_nicename'] || cat?.nicename || cat
-              })
-              .filter((cat: any) => cat && typeof cat === 'string')
-          : post.category && !Array.isArray(post.category)
-            ? (() => {
-                const cat = post.category
-                const domain = cat?.['@_domain'] || cat?.domain
-                if (domain === 'category') {
-                  const catName =
-                    cat?.text || cat?.['#text'] || cat?.['@_nicename'] || cat?.nicename || cat
-                  return catName && typeof catName === 'string' ? [catName] : []
-                }
-                return []
-              })()
-            : []
-
-        // Find featured image
-        let featuredImageFileName: string | undefined
-        let featuredImageUrl: string | undefined
-        if (post['wp:postmeta']) {
-          const postmeta = Array.isArray(post['wp:postmeta'])
-            ? post['wp:postmeta']
-            : [post['wp:postmeta']]
-
-          for (const meta of postmeta) {
-            if (meta['wp:meta_key'] === '_thumbnail_id' && meta['wp:meta_value']) {
-              const thumbnailId = meta['wp:meta_value']
-              const imageData = imageMap.get(thumbnailId)
-              if (imageData) {
-                featuredImageFileName = imageData.fileName
-                featuredImageUrl = imageData.url
-              }
-              break
-            }
-          }
-        }
-
-        parsedPosts.push({
-          title,
-          slug,
-          content,
-          publishedDate,
-          categories,
-          featuredImageFileName,
-          featuredImageUrl,
-        })
+      } else {
+        return // Skip non-post items
       }
+
+      // Now process the post
+      const title = post.title || 'Untitled'
+      // Always normalize slug using our formatter so Romanian characters are handled correctly
+      let rawSlug = post['wp:post_name'] || title
+
+      // Decode URL-encoded slugs (e.g., %e2%88%92 becomes the actual character)
+      try {
+        rawSlug = decodeURIComponent(rawSlug)
+      } catch (e) {
+        // If decoding fails, use the raw slug as-is
+        payload.logger.warn(
+          `   ⚠️  Failed to decode slug "${rawSlug}" for post "${title}", using as-is`,
+        )
+      }
+
+      let slug = formatSlug(rawSlug)
+
+      // Handle slug conflicts by appending WordPress ID or a number
+      if (existingSlugs.has(slug) || parsedSlugs.has(slug)) {
+        const wpPostId = post['wp:post_id']
+        if (wpPostId) {
+          slug = `${slug}-${wpPostId}`
+        } else {
+          let counter = 1
+          let newSlug = `${slug}-${counter}`
+          while (existingSlugs.has(newSlug) || parsedSlugs.has(newSlug)) {
+            counter++
+            newSlug = `${slug}-${counter}`
+          }
+          slug = newSlug
+        }
+
+        if (existingSlugs.has(slug)) {
+          let counter = 1
+          let newSlug = `${slug}-${counter}`
+          while (existingSlugs.has(newSlug) || parsedSlugs.has(newSlug)) {
+            counter++
+            newSlug = `${slug}-${counter}`
+          }
+          slug = newSlug
+        }
+
+        payload.logger.info(`   🔄 Resolved slug conflict for "${title}": using slug "${slug}"`)
+      }
+
+      parsedSlugs.set(slug, 1)
+
+      let content = post['content:encoded'] || post.description || ''
+
+      // Ensure content is not empty (required field)
+      if (!content || content.trim().length === 0) {
+        payload.logger.warn(`⚠️  Post "${title}" has empty content, using placeholder`)
+        content = '<p>No content available.</p>'
+      }
+
+      const publishedDate = post.pubDate || new Date().toISOString()
+
+      // Extract categories from XML
+      // XML structure: { text: "Category Title", domain: "category", nicename: "category-slug" }
+      const categories = Array.isArray(post.category)
+        ? post.category
+            .filter((cat: any) => {
+              const domain = cat?.['@_domain'] || cat?.domain
+              return domain === 'category'
+            })
+            .map((cat: any) => {
+              // Prefer text (title) over nicename (slug) for matching
+              return cat?.text || cat?.['#text'] || cat?.['@_nicename'] || cat?.nicename || cat
+            })
+            .filter((cat: any) => cat && typeof cat === 'string')
+        : post.category && !Array.isArray(post.category)
+          ? (() => {
+              const cat = post.category
+              const domain = cat?.['@_domain'] || cat?.domain
+              if (domain === 'category') {
+                const catName =
+                  cat?.text || cat?.['#text'] || cat?.['@_nicename'] || cat?.nicename || cat
+                return catName && typeof catName === 'string' ? [catName] : []
+              }
+              return []
+            })()
+          : []
+
+      // Find featured image
+      let featuredImageFileName: string | undefined
+      let featuredImageUrl: string | undefined
+      if (post['wp:postmeta']) {
+        const postmeta = Array.isArray(post['wp:postmeta'])
+          ? post['wp:postmeta']
+          : [post['wp:postmeta']]
+
+        for (const meta of postmeta) {
+          if (meta['wp:meta_key'] === '_thumbnail_id' && meta['wp:meta_value']) {
+            const thumbnailId = meta['wp:meta_value']
+            const imageData = imageMap.get(thumbnailId)
+            if (imageData) {
+              featuredImageFileName = imageData.fileName
+              featuredImageUrl = imageData.url
+            }
+            break
+          }
+        }
+      }
+
+      parsedPosts.push({
+        title,
+        slug,
+        content,
+        publishedDate,
+        categories,
+        featuredImageFileName,
+        featuredImageUrl,
+      })
     })
 
-    payload.logger.info(`🆕 Found ${parsedPosts.length} new posts to import`)
+    const totalPostsInXml = posts.filter(
+      (p: any) => p['wp:post_type'] === 'post' && p['wp:status'] === 'publish',
+    ).length
+
+    payload.logger.info(`📊 Import Statistics:`)
+    payload.logger.info(`   Total items in XML: ${posts.length}`)
+    payload.logger.info(`   Published posts in XML: ${totalPostsInXml}`)
+    payload.logger.info(`   Parsed posts ready to import: ${parsedPosts.length}`)
+
+    if (parsedPosts.length < totalPostsInXml) {
+      payload.logger.warn(
+        `⚠️  ${totalPostsInXml - parsedPosts.length} posts from XML were not parsed (might be duplicates by slug or missing required fields)`,
+      )
+    }
+
+    payload.logger.info(`🆕 Starting import of ${parsedPosts.length} posts...`)
 
     let imported = 0
     let errors = 0
@@ -348,6 +383,20 @@ export async function POST(request: Request): Promise<Response> {
     // Import new posts
     for (const post of parsedPosts) {
       try {
+        // Check if post already exists by slug
+        const existingPost = await payload.find({
+          collection: 'posts',
+          where: { slug: { equals: post.slug } },
+          limit: 1,
+          depth: 0,
+          req: payloadReq,
+        })
+
+        if (existingPost.docs.length > 0) {
+          payload.logger.info(`⏭️  Skipping existing post: "${post.title}" (slug: "${post.slug}")`)
+          continue
+        }
+
         // Debug: Log categories from XML
         if (post.categories.length > 0) {
           payload.logger.info(
@@ -495,7 +544,109 @@ export async function POST(request: Request): Promise<Response> {
         }
 
         // Convert HTML content to Lexical with proper formatting
-        const lexicalContent = htmlToLexical(post.content)
+        let lexicalContent
+        try {
+          lexicalContent = htmlToLexical(post.content)
+
+          // Validate that we have a valid root structure
+          if (
+            !lexicalContent ||
+            !lexicalContent.root ||
+            !Array.isArray(lexicalContent.root.children)
+          ) {
+            payload.logger.warn(`⚠️  Invalid Lexical structure for "${post.title}", using fallback`)
+            lexicalContent = {
+              root: {
+                type: 'root',
+                children: [
+                  {
+                    type: 'paragraph',
+                    children: [
+                      {
+                        type: 'text',
+                        detail: 0,
+                        format: 0,
+                        mode: 'normal',
+                        style: '',
+                        text: post.content || 'No content available.',
+                        version: 1,
+                      },
+                    ],
+                    direction: 'ltr',
+                    format: '',
+                    indent: 0,
+                    textFormat: 0,
+                    version: 1,
+                  },
+                ],
+                direction: 'ltr',
+                format: '',
+                indent: 0,
+                version: 1,
+              },
+            }
+          }
+
+          // Ensure we have at least one child
+          if (!lexicalContent.root.children || lexicalContent.root.children.length === 0) {
+            lexicalContent.root.children = [
+              {
+                type: 'paragraph',
+                children: [
+                  {
+                    type: 'text',
+                    detail: 0,
+                    format: 0,
+                    mode: 'normal',
+                    style: '',
+                    text: ' ',
+                    version: 1,
+                  },
+                ],
+                direction: 'ltr',
+                format: '',
+                indent: 0,
+                textFormat: 0,
+                version: 1,
+              },
+            ]
+          }
+        } catch (lexicalError: any) {
+          payload.logger.error(
+            `❌ Failed to convert content to Lexical for "${post.title}": ${lexicalError.message}`,
+          )
+          // Fallback to simple paragraph
+          lexicalContent = {
+            root: {
+              type: 'root',
+              children: [
+                {
+                  type: 'paragraph',
+                  children: [
+                    {
+                      type: 'text',
+                      detail: 0,
+                      format: 0,
+                      mode: 'normal',
+                      style: '',
+                      text: post.content || 'No content available.',
+                      version: 1,
+                    },
+                  ],
+                  direction: 'ltr',
+                  format: '',
+                  indent: 0,
+                  textFormat: 0,
+                  version: 1,
+                },
+              ],
+              direction: 'ltr',
+              format: '',
+              indent: 0,
+              version: 1,
+            },
+          }
+        }
 
         const postPayload: any = {
           title: post.title,
@@ -534,7 +685,7 @@ export async function POST(request: Request): Promise<Response> {
         const errorMessage = `Failed to import "${post.title}" (slug: ${post.slug}): ${error.message || error}`
         errorsList.push(errorMessage)
         payload.logger.error(errorMessage)
-        
+
         // Log more details for debugging
         if (error.stack) {
           payload.logger.error(`   Stack: ${error.stack}`)
@@ -563,14 +714,15 @@ export async function POST(request: Request): Promise<Response> {
       unmatchedCategoriesReport.forEach((line) => payload.logger.info(line))
     }
 
+    const skippedCount = totalPostsInXml - imported - errors
+
     return Response.json({
       success: true,
       imported,
-      skipped: existingSlugs.size,
+      skipped: skippedCount,
       errors,
-      totalInXml: posts.filter(
-        (p: any) => p['wp:post_type'] === 'post' && p['wp:status'] === 'publish',
-      ).length,
+      totalInXml: totalPostsInXml,
+      parsedPosts: parsedPosts.length,
       errorList: errorsList.slice(0, 10),
       unmatchedCategoriesReport:
         unmatchedCategoriesReport.length > 0 ? unmatchedCategoriesReport : undefined,
