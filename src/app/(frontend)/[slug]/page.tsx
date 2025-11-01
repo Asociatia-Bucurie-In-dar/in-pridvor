@@ -57,6 +57,8 @@ export async function generateStaticParams() {
   return params
 }
 
+export const dynamicParams = true
+
 type Args = {
   params: Promise<{
     slug?: string
