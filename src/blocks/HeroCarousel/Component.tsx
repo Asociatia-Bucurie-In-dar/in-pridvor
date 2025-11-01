@@ -58,6 +58,7 @@ export const HeroCarouselBlock: React.FC<
         categories: true,
         meta: true,
         heroImage: true,
+        heroImageAlignment: true,
         content: true,
         publishedAt: true,
         authors: true,

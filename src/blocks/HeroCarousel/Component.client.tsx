@@ -121,6 +121,25 @@ export const HeroCarouselClient: React.FC<HeroCarouselClientProps> = ({
           const realIndex = index % posts.length
           const isActive = realIndex === activeIndex
 
+          const alignment = post.heroImageAlignment || 'centered'
+          const getAlignmentClass = (align: string) => {
+            switch (align) {
+              case 'top':
+                return 'object-top'
+              case 'upper-center':
+                return 'object-[50%_25%]'
+              case 'centered':
+                return 'object-center'
+              case 'lower-center':
+                return 'object-[50%_75%]'
+              case 'bottom':
+                return 'object-bottom'
+              default:
+                return 'object-center'
+            }
+          }
+          const alignmentClass = getAlignmentClass(alignment)
+
           return (
             <SwiperSlide key={`${post.id}-${index}`}>
               <div
@@ -134,7 +153,7 @@ export const HeroCarouselClient: React.FC<HeroCarouselClientProps> = ({
                       resource={post.heroImage}
                       fill
                       className="object-cover"
-                      imgClassName="object-cover"
+                      imgClassName={`object-cover ${alignmentClass}`}
                     />
                   )}
                   {/* Gradient Overlay */}
