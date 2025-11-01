@@ -65,6 +65,7 @@ export interface Config {
   auth: {
     users: UserAuthOperations;
   };
+  blocks: {};
   collections: {
     pages: Page;
     posts: Post;
