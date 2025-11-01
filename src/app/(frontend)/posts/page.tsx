@@ -8,6 +8,7 @@ import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import PageClient from './page.client'
 import { websiteTitle } from '@/utilities/commonInfo'
+import { getPostsCardSelect } from '@/utilities/getPostsCardSelect'
 
 export const dynamic = 'force-static'
 // Removed time-based revalidation - now using on-demand revalidation via hooks
@@ -21,18 +22,7 @@ export default async function Page() {
     limit: 12,
     sort: '-publishedAt',
     overrideAccess: false,
-    select: {
-      title: true,
-      slug: true,
-      categories: true,
-      meta: true,
-      heroImage: true,
-      heroImageAlignment: true,
-      content: true,
-      authors: true,
-      populatedAuthors: true,
-      publishedAt: true,
-    },
+    select: getPostsCardSelect(),
   })
 
   return (

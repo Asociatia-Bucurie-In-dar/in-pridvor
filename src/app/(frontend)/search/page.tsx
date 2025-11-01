@@ -7,6 +7,7 @@ import React from 'react'
 import { Search } from '@/search/Component'
 import PageClient from './page.client'
 import { CardPostData } from '@/components/Card'
+import { getPostsCardSelect } from '@/utilities/getPostsCardSelect'
 
 type Args = {
   searchParams: Promise<{
@@ -22,18 +23,7 @@ export default async function Page({ searchParams: searchParamsPromise }: Args) 
     depth: 1,
     limit: 12,
     sort: '-publishedAt',
-    select: {
-      title: true,
-      slug: true,
-      categories: true,
-      meta: true,
-      heroImage: true,
-      heroImageAlignment: true,
-      content: true,
-      authors: true,
-      populatedAuthors: true,
-      publishedAt: true,
-    },
+    select: getPostsCardSelect(),
     ...(query
       ? {
           where: {

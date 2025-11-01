@@ -9,6 +9,7 @@ import { cache } from 'react'
 import { notFound } from 'next/navigation'
 import PageClient from './page.client'
 import { toKebabCase } from '@/utilities/toKebabCase'
+import { getPostsCardSelect } from '@/utilities/getPostsCardSelect'
 
 type Args = {
   params: Promise<{
@@ -36,17 +37,7 @@ export default async function AuthorPage({ params: paramsPromise }: Args) {
     limit: 12,
     page: sanitizedPageNumber,
     overrideAccess: false,
-    select: {
-      title: true,
-      slug: true,
-      categories: true,
-      meta: true,
-      heroImage: true,
-      content: true,
-      authors: true,
-      populatedAuthors: true,
-      publishedAt: true,
-    },
+    select: getPostsCardSelect(),
     where: {
       authors: {
         equals: author.id,

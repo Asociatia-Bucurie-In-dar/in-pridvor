@@ -11,6 +11,7 @@ import React, { cache } from 'react'
 
 import { generateMeta } from '@/utilities/generateMeta'
 import { getCategoryHierarchyIds } from '@/utilities/getCategoryHierarchy'
+import { getPostsCardSelect } from '@/utilities/getPostsCardSelect'
 import PageClient from './page.client'
 
 export async function generateStaticParams() {
@@ -169,17 +170,7 @@ const queryPostsByCategoryIds = cache(async (categoryIds: number[], page: number
     limit: 12,
     page,
     overrideAccess: false,
-    select: {
-      title: true,
-      slug: true,
-      categories: true,
-      meta: true,
-      heroImage: true,
-      content: true,
-      authors: true,
-      populatedAuthors: true,
-      publishedAt: true,
-    },
+    select: getPostsCardSelect(),
     where: {
       categories: {
         in: categoryIds,

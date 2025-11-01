@@ -10,6 +10,7 @@ import { getPayload } from 'payload'
 import React, { cache } from 'react'
 import PageClient from './page.client'
 import { toKebabCase } from '@/utilities/toKebabCase'
+import { getPostsCardSelect } from '@/utilities/getPostsCardSelect'
 
 export async function generateStaticParams() {
   const payload = await getPayload({ config: configPromise })
@@ -120,17 +121,7 @@ const queryPostsByAuthorId = cache(async (authorId: number) => {
     depth: 1,
     limit: 12,
     overrideAccess: false,
-    select: {
-      title: true,
-      slug: true,
-      categories: true,
-      meta: true,
-      heroImage: true,
-      content: true,
-      authors: true,
-      populatedAuthors: true,
-      publishedAt: true,
-    },
+    select: getPostsCardSelect(),
     where: {
       authors: {
         equals: authorId,
