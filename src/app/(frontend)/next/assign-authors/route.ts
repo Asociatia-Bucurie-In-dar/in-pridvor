@@ -70,6 +70,65 @@ function findAuthorInContent(content: string, authorName: string, normalizedAuth
   return false
 }
 
+function findAuthorByName(allUsers: any[], namePatterns: string[]): any {
+  for (const user of allUsers) {
+    if (!user.name) continue
+    const normalizedName = normalizeForMatching(user.name)
+    for (const pattern of namePatterns) {
+      const normalizedPattern = normalizeForMatching(pattern)
+      if (normalizedName === normalizedPattern || 
+          normalizedName.includes(normalizedPattern) || 
+          normalizedPattern.includes(normalizedName)) {
+        return user
+      }
+      const nameParts = normalizedName.split(' ').filter(p => p.length > 1)
+      const patternParts = normalizedPattern.split(' ').filter(p => p.length > 1)
+      if (patternParts.length >= 2 && nameParts.length >= 2 && patternParts[0] && nameParts[0]) {
+        const lastNameMatch = patternParts[patternParts.length - 1] === nameParts[nameParts.length - 1]
+        const firstNameMatch = patternParts[0] === nameParts[0] || patternParts[0].includes(nameParts[0]) || nameParts[0].includes(patternParts[0])
+        if (lastNameMatch && firstNameMatch) {
+          return user
+        }
+      }
+    }
+  }
+  return null
+}
+
+function getCategoryAuthor(categorySlug: string, allUsers: any[]): any | null {
+  const normalizedSlug = normalizeForMatching(categorySlug)
+  
+  if (normalizedSlug === 'in-tinda-raiului') {
+    return findAuthorByName(allUsers, ['Maica D.', 'Maica D'])
+  }
+  
+  if (normalizedSlug === 'nescris-de-mult') {
+    return findAuthorByName(allUsers, ['Cosmina Dragomir'])
+  }
+  
+  if (normalizedSlug === 'culoarea-zilei') {
+    return findAuthorByName(allUsers, ['Pr. Cristian Muntean', 'Cristian Muntean'])
+  }
+  
+  if (normalizedSlug === 'picaturi-de-moarte') {
+    return findAuthorByName(allUsers, ['Șerban Madgearu', 'Serban Madgearu'])
+  }
+  
+  if (normalizedSlug === 'draga-mama') {
+    return findAuthorByName(allUsers, ['Dr. Daniela Ilioiu', 'Daniela Ilioiu'])
+  }
+  
+  if (normalizedSlug === 'printre-umbre-si-lumini') {
+    return findAuthorByName(allUsers, ['Simona Andrușcă', 'Simona Andrusca'])
+  }
+  
+  if (normalizedSlug.includes('nascuta-mama') || normalizedSlug.includes('arta-acasa')) {
+    return findAuthorByName(allUsers, ['Pr. Cristian Muntean', 'Cristian Muntean'])
+  }
+  
+  return null
+}
+
 export async function POST(): Promise<Response> {
   const payload = await getPayload({ config })
   const requestHeaders = await headers()
@@ -128,7 +187,7 @@ export async function POST(): Promise<Response> {
     const allPosts = await payload.find({
       collection: 'posts',
       limit: 10000,
-      depth: 0,
+      depth: 1,
       where: {
         _status: {
           equals: 'published',
@@ -150,39 +209,79 @@ export async function POST(): Promise<Response> {
         continue
       }
 
-      const plainText = extractPlainTextFromLexical(post.content)
-      
-      if (!plainText || plainText.trim().length === 0) {
-        payload.logger.warn(`⚠️  Post "${post.title}" has empty content, skipping`)
-        continue
-      }
-
       let matchedUser = null
-      let bestMatch: { user: any; score: number } | null = null
+      let matchSource = ''
 
-      for (const candidateUser of allUsers.docs) {
-        if (!candidateUser.name) continue
-
-        const normalizedName = normalizeForMatching(candidateUser.name)
-        
-        if (normalizedName.length < 3) continue
-
-        const isMatch = findAuthorInContent(plainText, candidateUser.name, normalizedName)
-
-        if (isMatch) {
-          const matchScore = normalizedName.split(' ').length
+      if (post.categories && Array.isArray(post.categories) && post.categories.length > 0) {
+        for (const category of post.categories) {
+          let categoryData: any = null
           
-          if (!bestMatch || matchScore > bestMatch.score) {
-            bestMatch = {
-              user: candidateUser,
-              score: matchScore,
+          if (typeof category === 'object' && category !== null && 'slug' in category) {
+            categoryData = category
+          } else if (typeof category === 'number' || typeof category === 'string') {
+            try {
+              categoryData = await payload.findByID({
+                collection: 'categories',
+                id: category,
+                depth: 1,
+              })
+            } catch {
+              payload.logger.warn(`Failed to fetch category ${category} for post "${post.title}"`)
+            }
+          }
+          
+          if (categoryData?.slug) {
+            let categoryPath = categoryData.slug
+            
+            if (categoryData.parent && typeof categoryData.parent === 'object' && categoryData.parent.slug) {
+              categoryPath = `${categoryData.parent.slug}/${categoryData.slug}`
+            }
+            
+            const categoryAuthor = getCategoryAuthor(categoryPath, allUsers.docs)
+            if (categoryAuthor) {
+              matchedUser = categoryAuthor
+              matchSource = `category (${categoryPath})`
+              break
             }
           }
         }
       }
 
-      if (bestMatch) {
-        matchedUser = bestMatch.user
+      if (!matchedUser) {
+        const plainText = extractPlainTextFromLexical(post.content)
+        
+        if (!plainText || plainText.trim().length === 0) {
+          payload.logger.warn(`⚠️  Post "${post.title}" has empty content, skipping`)
+          continue
+        }
+
+        let bestMatch: { user: any; score: number } | null = null
+
+        for (const candidateUser of allUsers.docs) {
+          if (!candidateUser.name) continue
+
+          const normalizedName = normalizeForMatching(candidateUser.name)
+          
+          if (normalizedName.length < 3) continue
+
+          const isMatch = findAuthorInContent(plainText, candidateUser.name, normalizedName)
+
+          if (isMatch) {
+            const matchScore = normalizedName.split(' ').length
+            
+            if (!bestMatch || matchScore > bestMatch.score) {
+              bestMatch = {
+                user: candidateUser,
+                score: matchScore,
+              }
+            }
+          }
+        }
+
+        if (bestMatch) {
+          matchedUser = bestMatch.user
+          matchSource = 'content'
+        }
       }
 
       const targetAuthorId = matchedUser ? matchedUser.id : ancaUser.id
@@ -209,8 +308,9 @@ export async function POST(): Promise<Response> {
           })
 
           updated++
+          const sourceNote = matchSource ? ` [${matchSource}]` : matchedUser ? '' : ' [default - no match found]'
           matchingDetails.push(
-            `✅ "${post.title}": Assigned to ${targetAuthorName}${matchedUser ? '' : ' (default - no match found)'}`,
+            `✅ "${post.title}": Assigned to ${targetAuthorName}${sourceNote}`,
           )
 
           if (updated % 10 === 0) {

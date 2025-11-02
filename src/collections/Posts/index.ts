@@ -16,6 +16,7 @@ import { Code } from '../../blocks/Code/config'
 import { MediaBlock } from '../../blocks/MediaBlock/config'
 import { VideoEmbed } from '../../blocks/VideoEmbed/config'
 import { generatePreviewPath } from '../../utilities/generatePreviewPath'
+import { cleanupPostRelations } from './hooks/cleanupPostRelations'
 import { populateAuthors } from './hooks/populateAuthors'
 import { revalidateDelete, revalidatePost } from './hooks/revalidatePost'
 
@@ -266,6 +267,7 @@ export const Posts: CollectionConfig<'posts'> = {
     ...slugField(),
   ],
   hooks: {
+    beforeDelete: [cleanupPostRelations],
     afterChange: [revalidatePost],
     afterRead: [populateAuthors],
     afterDelete: [revalidateDelete],

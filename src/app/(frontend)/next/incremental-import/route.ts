@@ -211,18 +211,98 @@ export async function POST(request: Request): Promise<Response> {
 
     const parsedPosts: ParsedPost[] = []
     const imageMap = new Map<string, { fileName: string; url: string }>() // postId -> {fileName, url}
+    const imageVariants = new Map<string, Array<{ attachmentId: string; fileName: string; url: string; size: number }>>() // baseFileName -> variants[]
 
-    // First pass: collect attachment URLs
+    function getBaseFileName(fileName: string): string {
+      const parsed = path.parse(fileName.toLowerCase())
+      const name = parsed.name
+      const sizeMatch = name.match(/^(.+)-(\d+)x(\d+)$/)
+      return sizeMatch && sizeMatch[1] ? sizeMatch[1] : name
+    }
+
+    function extractImageSize(fileName: string): number {
+      const parsed = path.parse(fileName.toLowerCase())
+      const name = parsed.name
+      const sizeMatch = name.match(/-(\d+)x(\d+)$/)
+      if (sizeMatch && sizeMatch[1] && sizeMatch[2]) {
+        const width = parseInt(sizeMatch[1], 10)
+        const height = parseInt(sizeMatch[2], 10)
+        return width * height
+      }
+      return Infinity
+    }
+
+    function getBestVariant(variants: Array<{ attachmentId: string; fileName: string; url: string; size: number }>): { attachmentId: string; fileName: string; url: string } {
+      if (variants.length === 0) {
+        throw new Error('No variants provided')
+      }
+
+      const original = variants.find((v) => {
+        const parsed = path.parse(v.fileName.toLowerCase())
+        const sizeMatch = parsed.name.match(/-(\d+)x(\d+)$/)
+        return !sizeMatch
+      })
+
+      if (original) {
+        return {
+          attachmentId: original.attachmentId,
+          fileName: original.fileName,
+          url: original.url,
+        }
+      }
+
+      const largest = variants.reduce((best, current) => {
+        return current.size > best.size ? current : best
+      })
+
+      return {
+        attachmentId: largest.attachmentId,
+        fileName: largest.fileName,
+        url: largest.url,
+      }
+    }
+
     posts.forEach((post: any) => {
       if (post['wp:post_type'] === 'attachment' && post['wp:attachment_url']) {
         const attachmentId = post['wp:post_id']
         const imageUrl = post['wp:attachment_url']
-        imageMap.set(attachmentId, {
-          fileName: path.basename(imageUrl),
+        const fileName = path.basename(imageUrl)
+        const baseFileName = getBaseFileName(fileName)
+        const size = extractImageSize(fileName)
+
+        const imageData = {
+          attachmentId: String(attachmentId),
+          fileName,
+          url: imageUrl,
+          size,
+        }
+
+        imageMap.set(String(attachmentId), {
+          fileName,
           url: imageUrl,
         })
+
+        if (!imageVariants.has(baseFileName)) {
+          imageVariants.set(baseFileName, [])
+        }
+        imageVariants.get(baseFileName)!.push(imageData)
       }
     })
+
+    for (const [_baseFileName, variants] of imageVariants.entries()) {
+      if (variants.length > 1) {
+        const best = getBestVariant(variants)
+        // Update all variant IDs to point to the best variant's data
+        // This ensures that even if _thumbnail_id points to a smaller variant,
+        // we'll still get the best quality image
+        for (const variant of variants) {
+          imageMap.set(variant.attachmentId, {
+            fileName: best.fileName,
+            url: best.url,
+          })
+        }
+      }
+    }
 
     // Second pass: parse posts
     const parsedSlugs = new Map<string, number>() // Track slugs to handle conflicts
@@ -251,7 +331,7 @@ export async function POST(request: Request): Promise<Response> {
       // Decode URL-encoded slugs (e.g., %e2%88%92 becomes the actual character)
       try {
         rawSlug = decodeURIComponent(rawSlug)
-      } catch (e) {
+      } catch {
         // If decoding fails, use the raw slug as-is
         payload.logger.warn(
           `   ⚠️  Failed to decode slug "${rawSlug}" for post "${title}", using as-is`,
@@ -326,7 +406,7 @@ export async function POST(request: Request): Promise<Response> {
             })()
           : []
 
-      // Find featured image
+      // Find featured image (best quality variant - already normalized in imageMap)
       let featuredImageFileName: string | undefined
       let featuredImageUrl: string | undefined
       if (post['wp:postmeta']) {
@@ -336,9 +416,11 @@ export async function POST(request: Request): Promise<Response> {
 
         for (const meta of postmeta) {
           if (meta['wp:meta_key'] === '_thumbnail_id' && meta['wp:meta_value']) {
-            const thumbnailId = meta['wp:meta_value']
+            const thumbnailId = String(meta['wp:meta_value'])
             const imageData = imageMap.get(thumbnailId)
+            
             if (imageData) {
+              // imageMap already points to the best variant for this base filename
               featuredImageFileName = imageData.fileName
               featuredImageUrl = imageData.url
             }
