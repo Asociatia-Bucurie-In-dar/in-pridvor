@@ -264,7 +264,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 transition={{ duration: 0.2 }}
-                className="flex items-center text-sm shadow-sm text-black bg-yellow-400 hover:shadow-md focus:outline-hidden focus:ring-4 focus:ring-yellow-300 font-medium rounded-full px-5 py-2.5 text-center"
+                className="flex items-center text-sm shadow-sm text-gray-800 bg-yellow-400 hover:shadow-md focus:outline-hidden focus:ring-4 focus:ring-yellow-300 font-medium rounded-full px-5 py-2.5 text-center"
               >
                 <HeartIcon aria-hidden="true" className="size-5 mr-1" />
                 Donează
