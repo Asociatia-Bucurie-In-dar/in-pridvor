@@ -28,7 +28,7 @@ export const DropCapHandler: React.FC<{
     const applyDropCap = () => {
       attempts++
 
-      const container = document.querySelector(containerSelector)
+      const container = document.querySelector(containerSelector) as HTMLElement | null
       if (!container) {
         if (attempts < maxAttempts) {
           setTimeout(applyDropCap, 100)
@@ -36,90 +36,66 @@ export const DropCapHandler: React.FC<{
         return
       }
 
-      // Find all paragraphs in the container
-      // The RichText component might render paragraphs in different structures
-      const allParagraphs = container.querySelectorAll('p')
-      const paragraphs: HTMLParagraphElement[] = Array.from(allParagraphs).filter((p) => {
-        const text = p.textContent?.trim() || ''
-        if (text.length === 0) {
-          return false
-        }
+      const paragraphs: HTMLParagraphElement[] = []
+      const blockClassNames = [
+        'block',
+        'media-block',
+        'banner-block',
+        'code-block',
+        'cta-block',
+        'video-embed-block',
+      ]
+      const blockTags = ['blockquote', 'aside', 'header', 'footer', 'nav']
 
-        // Filter out paragraphs that are inside blocks or other nested structures
-        // Only keep paragraphs that are top-level content paragraphs
-        let parent = p.parentElement
-        while (parent && parent !== container) {
-          // Skip if inside blocks or complex structures
-          const classList = parent.classList
-          if (
-            classList.contains('block') ||
-            classList.contains('media-block') ||
-            classList.contains('banner-block') ||
-            classList.contains('code-block') ||
-            classList.contains('cta-block') ||
-            classList.contains('video-embed-block') ||
-            parent.tagName.toLowerCase() === 'blockquote' ||
-            parent.tagName.toLowerCase() === 'aside'
-          ) {
-            return false
+      const isBlockElement = (element: Element): boolean => {
+        const classList = element.classList
+        const tagName = element.tagName.toLowerCase()
+        
+        return (
+          blockClassNames.some(className => classList.contains(className)) ||
+          blockTags.includes(tagName)
+        )
+      }
+
+      const isInsideBlock = (element: Element): boolean => {
+        let current: Element | null = element.parentElement
+        while (current && current !== container) {
+          if (isBlockElement(current)) {
+            return true
           }
-          parent = parent.parentElement
+          current = current.parentElement
         }
-        return true
-      }) as HTMLParagraphElement[]
+        return false
+      }
 
-      console.log(
-        `Found ${paragraphs.length} top-level paragraphs in container (looking for paragraph ${dropCapIndex})`,
-      )
+      const allParagraphs = container.querySelectorAll('p')
+      for (let i = 0; i < allParagraphs.length; i++) {
+        const paragraph = allParagraphs[i] as HTMLParagraphElement
+        const text = paragraph.textContent?.trim() || ''
+        
+        if (text.length > 0 && !isInsideBlock(paragraph)) {
+          paragraphs.push(paragraph)
+        }
+      }
 
       if (paragraphs.length < dropCapIndex) {
-        console.log(
-          `Not enough paragraphs yet (${paragraphs.length} < ${dropCapIndex}), retrying...`,
-        )
         if (attempts < maxAttempts) {
           setTimeout(applyDropCap, 100)
         }
         return
       }
 
-      // Remove drop cap class from all paragraphs and explicitly reset their first-letter styles
       paragraphs.forEach((p, index) => {
-        p.classList.remove('drop-cap-target')
-
-        // For the first paragraph, we need to explicitly remove any default drop cap styles
-        // by adding a class that resets it
+        p.classList.remove('drop-cap-target', 'drop-cap-reset')
         if (index === 0 && dropCapIndex !== 1) {
-          // Explicitly remove drop cap from first paragraph
           p.classList.add('drop-cap-reset')
-        } else {
-          p.classList.remove('drop-cap-reset')
         }
       })
 
-      // Add drop cap class to the specified paragraph
-      const targetParagraph = paragraphs[dropCapIndex - 1]
-      if (targetParagraph) {
+      const targetIndex = dropCapIndex - 1
+      if (targetIndex >= 0 && targetIndex < paragraphs.length) {
+        const targetParagraph = paragraphs[targetIndex]
         targetParagraph.classList.add('drop-cap-target')
-
-        // Double-check by inspecting the element
-        const hasClass = targetParagraph.classList.contains('drop-cap-target')
-        console.log(
-          `✓ Applied drop cap to paragraph ${dropCapIndex} of ${paragraphs.length}`,
-          targetParagraph.textContent?.substring(0, 50),
-          `Class present: ${hasClass}`,
-          `Element:`,
-          targetParagraph,
-        )
-
-        // Verify it's not the first paragraph
-        const isFirstParagraph = paragraphs.indexOf(targetParagraph) === 0
-        if (isFirstParagraph && dropCapIndex !== 1) {
-          console.error(
-            `WARNING: Selected paragraph is the first paragraph, but dropCapIndex is ${dropCapIndex}`,
-          )
-        }
-      } else {
-        console.error(`Failed to find paragraph ${dropCapIndex}`)
       }
     }
 

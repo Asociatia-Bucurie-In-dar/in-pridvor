@@ -44,71 +44,15 @@
   }
 }
 
-/* Drop cap styles - DISABLED (keeping for future use) */
-/* All drop cap visual styling is disabled while keeping database fields and functionality intact */
-
-/* Default drop cap on first paragraph - DISABLED */
-/*
-.article-content-with-dropcap:not([data-dropcap-index]) > p:not(:empty):first-of-type:first-letter {
-  font-size: 4rem;
-  font-weight: bold;
-  font-family: var(--font-playfair);
-  float: left;
-  margin-right: 0.5rem;
-  line-height: 1;
-}
-*/
-
-/* When data-dropcap-index is set, completely reset ALL paragraphs' first letters - DISABLED */
-/*
-.article-content-with-dropcap[data-dropcap-index] p:first-letter,
-.article-content-with-dropcap[data-dropcap-index] > p:first-letter,
-.article-content-with-dropcap[data-dropcap-index] p:first-of-type:first-letter,
-.article-content-with-dropcap[data-dropcap-index] > p:first-of-type:first-letter,
-.article-content-with-dropcap[data-dropcap-index] p:not(:empty):first-of-type:first-letter,
-.article-content-with-dropcap[data-dropcap-index] > p:not(:empty):first-of-type:first-letter,
-.article-content-with-dropcap[data-dropcap-index] p:first-of-type:not(.drop-cap-target):first-letter,
-.article-content-with-dropcap[data-dropcap-index] > p:first-of-type:not(.drop-cap-target):first-letter {
-  font-size: inherit !important;
-  font-weight: inherit !important;
-  font-family: inherit !important;
-  float: none !important;
-  margin-right: 0 !important;
-  line-height: inherit !important;
-  text-transform: none !important;
-  color: inherit !important;
-}
-*/
-
-/* Explicitly remove drop cap from first paragraph when data-dropcap-index is set - DISABLED */
-/*
-.article-content-with-dropcap[data-dropcap-index] > p:not(.drop-cap-target):first-of-type:first-letter,
-.article-content-with-dropcap[data-dropcap-index] > p:not(.drop-cap-target):first-of-type:not(:empty):first-letter,
-.article-content-with-dropcap[data-dropcap-index] p.drop-cap-reset:first-letter,
-.article-content-with-dropcap[data-dropcap-index] p.drop-cap-reset:first-of-type:first-letter {
-  font-size: inherit !important;
-  font-weight: inherit !important;
-  font-family: inherit !important;
-  float: none !important;
-  margin-right: 0 !important;
-  line-height: inherit !important;
-  text-transform: none !important;
-  color: inherit !important;
-}
-*/
-
-/* Drop cap using JavaScript-added class - DISABLED */
-/*
-.article-content-with-dropcap[data-dropcap-index] p.drop-cap-target:first-letter,
-.article-content-with-dropcap[data-dropcap-index] p.drop-cap-target:first-of-type:first-letter {
-  font-size: 4rem !important;
-  font-weight: bold !important;
+.drop-cap-target:first-letter {
+  font-size: 5.5rem !important;
+  font-weight: 500 !important;
   font-family: var(--font-playfair) !important;
   float: left !important;
-  margin-right: 0.5rem !important;
-  line-height: 1 !important;
+  margin-right: 0.75rem !important;
+  margin-top: 0.05em !important;
+  line-height: 0.85 !important;
 }
-*/
 
   :root {
     --background: 0 0% 100%;
