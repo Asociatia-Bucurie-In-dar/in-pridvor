@@ -36,8 +36,17 @@ export const Card: React.FC<{
   const { card, link } = useClickableCard({})
   const { className, doc, relationTo, showCategories, title: titleFromProps } = props
 
-  const { slug, categories, meta, title, heroImage, heroImageAlignment, content, publishedAt, populatedAuthors } =
-    doc || {}
+  const {
+    slug,
+    categories,
+    meta,
+    title,
+    heroImage,
+    heroImageAlignment,
+    content,
+    publishedAt,
+    populatedAuthors,
+  } = doc || {}
   const { image: metaImage } = meta || {}
 
   // Use heroImage first, fall back to meta image
@@ -93,7 +102,7 @@ export const Card: React.FC<{
             </div>
           )}
         </div>
-        <div className="absolute inset-0 rounded-2xl ring-1 ring-gray-900/10 ring-inset" />
+        <div className="absolute inset-0 rounded-lg ring-1 ring-gray-900/10 ring-inset" />
       </Link>
 
       <div className="flex flex-col flex-grow p-4">
