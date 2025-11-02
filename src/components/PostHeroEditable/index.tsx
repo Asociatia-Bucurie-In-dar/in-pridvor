@@ -11,6 +11,7 @@ import { formatDateTime } from 'src/utilities/formatDateTime'
 import { Media } from '@/components/Media'
 import { formatAuthors } from '@/utilities/formatAuthors'
 import { AuthorLinks } from '@/components/AuthorLinks'
+import { CategoryLinks } from '@/components/CategoryLinks'
 
 interface PostHeroEditableProps {
   post: Post
@@ -60,20 +61,7 @@ export const PostHeroEditable: React.FC<PostHeroEditableProps> = ({
             <EditableCategories post={post} categories={categories || []} onUpdate={handleUpdate} />
           ) : (
             <div className="uppercase text-sm mb-6">
-              {categories?.map((category, index) => {
-                if (typeof category === 'object' && category !== null) {
-                  const { title: categoryTitle } = category
-                  const titleToUse = categoryTitle || 'Untitled category'
-                  const isLast = index === categories.length - 1
-                  return (
-                    <React.Fragment key={index}>
-                      {titleToUse}
-                      {!isLast && <React.Fragment>, &nbsp;</React.Fragment>}
-                    </React.Fragment>
-                  )
-                }
-                return null
-              })}
+              {categories && categories.length > 0 && <CategoryLinks categories={categories} />}
             </div>
           )}
 
