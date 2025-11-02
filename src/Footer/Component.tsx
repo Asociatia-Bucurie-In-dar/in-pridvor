@@ -6,6 +6,21 @@ import { SiFacebook, SiWhatsapp, SiYoutube } from 'react-icons/si'
 export async function Footer() {
   const currentYear = new Date().getFullYear()
 
+  const footerLinks = [
+    {
+      name: 'Acasă',
+      href: '/',
+    },
+    {
+      name: 'Toate articolele',
+      href: '/posts',
+    },
+    {
+      name: 'Noi',
+      href: '/noi',
+    },
+  ]
+
   const navigation = [
     {
       name: 'Facebook',
@@ -27,8 +42,8 @@ export async function Footer() {
   return (
     <footer className="bg-white border-t border-gray-200">
       <div className="mx-auto max-w-7xl px-6 py-12 lg:px-8">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-8">
-          <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-6">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <Link href="/" className="block">
               <Image
                 src="/logomic.png"
@@ -38,27 +53,39 @@ export async function Footer() {
                 priority={false}
               />
             </Link>
+            <div className="flex items-center gap-6">
+              {navigation.map((item) => {
+                const IconComponent = item.icon
+                return (
+                  <Link
+                    key={item.name}
+                    href={item.href}
+                    className="text-gray-600 hover:text-gray-900 transition-colors"
+                    aria-label={item.name}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <IconComponent className="w-6 h-6" aria-hidden="true" />
+                  </Link>
+                )
+              })}
+            </div>
+          </div>
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <p className="text-sm text-gray-600">
               &copy; {currentYear} Asociația Bucurie în Dar. Toate drepturile rezervate.
             </p>
-          </div>
-
-          <div className="flex items-center gap-6">
-            {navigation.map((item) => {
-              const IconComponent = item.icon
-              return (
+            <div className="flex items-center gap-4">
+              {footerLinks.map((item) => (
                 <Link
                   key={item.name}
                   href={item.href}
-                  className="text-gray-600 hover:text-gray-900 transition-colors"
-                  aria-label={item.name}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
                 >
-                  <IconComponent className="w-6 h-6" aria-hidden="true" />
+                  {item.name}
                 </Link>
-              )
-            })}
+              ))}
+            </div>
           </div>
         </div>
       </div>
