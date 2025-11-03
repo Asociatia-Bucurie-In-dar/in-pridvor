@@ -95,7 +95,9 @@ export const DropCapHandler: React.FC<{
       const targetIndex = dropCapIndex - 1
       if (targetIndex >= 0 && targetIndex < paragraphs.length) {
         const targetParagraph = paragraphs[targetIndex]
-        targetParagraph.classList.add('drop-cap-target')
+        if (targetParagraph) {
+          targetParagraph.classList.add('drop-cap-target')
+        }
       }
     }
 
