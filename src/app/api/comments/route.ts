@@ -6,7 +6,7 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
     console.log('Received comment submission:', { body })
-    const { name, email, comment, post } = body
+    const { name, email, comment, post, parent } = body
 
     // Validate required fields
     if (!name || !email || !comment || !post) {
@@ -36,16 +36,27 @@ export async function POST(request: NextRequest) {
     const postId = typeof post === 'string' ? parseInt(post, 10) : post
     console.log('Post ID (parsed):', postId, 'Type:', typeof postId)
 
+    // Parse parent ID if provided
+    const parentId = parent ? (typeof parent === 'string' ? parseInt(parent, 10) : parent) : undefined
+
+    // Create the comment data
+    const commentData: any = {
+      name: name.trim(),
+      email: email.trim().toLowerCase(),
+      comment: comment.trim(),
+      post: postId,
+      status: 'approved', // Comments are approved by default
+    }
+
+    // Add parent if this is a reply
+    if (parentId) {
+      commentData.parent = parentId
+    }
+
     // Create the comment
     const newComment = await payload.create({
       collection: 'comments',
-      data: {
-        name: name.trim(),
-        email: email.trim().toLowerCase(),
-        comment: comment.trim(),
-        post: postId,
-        status: 'approved', // Comments are approved by default
-      },
+      data: commentData,
     })
 
     console.log('Comment created successfully:', newComment.id)

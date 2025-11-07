@@ -816,6 +816,10 @@ export interface Comment {
   email: string;
   comment: string;
   post: number | Post;
+  /**
+   * Parent comment if this is a reply
+   */
+  parent?: (number | null) | Comment;
   status: 'approved' | 'pending' | 'rejected';
   updatedAt: string;
   createdAt: string;
@@ -1364,6 +1368,7 @@ export interface CommentsSelect<T extends boolean = true> {
   email?: T;
   comment?: T;
   post?: T;
+  parent?: T;
   status?: T;
   updatedAt?: T;
   createdAt?: T;

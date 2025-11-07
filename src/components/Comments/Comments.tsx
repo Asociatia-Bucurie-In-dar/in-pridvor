@@ -32,7 +32,7 @@ export async function Comments({ postId }: CommentsProps) {
     limit: 100,
   })
 
-  const comments = commentsData.docs.map((comment) => ({
+  const allComments = commentsData.docs.map((comment) => ({
     id: String(comment.id),
     name: comment.name,
     comment: comment.comment,
@@ -40,7 +40,54 @@ export async function Comments({ postId }: CommentsProps) {
       typeof comment.createdAt === 'string'
         ? comment.createdAt
         : new Date(comment.createdAt).toISOString(),
+    parent: comment.parent
+      ? typeof comment.parent === 'object' && comment.parent.id
+        ? String(comment.parent.id)
+        : String(comment.parent)
+      : null,
   }))
+
+  // Organize comments into tree structure
+  const buildCommentTree = (comments: typeof allComments) => {
+    const commentMap = new Map<string, (typeof allComments)[0] & { replies: typeof allComments }>()
+    const rootComments: typeof allComments = []
+
+    // First pass: create map of all comments with empty replies array
+    comments.forEach((comment) => {
+      commentMap.set(comment.id, { ...comment, replies: [] })
+    })
+
+    // Second pass: organize into tree
+    comments.forEach((comment) => {
+      const commentWithReplies = commentMap.get(comment.id)!
+      if (comment.parent && commentMap.has(comment.parent)) {
+        const parent = commentMap.get(comment.parent)!
+        parent.replies.push(commentWithReplies)
+      } else {
+        rootComments.push(commentWithReplies)
+      }
+    })
+
+    // Sort replies by date (oldest first for replies)
+    const sortReplies = (commentList: typeof rootComments) => {
+      commentList.forEach((comment) => {
+        if (comment.replies && comment.replies.length > 0) {
+          comment.replies.sort((a, b) => {
+            const dateA = new Date(a.createdAt).getTime()
+            const dateB = new Date(b.createdAt).getTime()
+            return dateA - dateB
+          })
+          sortReplies(comment.replies)
+        }
+      })
+    }
+
+    sortReplies(rootComments)
+
+    return rootComments
+  }
+
+  const comments = buildCommentTree(allComments)
 
   return (
     <div className="max-w-3xl mx-auto mt-16 mb-12">
@@ -48,7 +95,7 @@ export async function Comments({ postId }: CommentsProps) {
         <h2 className="text-3xl font-bold font-playfair text-gray-900 mb-2">Comentarii</h2>
         <div className="h-1 w-20 bg-gray-900 rounded-full"></div>
       </div> */}
-      <CommentList comments={comments} />
+      <CommentList comments={comments} postId={postId} />
       <CommentFormWrapper postId={postId} />
     </div>
   )

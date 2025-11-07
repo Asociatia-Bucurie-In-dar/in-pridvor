@@ -2,6 +2,7 @@ import type { CollectionConfig } from 'payload'
 
 import { anyone } from '../access/anyone'
 import { authenticated } from '../access/authenticated'
+import { cleanupCommentRelations } from './Comments/hooks/cleanupCommentRelations'
 
 export const Comments: CollectionConfig = {
   slug: 'comments',
@@ -38,8 +39,21 @@ export const Comments: CollectionConfig = {
       type: 'relationship',
       relationTo: 'posts',
       required: true,
+      db: {
+        relationName: 'comments_post_fk',
+        onDelete: 'cascade',
+      },
       admin: {
         position: 'sidebar',
+      },
+    },
+    {
+      name: 'parent',
+      type: 'relationship',
+      relationTo: 'comments',
+      admin: {
+        position: 'sidebar',
+        description: 'Parent comment if this is a reply',
       },
     },
     {
@@ -66,5 +80,8 @@ export const Comments: CollectionConfig = {
       },
     },
   ],
+  hooks: {
+    beforeDelete: [cleanupCommentRelations],
+  },
   timestamps: true,
 }

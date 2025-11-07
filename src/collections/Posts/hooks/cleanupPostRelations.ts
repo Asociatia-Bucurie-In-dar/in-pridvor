@@ -17,41 +17,106 @@ export const cleanupPostRelations: CollectionBeforeDeleteHook = async ({
 
     let cleanedCount = 0
 
+    // First, delete comments at database level to avoid foreign key constraint issues
+    // This must happen BEFORE Payload tries to delete the post, otherwise the foreign key constraint will fail
     try {
-      const commentsResult = await payload.find({
-        collection: 'comments',
-        where: {
-          post: {
-            equals: postId,
-          },
-        },
-        limit: 1000,
-        depth: 0,
-      })
-
-      if (commentsResult.docs.length > 0) {
-        for (const comment of commentsResult.docs) {
+      const { Pool } = await import('pg')
+      if (process.env.POSTGRES_URL) {
+        const pool = new Pool({
+          connectionString: process.env.POSTGRES_URL,
+        })
+        try {
+          // Delete comments directly at database level first (bypasses foreign key constraints)
+          const deleteCommentsResult = await pool.query(
+            'DELETE FROM comments WHERE post_id = $1',
+            [postId],
+          )
+          if (deleteCommentsResult.rowCount && deleteCommentsResult.rowCount > 0) {
+            cleanedCount += deleteCommentsResult.rowCount
+            payload.logger.info(`   ✅ Deleted ${deleteCommentsResult.rowCount} comments at database level`)
+          }
+          await pool.end()
+        } catch (dbError: any) {
+          payload.logger.warn(`   ⚠️  Database cleanup error: ${dbError.message}`)
+          await pool.end()
+          // Fallback to Payload API deletion if SQL fails
           try {
-            await payload.delete({
+            const commentsResult = await payload.find({
               collection: 'comments',
-              id: comment.id,
-              req: {
-                ...req,
-                context: {
-                  ...context,
-                  disableRevalidate: true,
+              where: {
+                post: {
+                  equals: postId,
                 },
               },
+              limit: 1000,
+              depth: 0,
             })
-            cleanedCount++
+
+            if (commentsResult.docs.length > 0) {
+              for (const comment of commentsResult.docs) {
+                try {
+                  await payload.delete({
+                    collection: 'comments',
+                    id: comment.id,
+                    req: {
+                      ...req,
+                      context: {
+                        ...context,
+                        disableRevalidate: true,
+                      },
+                    },
+                  })
+                  cleanedCount++
+                } catch (error: any) {
+                  payload.logger.warn(`   ⚠️  Failed to delete comment ${comment.id}: ${error.message}`)
+                }
+              }
+              payload.logger.info(`   ✅ Deleted ${commentsResult.docs.length} comments via Payload API fallback`)
+            }
           } catch (error: any) {
-            payload.logger.warn(`   ⚠️  Failed to delete comment ${comment.id}: ${error.message}`)
+            payload.logger.warn(`   ⚠️  Failed to cleanup comments via Payload API: ${error.message}`)
           }
         }
-        payload.logger.info(`   ✅ Deleted ${commentsResult.docs.length} comments`)
       }
-    } catch (error: any) {
-      payload.logger.warn(`   ⚠️  Failed to cleanup comments: ${error.message}`)
+    } catch (importError: any) {
+      payload.logger.warn(`   ⚠️  Failed to import pg for direct comment deletion: ${importError.message}`)
+      // Fallback to Payload API deletion
+      try {
+        const commentsResult = await payload.find({
+          collection: 'comments',
+          where: {
+            post: {
+              equals: postId,
+            },
+          },
+          limit: 1000,
+          depth: 0,
+        })
+
+        if (commentsResult.docs.length > 0) {
+          for (const comment of commentsResult.docs) {
+            try {
+              await payload.delete({
+                collection: 'comments',
+                id: comment.id,
+                req: {
+                  ...req,
+                  context: {
+                    ...context,
+                    disableRevalidate: true,
+                  },
+                },
+              })
+              cleanedCount++
+            } catch (error: any) {
+              payload.logger.warn(`   ⚠️  Failed to delete comment ${comment.id}: ${error.message}`)
+            }
+          }
+          payload.logger.info(`   ✅ Deleted ${commentsResult.docs.length} comments via Payload API fallback`)
+        }
+      } catch (error: any) {
+        payload.logger.warn(`   ⚠️  Failed to cleanup comments: ${error.message}`)
+      }
     }
 
     try {
@@ -100,6 +165,7 @@ export const cleanupPostRelations: CollectionBeforeDeleteHook = async ({
       payload.logger.warn(`   ⚠️  Failed to cleanup relatedPosts: ${error.message}`)
     }
 
+    // Clean up database-level relations (comments already deleted above)
     try {
       const { Pool } = await import('pg')
 

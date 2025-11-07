@@ -16,6 +16,8 @@ interface ParsedPost {
   categories: string[]
   featuredImageUrl?: string
   featuredImageFileName?: string
+  wpPostId?: string
+  originalPostItem?: any
 }
 
 export async function POST(request: Request): Promise<Response> {
@@ -47,7 +49,7 @@ export async function POST(request: Request): Promise<Response> {
       attributeNamePrefix: '',
       textNodeName: 'text',
       isArray: (name) => {
-        if (name === 'wp:postmeta' || name === 'category') return true
+        if (name === 'wp:postmeta' || name === 'category' || name === 'wp:comment') return true
         return false
       },
     })
@@ -437,6 +439,8 @@ export async function POST(request: Request): Promise<Response> {
         categories,
         featuredImageFileName,
         featuredImageUrl,
+        wpPostId: post['wp:post_id'],
+        originalPostItem: post,
       })
     })
 
@@ -625,10 +629,76 @@ export async function POST(request: Request): Promise<Response> {
           }
         }
 
-        // Convert HTML content to Lexical with proper formatting
+        // Extract images from content and upload to R2
+        const imageMediaMap = new Map<string, number>()
+        const imgRegex = /<img[^>]+src=["']([^"']+)["'][^>]*>/gi
+        const imageUrls = new Set<string>()
+        let imgMatch: RegExpExecArray | null
+        while ((imgMatch = imgRegex.exec(post.content)) !== null) {
+          const imageUrl = imgMatch[1]
+          if (imageUrl && !imageUrl.startsWith('data:')) {
+            imageUrls.add(imageUrl)
+          }
+        }
+
+        // Upload images to R2 and build media map
+        for (const imageUrl of imageUrls) {
+          try {
+            const fileName = path.basename(imageUrl.split('?')[0])
+            
+            // Check if media already exists
+            let matchingMedia = allMedia.docs.find((media) => {
+              if (!media.filename) return false
+              const mediaBaseName = path.parse(media.filename).name.toLowerCase()
+              const urlBaseName = path.parse(fileName).name.toLowerCase()
+              return mediaBaseName === urlBaseName || media.filename.toLowerCase() === fileName.toLowerCase()
+            })
+
+            if (matchingMedia) {
+              const mediaId = typeof matchingMedia.id === 'number' ? matchingMedia.id : parseInt(String(matchingMedia.id), 10)
+              if (!isNaN(mediaId)) {
+                imageMediaMap.set(imageUrl, mediaId)
+                payload.logger.info(`   ♻️  Reusing existing image: ${matchingMedia.filename} (ID: ${mediaId})`)
+              }
+            } else {
+              // Download and upload image
+              payload.logger.info(`   📥 Downloading image from ${imageUrl}`)
+              const imageResponse = await fetch(imageUrl)
+              if (imageResponse.ok) {
+                const imageBuffer = await imageResponse.arrayBuffer()
+                const mimeType = imageResponse.headers.get('content-type') || 'image/jpeg'
+
+                const uploadedMedia = await payload.create({
+                  collection: 'media',
+                  data: {
+                    alt: post.title,
+                  },
+                  file: {
+                    data: Buffer.from(imageBuffer),
+                    mimetype: mimeType,
+                    name: fileName,
+                    size: imageBuffer.byteLength,
+                  },
+                  req: payloadReq,
+                })
+
+                const uploadedId = typeof uploadedMedia.id === 'number' ? uploadedMedia.id : parseInt(String(uploadedMedia.id), 10)
+                if (!isNaN(uploadedId)) {
+                  imageMediaMap.set(imageUrl, uploadedId)
+                  allMedia.docs.push(uploadedMedia as any)
+                  payload.logger.info(`   ✅ Uploaded image to R2: ${fileName} (ID: ${uploadedId})`)
+                }
+              }
+            }
+          } catch (imageError: any) {
+            payload.logger.warn(`   ⚠️  Failed to process image ${imageUrl}: ${imageError.message}`)
+          }
+        }
+
+        // Convert HTML content to Lexical with proper formatting and image map
         let lexicalContent
         try {
-          lexicalContent = htmlToLexical(post.content)
+          lexicalContent = htmlToLexical(post.content, imageMediaMap)
 
           // Validate that we have a valid root structure
           if (
@@ -748,7 +818,7 @@ export async function POST(request: Request): Promise<Response> {
           postPayload.heroImage = heroImageId
         }
 
-        await payload.create({
+        const createdPost = await payload.create({
           collection: 'posts',
           depth: 0,
           context: {
@@ -757,6 +827,87 @@ export async function POST(request: Request): Promise<Response> {
           data: postPayload,
           req: payloadReq,
         })
+
+        // Import comments for this post
+        if (post.originalPostItem) {
+          const comments = post.originalPostItem['wp:comment'] || []
+          const postComments = (Array.isArray(comments) ? comments : comments ? [comments] : [])
+            .filter((comment: any) => {
+              const commentType = comment['wp:comment_type']
+              const approved = comment['wp:comment_approved']
+              return commentType === 'comment' && (approved === '1' || approved === 1)
+            })
+
+          if (postComments.length > 0) {
+            payload.logger.info(`   💬 Found ${postComments.length} comments for "${post.title}"`)
+            const commentMap = new Map<string, any>()
+            
+            // First pass: create all comments and build map
+            for (const comment of postComments) {
+              try {
+                const commentId = String(comment['wp:comment_id'] || comment['wp:comment_id'])
+                const parentId = String(comment['wp:comment_parent'] || '0')
+                const commentAuthor = comment['wp:comment_author'] || 'Anonymous'
+                const commentContent = comment['wp:comment_content'] || ''
+                const commentEmail = comment['wp:comment_author_email'] || ''
+                
+                if (!commentContent || commentContent.trim().length === 0) {
+                  payload.logger.warn(`   ⚠️  Skipping empty comment from ${commentAuthor}`)
+                  continue
+                }
+
+                const commentData: any = {
+                  name: commentAuthor,
+                  email: commentEmail,
+                  comment: commentContent,
+                  post: createdPost.id,
+                  status: 'approved',
+                }
+
+                const createdComment = await payload.create({
+                  collection: 'comments',
+                  data: commentData,
+                  req: payloadReq,
+                })
+
+                commentMap.set(commentId, createdComment.id)
+                payload.logger.info(`   ✅ Imported comment from ${commentAuthor} (ID: ${commentId})`)
+              } catch (commentError: any) {
+                payload.logger.error(`   ❌ Failed to import comment: ${commentError.message}`)
+                if (commentError.stack) {
+                  payload.logger.error(`   Stack: ${commentError.stack}`)
+                }
+              }
+            }
+
+            // Second pass: update parent relationships
+            for (const comment of postComments) {
+              try {
+                const commentId = String(comment['wp:comment_id'])
+                const parentId = String(comment['wp:comment_parent'] || '0')
+                const currentCommentId = commentMap.get(commentId)
+                const parentCommentId = commentMap.get(parentId)
+
+                if (currentCommentId && parentCommentId && parentId !== '0') {
+                  await payload.update({
+                    collection: 'comments',
+                    id: currentCommentId,
+                    data: {
+                      parent: parentCommentId,
+                    },
+                    req: payloadReq,
+                  })
+                }
+              } catch (commentError: any) {
+                payload.logger.warn(`   ⚠️  Failed to set comment parent: ${commentError.message}`)
+              }
+            }
+
+            if (commentMap.size > 0) {
+              payload.logger.info(`   💬 Imported ${commentMap.size} comments for "${post.title}"`)
+            }
+          }
+        }
 
         imported++
         if (imported % 10 === 0) {

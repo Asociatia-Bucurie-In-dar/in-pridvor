@@ -41,17 +41,27 @@ interface AssignAuthorsResult {
   message?: string
 }
 
+interface DeleteMediaResult {
+  success: boolean
+  deleted: number
+  errors: number
+  total: number
+  errorList: string[]
+}
+
 export const ImportPostsWidget: React.FC = () => {
   const [isIncrementalImporting, setIsIncrementalImporting] = useState(false)
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [isReformatting, setIsReformatting] = useState(false)
   const [isCleaning, setIsCleaning] = useState(false)
   const [isAssigningAuthors, setIsAssigningAuthors] = useState(false)
+  const [isDeletingMedia, setIsDeletingMedia] = useState(false)
 
   const [incrementalResult, setIncrementalResult] = useState<IncrementalResult | null>(null)
   const [reformatResult, setReformatResult] = useState<ReformatResult | null>(null)
   const [cleanupResult, setCleanupResult] = useState<CleanupResult | null>(null)
   const [assignAuthorsResult, setAssignAuthorsResult] = useState<AssignAuthorsResult | null>(null)
+  const [deleteMediaResult, setDeleteMediaResult] = useState<DeleteMediaResult | null>(null)
 
   const handleIncrementalImport = async () => {
     if (!selectedFile) {
@@ -294,6 +304,70 @@ export const ImportPostsWidget: React.FC = () => {
     }
   }
 
+  const handleDeleteAllMedia = async () => {
+    if (
+      !confirm(
+        '⚠️ WARNING: This will delete ALL images from your R2 bucket and database. This action cannot be undone. Are you absolutely sure?',
+      )
+    ) {
+      return
+    }
+
+    if (
+      !confirm(
+        'This is your last chance. All media files will be permanently deleted from R2 and the database. Continue?',
+      )
+    ) {
+      return
+    }
+
+    setIsDeletingMedia(true)
+    setDeleteMediaResult(null)
+
+    try {
+      const response = await fetch('/next/delete-all-media', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+
+      const data = await response.json()
+
+      if (response.ok) {
+        setDeleteMediaResult({
+          success: true,
+          deleted: data.deleted || 0,
+          errors: data.errors || 0,
+          total: data.total || 0,
+          errorList: data.errorList || [],
+        })
+        toast.success('All media deleted successfully!')
+      } else {
+        setDeleteMediaResult({
+          success: false,
+          deleted: data.deleted || 0,
+          errors: data.errors || 1,
+          total: data.total || 0,
+          errorList: [data.message || 'Media deletion failed'],
+        })
+        toast.error(`Media deletion failed: ${data.message || 'Unknown error'}`)
+      }
+    } catch (error: any) {
+      console.error('Delete media error:', error)
+      setDeleteMediaResult({
+        success: false,
+        deleted: 0,
+        errors: 1,
+        total: 0,
+        errorList: [error instanceof Error ? error.message : 'Unknown error'],
+      })
+      toast.error(`Media deletion failed: ${error.message || 'Unknown error'}`)
+    } finally {
+      setIsDeletingMedia(false)
+    }
+  }
+
   return (
     <div
       style={{
@@ -376,6 +450,20 @@ export const ImportPostsWidget: React.FC = () => {
         </p>
         <Button onClick={handleAssignAuthors} disabled={isAssigningAuthors}>
           {isAssigningAuthors ? 'Assigning...' : '✍️ Assign Authors'}
+        </Button>
+      </div>
+
+      <hr style={{ margin: '20px 0', border: 'none', borderTop: '1px solid #e1e5e9' }} />
+
+      {/* Delete All Media Section */}
+      <h4 style={{ margin: '0 0 10px 0', color: '#d32f2f' }}>🗑️ Delete All Media</h4>
+      <div style={{ marginBottom: '20px' }}>
+        <p style={{ margin: '0 0 10px 0', color: '#666', fontSize: '14px' }}>
+          Delete all images from your R2 bucket and database. This will remove all media files permanently. 
+          Use this if you want to upload fresh images. Posts will lose their images until you re-import.
+        </p>
+        <Button onClick={handleDeleteAllMedia} disabled={isDeletingMedia}>
+          {isDeletingMedia ? 'Deleting...' : '🗑️ Delete All Media from R2'}
         </Button>
       </div>
 
@@ -663,6 +751,56 @@ export const ImportPostsWidget: React.FC = () => {
               }}
             >
               {assignAuthorsResult.message}
+            </div>
+          )}
+        </div>
+      )}
+
+      {deleteMediaResult && (
+        <div
+          style={{
+            marginTop: '15px',
+            padding: '15px',
+            border: `1px solid ${deleteMediaResult.success ? '#4CAF50' : '#f44336'}`,
+            borderRadius: '4px',
+            backgroundColor: deleteMediaResult.success ? '#e8f5e9' : '#ffebee',
+          }}
+        >
+          <h4
+            style={{
+              color: deleteMediaResult.success ? '#2e7d32' : '#c62828',
+              margin: '0 0 10px 0',
+              fontSize: '16px',
+            }}
+          >
+            {deleteMediaResult.success
+              ? '✅ All Media Deleted Successfully!'
+              : '❌ Media Deletion Failed'}
+          </h4>
+
+          <div style={{ marginBottom: '10px', fontSize: '14px' }}>
+            <strong>Total media items:</strong> {deleteMediaResult.total}
+            <br />
+            <strong>Successfully deleted:</strong> {deleteMediaResult.deleted}
+            <br />
+            <strong>Errors:</strong> {deleteMediaResult.errors}
+          </div>
+
+          {deleteMediaResult.errors > 0 && (
+            <div>
+              <h4>First 10 Errors:</h4>
+              <ul style={{ color: '#c62828', margin: '0', paddingLeft: '20px' }}>
+                {deleteMediaResult.errorList.map((err, index) => (
+                  <li key={index}>{err}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {deleteMediaResult.success && deleteMediaResult.deleted > 0 && (
+            <div style={{ marginTop: '10px', color: '#2e7d32', fontSize: '14px' }}>
+              🗑️ Successfully deleted {deleteMediaResult.deleted} media files from R2 and database.
+              You can now upload fresh images.
             </div>
           )}
         </div>

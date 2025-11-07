@@ -17,12 +17,15 @@ interface CommentFormData {
 
 interface CommentFormProps {
   postId: string
+  parentId?: string | null
+  parentAuthor?: string
   onCommentSubmitted?: () => void
+  onCancel?: () => void
 }
 
 const STORAGE_KEY = 'commentUserInfo'
 
-export function CommentForm({ postId, onCommentSubmitted }: CommentFormProps) {
+export function CommentForm({ postId, parentId, parentAuthor, onCommentSubmitted, onCancel }: CommentFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
   const [errorMessage, setErrorMessage] = useState('')
@@ -90,6 +93,7 @@ export function CommentForm({ postId, onCommentSubmitted }: CommentFormProps) {
           email: data.email,
           comment: data.comment,
           post: postId,
+          ...(parentId && { parent: parentId }),
         }),
       })
 
@@ -106,12 +110,12 @@ export function CommentForm({ postId, onCommentSubmitted }: CommentFormProps) {
       // Notify parent component
       if (onCommentSubmitted) {
         onCommentSubmitted()
+      } else {
+        // For top-level comments, clear success message after 5 seconds
+        setTimeout(() => {
+          setSubmitStatus('idle')
+        }, 5000)
       }
-
-      // Clear success message after 5 seconds
-      setTimeout(() => {
-        setSubmitStatus('idle')
-      }, 5000)
     } catch (error) {
       console.error('Error submitting comment:', error)
       setSubmitStatus('error')
@@ -125,9 +129,26 @@ export function CommentForm({ postId, onCommentSubmitted }: CommentFormProps) {
 
   return (
     <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8 transition-all duration-200 hover:shadow-md">
-      <h3 className="text-2xl font-semibold mb-6 font-playfair text-gray-900">
-        Lasă un comentariu
-      </h3>
+      {parentAuthor ? (
+        <div className="mb-4">
+          <h3 className="text-xl font-semibold mb-2 font-playfair text-gray-900">
+            Răspunde la {parentAuthor}
+          </h3>
+          {onCancel && (
+            <button
+              type="button"
+              onClick={onCancel}
+              className="text-sm text-gray-500 hover:text-gray-700 underline"
+            >
+              Anulează
+            </button>
+          )}
+        </div>
+      ) : (
+        <h3 className="text-2xl font-semibold mb-6 font-playfair text-gray-900">
+          Lasă un comentariu
+        </h3>
+      )}
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">

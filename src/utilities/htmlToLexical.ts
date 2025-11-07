@@ -258,7 +258,10 @@ function parseHtmlNode(node: Node, format = 0): (LexicalTextNode | LexicalElemen
   return results
 }
 
-export function htmlToLexical(html: string): LexicalRootNode {
+export function htmlToLexical(
+  html: string,
+  imageMediaMap?: Map<string, number>,
+): LexicalRootNode {
   // Validate input
   if (!html || typeof html !== 'string') {
     return {
@@ -302,12 +305,13 @@ export function htmlToLexical(html: string): LexicalRootNode {
 
     const videoMatches: VideoMatch[] = []
 
-    // Find YouTube URLs in the HTML (also match URLs missing 'h' from https)
+    // Find YouTube URLs in the HTML (including Shorts)
     const youtubePatterns = [
       /https?:\/\/(?:www\.)?youtube\.com\/watch\?.*?[&?]v=([a-zA-Z0-9_-]{11})/gi,
       /https?:\/\/(?:www\.)?youtube\.com\/watch\?v=([a-zA-Z0-9_-]{11})/gi,
       /https?:\/\/youtu\.be\/([a-zA-Z0-9_-]{11})/gi,
       /https?:\/\/(?:www\.)?youtube\.com\/embed\/([a-zA-Z0-9_-]{11})/gi,
+      /https?:\/\/(?:www\.)?youtube\.com\/shorts\/([a-zA-Z0-9_-]{11})/gi,
       /ttps?:\/\/(?:www\.)?youtube\.com\/watch\?.*?[&?]v=([a-zA-Z0-9_-]{11})/gi,
       /ttps?:\/\/(?:www\.)?youtube\.com\/watch\?v=([a-zA-Z0-9_-]{11})/gi,
     ]
@@ -336,11 +340,14 @@ export function htmlToLexical(html: string): LexicalRootNode {
         }
 
         const videoId = match[1]
+        const isShorts = url.includes('/shorts/')
         if (videoId && match.index !== undefined) {
           try {
-            // Normalize to standard watch URL format (we'll preserve params in the normalized URL for embedding)
+            // Normalize to standard watch URL format (preserve Shorts as shorts URL)
             const urlObj = new URL(url.startsWith('http') ? url : `https://${url}`)
-            const normalizedUrl = `https://www.youtube.com/watch?v=${videoId}${urlObj.search.replace(/^\?/, '&').replace(/^&/, '?')}`
+            const normalizedUrl = isShorts
+              ? `https://www.youtube.com/shorts/${videoId}`
+              : `https://www.youtube.com/watch?v=${videoId}${urlObj.search.replace(/^\?/, '&').replace(/^&/, '?')}`
 
             // Check if this URL is already in our list at this position
             const existingMatch = videoMatches.find(
@@ -356,7 +363,10 @@ export function htmlToLexical(html: string): LexicalRootNode {
             }
           } catch (urlError) {
             // If URL parsing fails, use basic normalized URL
-            const normalizedUrl = `https://www.youtube.com/watch?v=${videoId}`
+            const isShorts = url.includes('/shorts/')
+            const normalizedUrl = isShorts
+              ? `https://www.youtube.com/shorts/${videoId}`
+              : `https://www.youtube.com/watch?v=${videoId}`
             const existingMatch = videoMatches.find(
               (m) => m.position === match!.index && m.normalizedUrl === normalizedUrl,
             )
@@ -428,6 +438,18 @@ export function htmlToLexical(html: string): LexicalRootNode {
       }
     })
 
+    // Extract images before cleaning HTML
+    const imageMatches: Array<{ src: string; alt: string; position: number }> = []
+    const imgRegex = /<img[^>]+src=["']([^"']+)["'][^>]*(?:alt=["']([^"']*)["'])?[^>]*>/gi
+    let imgMatch: RegExpExecArray | null
+    while ((imgMatch = imgRegex.exec(html)) !== null) {
+      const src = imgMatch[1]
+      const alt = imgMatch[2] || ''
+      if (src && imgMatch.index !== undefined) {
+        imageMatches.push({ src, alt, position: imgMatch.index })
+      }
+    }
+
     // Clean up the HTML and remove video URLs from text
     let cleanHtml = html
       .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
@@ -439,6 +461,9 @@ export function htmlToLexical(html: string): LexicalRootNode {
       .replace(/<\/figure>/gi, '</div>')
       .replace(/<figcaption[^>]*>.*?<\/figcaption>/gi, '')
       .replace(/<p>\s*<\/p>/gi, '')
+
+    // Remove img tags (they'll be converted to Media blocks)
+    cleanHtml = cleanHtml.replace(/<img[^>]*>/gi, '')
 
     // Remove video URLs from content - use the original full URLs including parameters
     videoMatches.forEach((videoMatch) => {
@@ -487,11 +512,13 @@ export function htmlToLexical(html: string): LexicalRootNode {
     // Insert early videos at the beginning
     earlyVideos.forEach((videoUrl) => {
       if (!insertedVideoUrls.has(videoUrl)) {
+        const isShorts = videoUrl.includes('/shorts/')
         children.push({
           type: 'block',
           fields: {
             blockType: 'videoEmbed',
             url: videoUrl,
+            isShorts: isShorts || undefined,
           },
           format: '',
           version: 2,
@@ -500,7 +527,29 @@ export function htmlToLexical(html: string): LexicalRootNode {
       }
     })
 
-    // Process each child node (content)
+    // Sort images by position to maintain order
+    imageMatches.sort((a, b) => a.position - b.position)
+    
+    // Process images - insert them as blocks between content blocks
+    const imageBlocks: LexicalElementNode[] = []
+    for (const imageMatch of imageMatches) {
+      const mediaId = imageMediaMap?.get(imageMatch.src)
+      if (mediaId) {
+        imageBlocks.push({
+          type: 'block',
+          fields: {
+            blockType: 'mediaBlock',
+            media: mediaId,
+          },
+          format: '',
+          version: 2,
+        } as any)
+      }
+    }
+
+    // Process each child node (content) and insert images between paragraphs
+    let imageBlockIndex = 0
+    
     body.childNodes.forEach((node) => {
       try {
         const parsed = parseHtmlNode(node)
@@ -515,8 +564,20 @@ export function htmlToLexical(html: string): LexicalRootNode {
               textFormat: 0,
               version: 1,
             })
+            
+            // Insert image after paragraph if available
+            if (imageBlockIndex < imageBlocks.length) {
+              children.push(imageBlocks[imageBlockIndex])
+              imageBlockIndex++
+            }
           } else if (item) {
             children.push(item as LexicalElementNode)
+            
+            // Insert image after block elements (paragraphs, headings) if available
+            if (imageBlockIndex < imageBlocks.length && (item.type === 'paragraph' || item.type === 'heading')) {
+              children.push(imageBlocks[imageBlockIndex])
+              imageBlockIndex++
+            }
           }
         })
       } catch (nodeError) {
@@ -524,15 +585,23 @@ export function htmlToLexical(html: string): LexicalRootNode {
       }
     })
 
+    // Insert remaining images at the end
+    while (imageBlockIndex < imageBlocks.length) {
+      children.push(imageBlocks[imageBlockIndex])
+      imageBlockIndex++
+    }
+
     // Add remaining video blocks at the end (videos that were not early)
     // Only add videos that haven't been inserted yet
     laterVideos.forEach((videoUrl) => {
       if (!insertedVideoUrls.has(videoUrl)) {
+        const isShorts = videoUrl.includes('/shorts/')
         children.push({
           type: 'block',
           fields: {
             blockType: 'videoEmbed',
             url: videoUrl,
+            isShorts: isShorts || undefined,
           },
           format: '',
           version: 2,

@@ -6,8 +6,9 @@ export type VideoEmbedBlockProps = {
 }
 
 function getYouTubeEmbedUrl(url: string): string | null {
-  // Extract YouTube video ID from various URL formats
+  // Extract YouTube video ID from various URL formats including Shorts
   const patterns = [
+    /youtube\.com\/shorts\/([a-zA-Z0-9_-]{11})/, // Shorts URLs
     /youtube\.com\/watch\?.*?[&?]v=([a-zA-Z0-9_-]{11})/, // Handles query params before v=
     /youtube\.com\/watch\?v=([a-zA-Z0-9_-]{11})/, // Direct v= after watch?
     /youtu\.be\/([a-zA-Z0-9_-]{11})/, // Short URLs
@@ -37,6 +38,7 @@ function getVimeoEmbedUrl(url: string): string | null {
 export const VideoEmbedBlock: React.FC<VideoEmbedBlockProps> = ({ url, caption }) => {
   let embedUrl: string | null = null
   let platform = 'unknown'
+  const isShorts = url.includes('/shorts/')
 
   // Detect platform and get embed URL
   if (url.includes('youtube.com') || url.includes('youtu.be')) {
@@ -56,9 +58,16 @@ export const VideoEmbedBlock: React.FC<VideoEmbedBlockProps> = ({ url, caption }
     )
   }
 
+  // Portrait aspect ratio for Shorts (9:16), landscape for regular videos (16:9)
+  const aspectRatio = isShorts ? '177.78%' : '56.25%'
+  const maxWidth = isShorts ? '400px' : '100%'
+
   return (
     <div className="my-8">
-      <div className="relative overflow-hidden rounded-lg" style={{ paddingBottom: '56.25%' }}>
+      <div
+        className="relative overflow-hidden rounded-lg mx-auto"
+        style={{ paddingBottom: aspectRatio, maxWidth }}
+      >
         <iframe
           src={embedUrl}
           className="absolute left-0 top-0 h-full w-full"
