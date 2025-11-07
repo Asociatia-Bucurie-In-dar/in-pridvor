@@ -87,8 +87,8 @@ export const Card: React.FC<{
 
   return (
     <article className={cn('relative card flex flex-col h-full', className)} ref={card.ref}>
-      <Link className="relative w-full" href={href} ref={link.ref}>
-        <div className="relative aspect-video w-full rounded-lg bg-gray-100 overflow-hidden">
+      <Link className="relative block w-full" href={href} ref={link.ref}>
+        <div className="relative aspect-[5/3] w-full overflow-hidden rounded-lg bg-gray-100">
           {cardImage && typeof cardImage !== 'string' ? (
             <Media
               resource={cardImage}
@@ -101,14 +101,8 @@ export const Card: React.FC<{
               <span className="text-gray-400 text-sm">No image</span>
             </div>
           )}
-        </div>
-        <div className="absolute inset-0 rounded-lg ring-1 ring-gray-900/10 ring-inset" />
-      </Link>
-
-      <div className="flex flex-col flex-grow p-4">
-        <div className="flex-grow">
           {showCategories && hasCategories && (
-            <div className="mt-1 flex items-center gap-x-2 text-xs">
+            <div className="pointer-events-auto absolute inset-x-4 bottom-4 z-20 flex flex-wrap gap-2">
               {categories?.map((category, index) => {
                 if (typeof category === 'object') {
                   const { title: titleFromCategory } = category
@@ -118,7 +112,7 @@ export const Card: React.FC<{
                     <Link
                       href={`/categories/${category.slug}`}
                       key={index}
-                      className="relative z-10 rounded-full bg-gray-50 px-3 py-1.5 font-semibold text-gray-600 hover:bg-gray-100"
+                      className="rounded-full border border-white/50 bg-white/60 px-3 py-1.5 text-xs font-semibold text-gray-700 backdrop-blur transition hover:bg-white/80"
                     >
                       {categoryTitle}
                     </Link>
@@ -128,10 +122,15 @@ export const Card: React.FC<{
               })}
             </div>
           )}
+          <div className="pointer-events-none absolute inset-0 rounded-lg ring-1 ring-inset ring-gray-900/10" />
+        </div>
+      </Link>
 
+      <div className="flex flex-col flex-grow px-4 pb-4 pt-3">
+        <div className="flex-grow">
           <div className="group relative">
             {titleToUse && (
-              <h3 className="mt-4 text-lg/6 font-semibold text-gray-900 group-hover:text-gray-600">
+              <h3 className="mt-2 text-lg/6 font-semibold text-gray-900 group-hover:text-gray-600">
                 <Link href={href}>
                   <span className="absolute inset-0" />
                   {titleToUse}
@@ -140,7 +139,7 @@ export const Card: React.FC<{
             )}
 
             {previewText && (
-              <p className="mt-4 line-clamp-4 text-sm/6 text-gray-600">
+              <p className="mt-2 line-clamp-4 text-sm/6 text-gray-600">
                 <Link href={href}>{previewText}</Link>
               </p>
             )}
@@ -148,7 +147,7 @@ export const Card: React.FC<{
         </div>
 
         {(formattedAuthors || formattedDate) && (
-          <div className="mt-6 flex items-center gap-x-4">
+          <div className="mt-5 flex items-center gap-x-4">
             <div className="text-sm/6 text-gray-500">
               {hasAuthors && populatedAuthors && (
                 <p className="font-semibold text-gray-900">

@@ -12,17 +12,23 @@ import { Media } from '@/components/Media'
 import { formatAuthors } from '@/utilities/formatAuthors'
 import { AuthorLinks } from '@/components/AuthorLinks'
 import { CategoryLinks } from '@/components/CategoryLinks'
+import { cn } from '@/utilities/ui'
+
+const headerOverlap = '10.5rem'
+const fullHeightMinHeight = `calc(100vh - ${headerOverlap})`
 
 interface PostHeroEditableProps {
   post: Post
   showDropCap: boolean
   dropCapIndex: number
+  fullHeight?: boolean
 }
 
 export const PostHeroEditable: React.FC<PostHeroEditableProps> = ({
   post,
   showDropCap,
   dropCapIndex,
+  fullHeight,
 }) => {
   const { isAdmin } = useAdmin()
   const { categories, heroImage, heroImageAlignment, populatedAuthors, publishedAt, title } = post
@@ -54,7 +60,10 @@ export const PostHeroEditable: React.FC<PostHeroEditableProps> = ({
   }
 
   return (
-    <div className="relative -mt-[10.4rem] flex items-end">
+    <div
+      className={cn('relative -mt-[10.4rem] flex items-end', fullHeight && 'min-h-screen')}
+      style={fullHeight ? { minHeight: fullHeightMinHeight } : undefined}
+    >
       <div className="container z-10 relative lg:grid lg:grid-cols-[1fr_48rem_1fr] text-white pb-8">
         <div className="col-start-1 col-span-1 md:col-start-2 md:col-span-2">
           {isAdmin ? (
@@ -117,7 +126,10 @@ export const PostHeroEditable: React.FC<PostHeroEditableProps> = ({
           </div>
         </div>
       </div>
-      <div className="min-h-[80vh] select-none">
+      <div
+        className={cn(fullHeight ? 'min-h-screen' : 'min-h-[80vh]', 'select-none')}
+        style={fullHeight ? { minHeight: fullHeightMinHeight } : undefined}
+      >
         {heroImage && typeof heroImage !== 'string' && (
           <Media
             fill
@@ -131,4 +143,3 @@ export const PostHeroEditable: React.FC<PostHeroEditableProps> = ({
     </div>
   )
 }
-
