@@ -60,7 +60,7 @@ export const VideoEmbedBlock: React.FC<VideoEmbedBlockProps> = ({ url, caption }
 
   // Portrait aspect ratio for Shorts (9:16), landscape for regular videos (16:9)
   const aspectRatio = isShorts ? '177.78%' : '56.25%'
-  const maxWidth = isShorts ? '400px' : '100%'
+  const maxWidth = isShorts ? '100%' : '100%'
 
   return (
     <div className="my-8">
