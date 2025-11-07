@@ -49,8 +49,10 @@ export async function Comments({ postId }: CommentsProps) {
 
   // Organize comments into tree structure
   const buildCommentTree = (comments: typeof allComments) => {
-    const commentMap = new Map<string, (typeof allComments)[0] & { replies: typeof allComments }>()
-    const rootComments: typeof allComments = []
+    type CommentNode = (typeof allComments)[0] & { replies: CommentNode[] }
+
+    const commentMap = new Map<string, CommentNode>()
+    const rootComments: CommentNode[] = []
 
     // First pass: create map of all comments with empty replies array
     comments.forEach((comment) => {
@@ -59,9 +61,12 @@ export async function Comments({ postId }: CommentsProps) {
 
     // Second pass: organize into tree
     comments.forEach((comment) => {
-      const commentWithReplies = commentMap.get(comment.id)!
+      const commentWithReplies = commentMap.get(comment.id)
+      if (!commentWithReplies) return
+
       if (comment.parent && commentMap.has(comment.parent)) {
-        const parent = commentMap.get(comment.parent)!
+        const parent = commentMap.get(comment.parent)
+        if (!parent) return
         parent.replies.push(commentWithReplies)
       } else {
         rootComments.push(commentWithReplies)
@@ -69,7 +74,7 @@ export async function Comments({ postId }: CommentsProps) {
     })
 
     // Sort replies by date (oldest first for replies)
-    const sortReplies = (commentList: typeof rootComments) => {
+    const sortReplies = (commentList: CommentNode[]) => {
       commentList.forEach((comment) => {
         if (comment.replies && comment.replies.length > 0) {
           comment.replies.sort((a, b) => {

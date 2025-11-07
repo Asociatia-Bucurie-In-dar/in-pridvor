@@ -116,7 +116,9 @@ export async function Header() {
     overrideAccess: false,
   })
 
-  const categoryNav = toCategoryNavItems(categoriesRes.docs as Category[])
+  const categoryNav = toCategoryNavItems(
+    (categoriesRes.docs as Category[]).filter((category) => !(category as any).invisibleInHeader),
+  )
   const adminNav = headerData.navItems ?? []
   const mergedNav = [...categoryNav, ...adminNav]
 

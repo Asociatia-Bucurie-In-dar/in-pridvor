@@ -3,7 +3,6 @@ import configPromise from '@payload-config'
 import { NextRequest, NextResponse } from 'next/server'
 import { revalidatePath } from 'next/cache'
 import type { Post, Category, User } from '@/payload-types'
-import { toKebabCase } from '@/utilities/toKebabCase'
 
 export async function PATCH(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
@@ -103,7 +102,6 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
         }
 
         // 7. Revalidate all author pages for authors of this post
-        // Authors use name-to-slug conversion (toKebabCase), not a slug field
         if (updatedPost.authors && Array.isArray(updatedPost.authors)) {
           for (const author of updatedPost.authors) {
             let authorData: User | null = null
@@ -123,10 +121,8 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
               }
             }
 
-            // Generate author slug from name using toKebabCase (same way author page does it)
-            if (authorData?.name) {
-              const authorSlug = toKebabCase(authorData.name)
-              const authorPath = `/authors/${authorSlug}`
+            if (authorData?.id !== undefined && authorData?.id !== null) {
+              const authorPath = `/authors/${authorData.id}`
               paths.push(authorPath)
             }
           }

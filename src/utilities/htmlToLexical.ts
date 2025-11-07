@@ -567,16 +567,22 @@ export function htmlToLexical(
             
             // Insert image after paragraph if available
             if (imageBlockIndex < imageBlocks.length) {
-              children.push(imageBlocks[imageBlockIndex])
-              imageBlockIndex++
+              const nextImageBlock = imageBlocks[imageBlockIndex]
+              if (nextImageBlock) {
+                children.push(nextImageBlock)
+                imageBlockIndex++
+              }
             }
           } else if (item) {
             children.push(item as LexicalElementNode)
             
             // Insert image after block elements (paragraphs, headings) if available
             if (imageBlockIndex < imageBlocks.length && (item.type === 'paragraph' || item.type === 'heading')) {
-              children.push(imageBlocks[imageBlockIndex])
-              imageBlockIndex++
+              const nextImageBlock = imageBlocks[imageBlockIndex]
+              if (nextImageBlock) {
+                children.push(nextImageBlock)
+                imageBlockIndex++
+              }
             }
           }
         })
@@ -587,7 +593,9 @@ export function htmlToLexical(
 
     // Insert remaining images at the end
     while (imageBlockIndex < imageBlocks.length) {
-      children.push(imageBlocks[imageBlockIndex])
+      const nextImageBlock = imageBlocks[imageBlockIndex]
+      if (!nextImageBlock) break
+      children.push(nextImageBlock)
       imageBlockIndex++
     }
 

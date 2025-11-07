@@ -229,6 +229,10 @@ export interface Category {
   slug?: string | null;
   slugLock?: boolean | null;
   /**
+   * Exclude this category from the top navigation menu
+   */
+  invisibleInHeader?: boolean | null;
+  /**
    * Controls order of top-level categories in the header. Lower numbers appear first. Leave empty for default ordering.
    */
   displayOrder?: number | null;
@@ -1347,6 +1351,7 @@ export interface CategoriesSelect<T extends boolean = true> {
   parent?: T;
   slug?: T;
   slugLock?: T;
+  invisibleInHeader?: T;
   displayOrder?: T;
   breadcrumbs?:
     | T

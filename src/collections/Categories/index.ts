@@ -34,6 +34,16 @@ export const Categories: CollectionConfig = {
     },
     ...slugField(),
     {
+      name: 'invisibleInHeader',
+      type: 'checkbox',
+      defaultValue: false,
+      admin: {
+        description: 'Exclude this category from the top navigation menu',
+        position: 'sidebar',
+      },
+      label: 'Hide from header',
+    },
+    {
       name: 'displayOrder',
       type: 'number',
       required: false,

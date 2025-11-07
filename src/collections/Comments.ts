@@ -39,10 +39,6 @@ export const Comments: CollectionConfig = {
       type: 'relationship',
       relationTo: 'posts',
       required: true,
-      db: {
-        relationName: 'comments_post_fk',
-        onDelete: 'cascade',
-      },
       admin: {
         position: 'sidebar',
       },

@@ -29,7 +29,8 @@ export const cleanupCommentRelations: CollectionBeforeDeleteHook = async ({
       }
     }
   } catch (error) {
-    payload.logger.error(`Failed to cleanup comment relations for comment ${id}:`, error)
+    const errorMessage = error instanceof Error ? error.message : String(error)
+    payload.logger.error(`Failed to cleanup comment relations for comment ${id}: ${errorMessage}`)
   }
 }
 

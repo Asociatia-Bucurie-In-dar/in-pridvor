@@ -8,28 +8,34 @@ import { getPayload } from 'payload'
 import { cache } from 'react'
 import { notFound } from 'next/navigation'
 import PageClient from './page.client'
-import { toKebabCase } from '@/utilities/toKebabCase'
 import { getPostsCardSelect } from '@/utilities/getPostsCardSelect'
 
 type Args = {
   params: Promise<{
     pageNumber: string
-    slug: string
+    authorId: string
   }>
 }
 
 export default async function AuthorPage({ params: paramsPromise }: Args) {
-  const { pageNumber, slug } = await paramsPromise
+  const { pageNumber, authorId } = await paramsPromise
   const payload = await getPayload({ config: configPromise })
 
   const sanitizedPageNumber = Number(pageNumber)
 
   if (!Number.isInteger(sanitizedPageNumber)) notFound()
 
-  // Find the author by slug
-  const author = await queryAuthorBySlug({ slug })
+  // Find the author by ID
+  const author = await queryAuthorById({ authorId })
 
   if (!author) notFound()
+
+  const authorRelationId =
+    typeof author.id === 'number'
+      ? author.id
+      : Number.isNaN(Number(author.id))
+        ? String(author.id)
+        : Number(author.id)
 
   const posts = await payload.find({
     collection: 'posts',
@@ -40,7 +46,7 @@ export default async function AuthorPage({ params: paramsPromise }: Args) {
     select: getPostsCardSelect(),
     where: {
       authors: {
-        equals: author.id,
+        equals: authorRelationId,
       },
     },
   })
@@ -72,7 +78,7 @@ export default async function AuthorPage({ params: paramsPromise }: Args) {
             <Pagination
               page={posts.page}
               totalPages={posts.totalPages}
-              basePath={`/authors/${slug}`}
+              basePath={`/authors/${authorId}`}
             />
           )}
         </div>
@@ -82,8 +88,8 @@ export default async function AuthorPage({ params: paramsPromise }: Args) {
 }
 
 export async function generateMetadata({ params: paramsPromise }: Args): Promise<Metadata> {
-  const { slug, pageNumber } = await paramsPromise
-  const author = await queryAuthorBySlug({ slug })
+  const { authorId, pageNumber } = await paramsPromise
+  const author = await queryAuthorById({ authorId })
 
   return {
     title: `${author?.name || 'Author'} - Page ${pageNumber}`,
@@ -91,23 +97,27 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
   }
 }
 
-const queryAuthorBySlug = cache(async ({ slug }: { slug: string }) => {
+const queryAuthorById = cache(async ({ authorId }: { authorId: string }) => {
   const payload = await getPayload({ config: configPromise })
 
-  const result = await payload.find({
-    collection: 'users',
-    limit: 1000,
-    overrideAccess: true,
-    pagination: false,
-    select: {
-      name: true,
-    },
-  })
+  const normalizedId = Number.isNaN(Number(authorId)) ? authorId : Number(authorId)
 
-  // Find the user whose name matches the slug
-  const author = result.docs.find((user) => toKebabCase(user.name || '') === slug)
+  try {
+    const author = await payload.findByID({
+      collection: 'users',
+      id: normalizedId,
+      overrideAccess: true,
+      depth: 0,
+    })
 
-  return author || null
+    return author || null
+  } catch (error: any) {
+    if (error?.status === 404 || error?.message?.includes('not found')) {
+      return null
+    }
+
+    throw error
+  }
 })
 
 export async function generateStaticParams() {
@@ -119,18 +129,20 @@ export async function generateStaticParams() {
     limit: 1000,
     overrideAccess: true,
     pagination: false,
-    select: {
-      name: true,
-    },
   })
 
-  const params: { slug: string; pageNumber: string }[] = []
+  const params: { authorId: string; pageNumber: string }[] = []
 
   // For each user, get their post count and generate page numbers
   for (const user of users.docs) {
-    if (!user.name) continue
+    if (user.id === undefined || user.id === null) continue
 
-    const slug = toKebabCase(user.name)
+    const normalizedUserId =
+      typeof user.id === 'number'
+        ? user.id
+        : Number.isNaN(Number(user.id))
+          ? String(user.id)
+          : Number(user.id)
 
     // Get the total number of posts by this author
     const postsCount = await payload.find({
@@ -139,7 +151,7 @@ export async function generateStaticParams() {
       overrideAccess: true,
       where: {
         authors: {
-          equals: user.id,
+          equals: normalizedUserId,
         },
       },
     })
@@ -149,7 +161,7 @@ export async function generateStaticParams() {
     // Generate params for pages 1 through totalPages
     for (let page = 1; page <= totalPages; page++) {
       params.push({
-        slug,
+        authorId: String(user.id),
         pageNumber: String(page),
       })
     }

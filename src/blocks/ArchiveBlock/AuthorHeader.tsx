@@ -5,18 +5,18 @@ import Link from 'next/link'
 
 interface AuthorHeaderProps {
   authorName: string
-  authorSlug?: string | null
+  authorId?: string | number | null
 }
 
-export const AuthorHeader: React.FC<AuthorHeaderProps> = ({ authorName, authorSlug }) => {
-  const hasValidSlug = authorSlug && authorSlug.trim() !== ''
+export const AuthorHeader: React.FC<AuthorHeaderProps> = ({ authorName, authorId }) => {
+  const hasValidId = authorId !== undefined && authorId !== null && String(authorId).trim() !== ''
 
   const content = (
     <div className="group inline-flex items-center gap-1">
       <h2 className="font-playfair text-2xl lg:text-3xl tracking-normal text-gray-900 transition-colors group-hover:text-gray-600">
         {authorName}
       </h2>
-      {hasValidSlug && (
+      {hasValidId && (
         <div className="relative flex text-yellow-500 h-8 w-8 items-center justify-center self-center sm:h-8 sm:w-8">
           <svg
             className="h-full w-full transition-colors"
@@ -51,10 +51,10 @@ export const AuthorHeader: React.FC<AuthorHeaderProps> = ({ authorName, authorSl
     </div>
   )
 
-  if (hasValidSlug) {
+  if (hasValidId) {
     return (
       <div className="container">
-        <Link href={`/authors/${authorSlug}`}>{content}</Link>
+        <Link href={`/authors/${authorId}`}>{content}</Link>
       </div>
     )
   }

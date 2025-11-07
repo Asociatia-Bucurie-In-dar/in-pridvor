@@ -644,10 +644,11 @@ export async function POST(request: Request): Promise<Response> {
         // Upload images to R2 and build media map
         for (const imageUrl of imageUrls) {
           try {
-            const fileName = path.basename(imageUrl.split('?')[0])
+            const [rawFileName] = imageUrl.split('?')
+            const fileName = path.basename(rawFileName ?? imageUrl)
             
             // Check if media already exists
-            let matchingMedia = allMedia.docs.find((media) => {
+            const matchingMedia = allMedia.docs.find((media) => {
               if (!media.filename) return false
               const mediaBaseName = path.parse(media.filename).name.toLowerCase()
               const urlBaseName = path.parse(fileName).name.toLowerCase()

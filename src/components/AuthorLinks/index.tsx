@@ -3,7 +3,6 @@
 import React from 'react'
 import Link from 'next/link'
 import { Post } from '@/payload-types'
-import { toKebabCase } from '@/utilities/toKebabCase'
 
 interface AuthorLinksProps {
   authors: NonNullable<NonNullable<Post['populatedAuthors']>[number]>[]
@@ -26,9 +25,10 @@ export const AuthorLinks: React.FC<AuthorLinksProps> = ({ authors, className = '
   if (authorNames.length === 1) {
     const author = authors[0]
     if (!author) return null
+    if (!author.id) return <span className={className}>{author.name}</span>
     return (
       <Link
-        href={`/authors/${toKebabCase(author.name || '')}`}
+        href={`/authors/${author.id}`}
         className={`relative z-10 hover:underline ${className}`}
       >
         {author.name}
@@ -41,21 +41,25 @@ export const AuthorLinks: React.FC<AuthorLinksProps> = ({ authors, className = '
     const author1 = authors[0]
     const author2 = authors[1]
     if (!author1 || !author2) return null
+    const author1Id = author1.id
+    const author2Id = author2.id
     return (
       <span className={className}>
-        <Link
-          href={`/authors/${toKebabCase(author1.name || '')}`}
-          className="relative z-10 hover:underline"
-        >
-          {author1.name}
-        </Link>
+        {author1Id ? (
+          <Link href={`/authors/${author1Id}`} className="relative z-10 hover:underline">
+            {author1.name}
+          </Link>
+        ) : (
+          <span className="relative z-10">{author1.name}</span>
+        )}
         {' and '}
-        <Link
-          href={`/authors/${toKebabCase(author2.name || '')}`}
-          className="relative z-10 hover:underline"
-        >
-          {author2.name}
-        </Link>
+        {author2Id ? (
+          <Link href={`/authors/${author2Id}`} className="relative z-10 hover:underline">
+            {author2.name}
+          </Link>
+        ) : (
+          <span className="relative z-10">{author2.name}</span>
+        )}
       </span>
     )
   }
@@ -63,30 +67,34 @@ export const AuthorLinks: React.FC<AuthorLinksProps> = ({ authors, className = '
   // Three or more authors
   const lastAuthor = authors[authors.length - 1]
   if (!lastAuthor) return null
+  const lastAuthorId = lastAuthor.id
 
   return (
     <span className={className}>
       {authors.slice(0, -1).map((author, index) => {
         if (!author) return null
+        const authorId = author.id
         return (
           <React.Fragment key={index}>
-            <Link
-              href={`/authors/${toKebabCase(author.name || '')}`}
-              className="relative z-10 hover:underline"
-            >
-              {author.name}
-            </Link>
+            {authorId ? (
+              <Link href={`/authors/${authorId}`} className="relative z-10 hover:underline">
+                {author.name}
+              </Link>
+            ) : (
+              <span className="relative z-10">{author.name}</span>
+            )}
             {index < authors.length - 2 ? ', ' : ''}
           </React.Fragment>
         )
       })}
       {', and '}
-      <Link
-        href={`/authors/${toKebabCase(lastAuthor.name || '')}`}
-        className="relative z-10 hover:underline"
-      >
-        {lastAuthor.name}
-      </Link>
+      {lastAuthorId ? (
+        <Link href={`/authors/${lastAuthorId}`} className="relative z-10 hover:underline">
+          {lastAuthor.name}
+        </Link>
+      ) : (
+        <span className="relative z-10">{lastAuthor.name}</span>
+      )}
     </span>
   )
 }
