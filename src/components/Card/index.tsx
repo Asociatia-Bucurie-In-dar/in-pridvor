@@ -87,44 +87,46 @@ export const Card: React.FC<{
 
   return (
     <article className={cn('relative card flex flex-col h-full', className)} ref={card.ref}>
-      <Link className="relative block w-full" href={href} ref={link.ref}>
-        <div className="relative aspect-[5/3] w-full overflow-hidden rounded-lg bg-gray-100">
-          {cardImage && typeof cardImage !== 'string' ? (
-            <Media
-              resource={cardImage}
-              size="33vw"
-              fill
-              imgClassName={`object-cover ${alignmentClass}`}
-            />
-          ) : (
-            <div className="flex items-center justify-center h-full">
-              <span className="text-gray-400 text-sm">No image</span>
-            </div>
-          )}
-          {showCategories && hasCategories && (
-            <div className="pointer-events-auto absolute inset-x-4 bottom-4 z-20 flex flex-wrap gap-2">
-              {categories?.map((category, index) => {
-                if (typeof category === 'object') {
-                  const { title: titleFromCategory } = category
-                  const categoryTitle = titleFromCategory || 'Untitled category'
+      <div className="relative w-full">
+        <Link className="block w-full" href={href} ref={link.ref}>
+          <div className="relative aspect-[5/3] w-full overflow-hidden rounded-lg bg-gray-100">
+            {cardImage && typeof cardImage !== 'string' ? (
+              <Media
+                resource={cardImage}
+                size="33vw"
+                fill
+                imgClassName={`object-cover ${alignmentClass}`}
+              />
+            ) : (
+              <div className="flex h-full items-center justify-center">
+                <span className="text-sm text-gray-400">No image</span>
+              </div>
+            )}
+            <div className="pointer-events-none absolute inset-0 rounded-lg ring-1 ring-inset ring-gray-900/10" />
+          </div>
+        </Link>
+        {showCategories && hasCategories && (
+          <div className="absolute inset-x-4 bottom-4 z-20 flex flex-wrap gap-2">
+            {categories?.map((category, index) => {
+              if (typeof category === 'object') {
+                const { title: titleFromCategory } = category
+                const categoryTitle = titleFromCategory || 'Untitled category'
 
-                  return (
-                    <Link
-                      href={`/categories/${category.slug}`}
-                      key={index}
-                      className="rounded-full border border-white/50 bg-white/60 px-3 py-1.5 text-xs font-semibold text-gray-700 backdrop-blur transition hover:bg-white/80"
-                    >
-                      {categoryTitle}
-                    </Link>
-                  )
-                }
-                return null
-              })}
-            </div>
-          )}
-          <div className="pointer-events-none absolute inset-0 rounded-lg ring-1 ring-inset ring-gray-900/10" />
-        </div>
-      </Link>
+                return (
+                  <Link
+                    href={`/categories/${category.slug}`}
+                    key={index}
+                    className="rounded-full border border-white/50 bg-white/60 px-3 py-1.5 text-xs font-semibold text-gray-700 backdrop-blur transition hover:bg-white/80"
+                  >
+                    {categoryTitle}
+                  </Link>
+                )
+              }
+              return null
+            })}
+          </div>
+        )}
+      </div>
 
       <div className="flex flex-col flex-grow px-4 pb-4 pt-3">
         <div className="flex-grow">

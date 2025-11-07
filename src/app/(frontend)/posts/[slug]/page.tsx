@@ -67,12 +67,7 @@ export default async function Post({ params: paramsPromise }: Args) {
 
       {draft && <LivePreviewListener />}
 
-      <PostHeroEditable
-        post={post}
-        showDropCap={showDropCap}
-        dropCapIndex={dropCapIndex}
-        fullHeight
-      />
+      <PostHeroEditable post={post} showDropCap={showDropCap} dropCapIndex={dropCapIndex} />
 
       <div className="flex flex-col items-center gap-4 pt-8">
         <div className="container">
