@@ -8,10 +8,12 @@ import RichText from '@/components/RichText'
 import { CollectionArchive } from '@/components/CollectionArchive'
 import { getCategoryHierarchyIds } from '@/utilities/getCategoryHierarchy'
 import { CategoryHeader } from './CategoryHeader'
+import { cn } from '@/utilities/ui'
 
 export const ArchiveBlock: React.FC<
   ArchiveBlockProps & {
     id?: string
+    disableInnerContainer?: boolean
   }
 > = async (props) => {
   const {
@@ -22,6 +24,7 @@ export const ArchiveBlock: React.FC<
     populateBy,
     selectedDocs,
     useCustomCategoryHeader,
+    disableInnerContainer,
   } = props
 
   const limit = limitFromProps || 3
@@ -99,7 +102,7 @@ export const ArchiveBlock: React.FC<
       : null
 
   return (
-    <div className="my-16" id={`block-${id}`}>
+    <div id={`block-${id}`}>
       {useCustomCategoryHeader && firstCategory ? (
         <div className="mb-8">
           <CategoryHeader
@@ -108,11 +111,11 @@ export const ArchiveBlock: React.FC<
           />
         </div>
       ) : introContent ? (
-        <div className="container mb-16">
+        <div className={cn(disableInnerContainer ? 'mb-16' : 'container mb-16')}>
           <RichText className="ml-0 max-w-3xl" data={introContent as any} enableGutter={false} />
         </div>
       ) : null}
-      <CollectionArchive posts={posts} />
+      <CollectionArchive disableContainer={disableInnerContainer} posts={posts} />
     </div>
   )
 }

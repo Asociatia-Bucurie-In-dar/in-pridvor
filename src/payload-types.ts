@@ -197,8 +197,45 @@ export interface Page {
     | ContentBlock
     | MediaBlock
     | ArchiveBlock
+    | FeaturedArchiveBlock
     | FormBlock
     | TitleBarBlock
+    | {
+        main: (
+          | ArchiveBlock
+          | FeaturedArchiveBlock
+          | ContentBlock
+          | CallToActionBlock
+          | MediaBlock
+          | FormBlock
+          | TitleBarBlock
+        )[];
+        sidebar?:
+          | (
+              | {
+                  heading?: string | null;
+                  subheading?: string | null;
+                  limit?: number | null;
+                  id?: string | null;
+                  blockName?: string | null;
+                  blockType: 'latestComments';
+                }
+              | {
+                  heading?: string | null;
+                  subheading?: string | null;
+                  limit?: number | null;
+                  id?: string | null;
+                  blockName?: string | null;
+                  blockType: 'popularPosts';
+                }
+              | ContentBlock
+              | CallToActionBlock
+            )[]
+          | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'twoColumnLayout';
+      }
   )[];
   meta?: {
     title?: string | null;
@@ -595,6 +632,46 @@ export interface ArchiveBlock {
   id?: string | null;
   blockName?: string | null;
   blockType: 'archive';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FeaturedArchiveBlock".
+ */
+export interface FeaturedArchiveBlock {
+  /**
+   * Enable elegant category header (uses first selected category)
+   */
+  useCustomCategoryHeader?: boolean | null;
+  /**
+   * Rich text intro content (hidden when using custom category header)
+   */
+  introContent?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  populateBy?: ('collection' | 'selection') | null;
+  relationTo?: 'posts' | null;
+  categories?: (number | Category)[] | null;
+  selectedDocs?:
+    | {
+        relationTo: 'posts';
+        value: number | Post;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'featuredArchive';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1088,8 +1165,50 @@ export interface PagesSelect<T extends boolean = true> {
         content?: T | ContentBlockSelect<T>;
         mediaBlock?: T | MediaBlockSelect<T>;
         archive?: T | ArchiveBlockSelect<T>;
+        featuredArchive?: T | FeaturedArchiveBlockSelect<T>;
         formBlock?: T | FormBlockSelect<T>;
         titleBar?: T | TitleBarBlockSelect<T>;
+        twoColumnLayout?:
+          | T
+          | {
+              main?:
+                | T
+                | {
+                    archive?: T | ArchiveBlockSelect<T>;
+                    featuredArchive?: T | FeaturedArchiveBlockSelect<T>;
+                    content?: T | ContentBlockSelect<T>;
+                    cta?: T | CallToActionBlockSelect<T>;
+                    mediaBlock?: T | MediaBlockSelect<T>;
+                    formBlock?: T | FormBlockSelect<T>;
+                    titleBar?: T | TitleBarBlockSelect<T>;
+                  };
+              sidebar?:
+                | T
+                | {
+                    latestComments?:
+                      | T
+                      | {
+                          heading?: T;
+                          subheading?: T;
+                          limit?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    popularPosts?:
+                      | T
+                      | {
+                          heading?: T;
+                          subheading?: T;
+                          limit?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    content?: T | ContentBlockSelect<T>;
+                    cta?: T | CallToActionBlockSelect<T>;
+                  };
+              id?: T;
+              blockName?: T;
+            };
       };
   meta?:
     | T
@@ -1191,6 +1310,20 @@ export interface ArchiveBlockSelect<T extends boolean = true> {
   relationTo?: T;
   categories?: T;
   limit?: T;
+  selectedDocs?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FeaturedArchiveBlock_select".
+ */
+export interface FeaturedArchiveBlockSelect<T extends boolean = true> {
+  useCustomCategoryHeader?: T;
+  introContent?: T;
+  populateBy?: T;
+  relationTo?: T;
+  categories?: T;
   selectedDocs?: T;
   id?: T;
   blockName?: T;
