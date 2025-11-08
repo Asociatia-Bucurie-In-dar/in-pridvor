@@ -1,5 +1,5 @@
 'use client'
-import React, { useCallback, useEffect } from 'react'
+import React, { useCallback, useEffect, useRef } from 'react'
 import { TextFieldClientProps } from 'payload'
 
 import { useField, Button, TextInput, FieldLabel, useFormFields, useForm } from '@payloadcms/ui'
@@ -32,7 +32,7 @@ export const SlugComponent: React.FC<SlugComponentProps> = ({
   // The value of the checkbox
   // We're using separate useFormFields to minimise re-renders
   const checkboxValue = useFormFields(([fields]) => {
-    return fields[checkboxFieldPath]?.value as string
+    return Boolean(fields[checkboxFieldPath]?.value)
   })
 
   // The value of the field we're listening to for the slug
@@ -40,17 +40,30 @@ export const SlugComponent: React.FC<SlugComponentProps> = ({
     return fields[fieldToUse]?.value as string
   })
 
-  useEffect(() => {
-    if (checkboxValue) {
-      if (targetFieldValue) {
-        const formattedSlug = formatSlug(targetFieldValue)
+  const previousCheckboxValue = useRef<boolean>(checkboxValue)
 
-        if (value !== formattedSlug) setValue(formattedSlug)
-      } else {
-        if (value !== '') setValue('')
-      }
+  useEffect(() => {
+    const wasLocked = previousCheckboxValue.current
+    previousCheckboxValue.current = checkboxValue
+
+    if (!checkboxValue) return
+
+    const formattedSlug = targetFieldValue ? formatSlug(targetFieldValue) : ''
+
+    if (!wasLocked && formattedSlug && value !== formattedSlug) {
+      setValue(formattedSlug)
+      return
     }
-  }, [targetFieldValue, checkboxValue, setValue, value])
+
+    if (!value && formattedSlug) {
+      setValue(formattedSlug)
+      return
+    }
+
+    if (!formattedSlug && value) {
+      setValue('')
+    }
+  }, [checkboxValue, targetFieldValue, setValue, value])
 
   const handleLock = useCallback(
     (e: React.MouseEvent<Element>) => {

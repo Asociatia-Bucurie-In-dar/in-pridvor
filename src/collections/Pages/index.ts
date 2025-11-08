@@ -11,6 +11,7 @@ import { HeroCarousel } from '../../blocks/HeroCarousel/config'
 import { TitleBar } from '../../blocks/TitleBar/config'
 import { hero } from '@/heros/config'
 import { slugField } from '@/fields/slug'
+import { preventStaleTitle } from '@/hooks/preventStaleTitle'
 import { populatePublishedAt } from '../../hooks/populatePublishedAt'
 import { generatePreviewPath } from '../../utilities/generatePreviewPath'
 import { revalidateDelete, revalidatePage } from './hooks/revalidatePage'
@@ -77,7 +78,15 @@ export const Pages: CollectionConfig<'pages'> = {
             {
               name: 'layout',
               type: 'blocks',
-              blocks: [HeroCarousel, CallToAction, Content, MediaBlock, Archive, FormBlock, TitleBar],
+              blocks: [
+                HeroCarousel,
+                CallToAction,
+                Content,
+                MediaBlock,
+                Archive,
+                FormBlock,
+                TitleBar,
+              ],
               required: true,
               admin: {
                 initCollapsed: true,
@@ -126,7 +135,7 @@ export const Pages: CollectionConfig<'pages'> = {
   ],
   hooks: {
     afterChange: [revalidatePage],
-    beforeChange: [populatePublishedAt],
+    beforeChange: [preventStaleTitle, populatePublishedAt],
     afterDelete: [revalidateDelete],
   },
   versions: {

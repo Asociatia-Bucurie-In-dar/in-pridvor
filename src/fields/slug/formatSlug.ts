@@ -1,7 +1,18 @@
 import type { FieldHook } from 'payload'
 
+const getByPath = (source: Record<string, unknown> | undefined, path: string): unknown => {
+  if (!source) return undefined
+  if (!path.includes('.')) return source[path]
+
+  return path.split('.').reduce<unknown>((acc, key) => {
+    if (acc && typeof acc === 'object' && key in acc) {
+      return (acc as Record<string, unknown>)[key]
+    }
+    return undefined
+  }, source)
+}
+
 export const formatSlug = (val: string): string => {
-  // Map Romanian diacritics to base Latin characters
   const diacriticsMap: { [key: string]: string } = {
     ă: 'a',
     â: 'a',
@@ -15,27 +26,40 @@ export const formatSlug = (val: string): string => {
     Ț: 'T',
   }
 
-  // Replace diacritics with base characters
   const normalized = val.replace(/[ăâîșțĂÂÎȘȚ]/g, (char) => diacriticsMap[char] || char)
 
   return normalized
-    .replace(/ /g, '-') // Replace spaces with hyphens
-    .replace(/[^\w-]+/g, '') // Remove non-word characters except hyphens
-    .toLowerCase() // Convert to lowercase
+    .replace(/ /g, '-')
+    .replace(/[^\w-]+/g, '')
+    .toLowerCase()
 }
 
 export const formatSlugHook =
   (fallback: string): FieldHook =>
   ({ data, operation, value }) => {
+    const dataRecord = (data as Record<string, unknown>) || {}
+    const fallbackValue = getByPath(dataRecord, fallback)
+    const slugLock =
+      typeof dataRecord.slugLock === 'boolean'
+        ? dataRecord.slugLock
+        : typeof getByPath(dataRecord, 'slugLock') === 'boolean'
+          ? (getByPath(dataRecord, 'slugLock') as boolean)
+          : false
+
+    if (slugLock) {
+      if (typeof fallbackValue === 'string' && fallbackValue.trim().length > 0) {
+        return formatSlug(fallbackValue)
+      }
+      return ''
+    }
+
     if (typeof value === 'string') {
       return formatSlug(value)
     }
 
-    if (operation === 'create' || !data?.slug) {
-      const fallbackData = data?.[fallback] || data?.[fallback]
-
-      if (fallbackData && typeof fallbackData === 'string') {
-        return formatSlug(fallbackData)
+    if (operation === 'create' || !dataRecord.slug) {
+      if (typeof fallbackValue === 'string' && fallbackValue.trim().length > 0) {
+        return formatSlug(fallbackValue)
       }
     }
 
