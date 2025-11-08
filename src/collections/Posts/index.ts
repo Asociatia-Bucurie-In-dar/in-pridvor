@@ -23,6 +23,7 @@ import { revalidateDelete, revalidatePost } from './hooks/revalidatePost'
 import { MetaImageField, MetaTitleField, PreviewField } from '@payloadcms/plugin-seo/fields'
 import { slugField } from '@/fields/slug'
 import { preventStaleTitle } from '@/hooks/preventStaleTitle'
+import { fillMetaFromHero, syncHeroImageToMeta } from './hooks/syncHeroImageToMeta'
 
 export const Posts: CollectionConfig<'posts'> = {
   slug: 'posts',
@@ -268,10 +269,10 @@ export const Posts: CollectionConfig<'posts'> = {
     ...slugField(),
   ],
   hooks: {
-    beforeChange: [preventStaleTitle],
+    beforeChange: [preventStaleTitle, syncHeroImageToMeta],
     beforeDelete: [cleanupPostRelations],
     afterChange: [revalidatePost],
-    afterRead: [populateAuthors],
+    afterRead: [fillMetaFromHero, populateAuthors],
     afterDelete: [revalidateDelete],
   },
   versions: {
