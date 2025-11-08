@@ -57,8 +57,14 @@ export const generateMeta = async (args: {
   const serverUrl = getServerSideURL()
   const path = args.path && args.path.length > 0 ? args.path : _derivePath(doc)
   const canonical = _resolveUrl(path, serverUrl)
+  const descriptionValue =
+    doc?.meta && 'description' in doc.meta
+      ? (doc.meta.description as string | undefined)
+      : undefined
   const description =
-    (doc?.meta && 'description' in doc.meta ? doc.meta.description : undefined) || undefined
+    typeof descriptionValue === 'string' && descriptionValue.trim().length > 0
+      ? descriptionValue.trim()
+      : undefined
 
   const ogImage = getImageURL(doc?.meta?.image, serverUrl)
 
@@ -70,7 +76,7 @@ export const generateMeta = async (args: {
     },
     description,
     openGraph: mergeOpenGraph({
-      description: description || '',
+      ...(description ? { description } : {}),
       images: ogImage
         ? [
             {
@@ -84,7 +90,7 @@ export const generateMeta = async (args: {
     title,
     twitter: {
       card: 'summary_large_image',
-      description: description || '',
+      ...(description ? { description } : {}),
       images: ogImage ? [ogImage] : undefined,
       title,
     },
