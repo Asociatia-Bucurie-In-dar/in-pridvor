@@ -106,7 +106,7 @@ export const Card: React.FC<{
           </div>
         </Link>
         {showCategories && hasCategories && (
-          <div className="absolute inset-x-4 bottom-2 z-11 flex flex-wrap gap-2">
+          <div className="absolute inset-x-2 bottom-2 z-11 flex flex-wrap gap-2">
             {categories?.map((category, index) => {
               if (typeof category === 'object') {
                 const { title: titleFromCategory } = category
