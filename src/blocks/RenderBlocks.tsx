@@ -8,9 +8,7 @@ import { MediaBlock } from '@/blocks/MediaBlock/Component'
 import { HeroCarouselBlock } from '@/blocks/HeroCarousel/Component'
 import { VideoEmbedBlock } from '@/blocks/VideoEmbed/Component'
 import { TitleBarBlock } from '@/blocks/TitleBar/Component'
-import { TwoColumnLayoutBlock } from '@/blocks/TwoColumnLayout/Component'
 import { LatestCommentsBlock } from '@/blocks/LatestComments/Component'
-import { PopularPostsBlock } from '@/blocks/PopularPosts/Component'
 import { FeaturedArchiveBlock } from '@/blocks/FeaturedArchive/Component'
 
 const blockComponents = {
@@ -22,9 +20,7 @@ const blockComponents = {
   heroCarousel: HeroCarouselBlock,
   videoEmbed: VideoEmbedBlock,
   titleBar: TitleBarBlock,
-  twoColumnLayout: TwoColumnLayoutBlock,
   latestComments: LatestCommentsBlock,
-  popularPosts: PopularPostsBlock,
   featuredArchive: FeaturedArchiveBlock,
 }
 
@@ -59,7 +55,7 @@ export const RenderBlocks: React.FC<RenderBlocksProps> = (props) => {
 
         const blockProps = disableInnerContainer ? { disableInnerContainer: true } : {}
 
-        if (blockType === 'heroCarousel' || blockType === 'titleBar' || blockType === 'twoColumnLayout') {
+        if (blockType === 'heroCarousel' || blockType === 'titleBar') {
           return (
             <Fragment key={index}>
               {/* @ts-expect-error there may be some mismatch between the expected types here */}

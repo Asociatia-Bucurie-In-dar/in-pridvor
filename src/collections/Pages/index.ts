@@ -9,7 +9,6 @@ import { FormBlock } from '../../blocks/Form/config'
 import { MediaBlock } from '../../blocks/MediaBlock/config'
 import { HeroCarousel } from '../../blocks/HeroCarousel/config'
 import { TitleBar } from '../../blocks/TitleBar/config'
-import { TwoColumnLayout } from '../../blocks/TwoColumnLayout/config'
 import { FeaturedArchive } from '../../blocks/FeaturedArchive/config'
 import { hero } from '@/heros/config'
 import { slugField } from '@/fields/slug'
@@ -89,7 +88,6 @@ export const Pages: CollectionConfig<'pages'> = {
                 FeaturedArchive,
                 FormBlock,
                 TitleBar,
-                TwoColumnLayout,
               ],
               required: true,
               admin: {
