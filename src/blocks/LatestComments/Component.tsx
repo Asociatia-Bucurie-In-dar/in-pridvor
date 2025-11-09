@@ -3,8 +3,6 @@ import React from 'react'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 
-import type { LatestCommentsBlock as LatestCommentsBlockProps } from '@/payload-types'
-
 import { formatDateTime } from '@/utilities/formatDateTime'
 
 const fetchLatestComments = async (limit: number) => {
@@ -32,6 +30,12 @@ const truncate = (value: string, length: number) => {
   return `${condensed.slice(0, length - 3)}...`
 }
 
+type LatestCommentsBlockProps = {
+  limit?: number
+  heading?: string
+  subheading?: string
+}
+
 export const LatestCommentsBlock: React.FC<LatestCommentsBlockProps> = async (props) => {
   const limit = props.limit || 5
   const comments = await fetchLatestComments(limit)
@@ -55,7 +59,9 @@ export const LatestCommentsBlock: React.FC<LatestCommentsBlockProps> = async (pr
         {comments.map((comment) => {
           const post = comment.post
           const postSlug =
-            post && typeof post === 'object' && 'slug' in post && post.slug ? String(post.slug) : null
+            post && typeof post === 'object' && 'slug' in post && post.slug
+              ? String(post.slug)
+              : null
           const postTitle =
             post && typeof post === 'object' && 'title' in post && post.title
               ? String(post.title)
@@ -76,7 +82,10 @@ export const LatestCommentsBlock: React.FC<LatestCommentsBlockProps> = async (pr
                   )}
                 </div>
                 <p className="text-sm text-gray-700">{truncate(comment.comment || '', 140)}</p>
-                <Link className="text-sm font-medium text-amber-700 hover:text-amber-800" href={href}>
+                <Link
+                  className="text-sm font-medium text-amber-700 hover:text-amber-800"
+                  href={href}
+                >
                   {postTitle}
                 </Link>
               </div>
@@ -87,4 +96,3 @@ export const LatestCommentsBlock: React.FC<LatestCommentsBlockProps> = async (pr
     </section>
   )
 }
-
