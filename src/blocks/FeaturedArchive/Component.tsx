@@ -116,15 +116,15 @@ export const FeaturedArchiveBlock: React.FC<
       : null
 
   const featuredPostData: CardPostData = {
-    slug: featuredPost.slug,
-    categories: featuredPost.categories,
-    meta: featuredPost.meta,
-    title: featuredPost.title,
-    heroImage: featuredPost.heroImage,
-    heroImageAlignment: featuredPost.heroImageAlignment,
-    content: featuredPost.content,
-    publishedAt: featuredPost.publishedAt,
-    populatedAuthors: featuredPost.populatedAuthors,
+    slug: featuredPost?.slug,
+    categories: featuredPost?.categories,
+    meta: featuredPost?.meta,
+    title: featuredPost?.title || '',
+    heroImage: featuredPost?.heroImage,
+    heroImageAlignment: featuredPost?.heroImageAlignment,
+    content: (featuredPost?.content as any) || null,
+    publishedAt: featuredPost?.publishedAt,
+    populatedAuthors: featuredPost?.populatedAuthors,
   }
 
   return (
