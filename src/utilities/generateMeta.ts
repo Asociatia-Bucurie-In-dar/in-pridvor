@@ -37,7 +37,7 @@ const _derivePath = (doc?: Partial<Page> | Partial<Post> | null) => {
 
 const getImageURL = (image?: Media | Config['db']['defaultIDType'] | null, serverUrl?: string) => {
   const base = serverUrl || getServerSideURL()
-  const fallback = _resolveUrl('/website-template-OG.webp', base)
+  const fallback = _resolveUrl('/logo-in-pridvor-1.jpg', base)
 
   if (!image || typeof image !== 'object' || !('url' in image)) return fallback
 
