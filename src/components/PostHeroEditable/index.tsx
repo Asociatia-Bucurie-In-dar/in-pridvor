@@ -15,8 +15,6 @@ import { CategoryLinks } from '@/components/CategoryLinks'
 import { cn } from '@/utilities/ui'
 
 const headerOverlap = '10.5rem'
-const fullHeightMinHeight = `calc(100vh - ${headerOverlap})`
-
 interface PostHeroEditableProps {
   post: Post
   showDropCap: boolean
@@ -64,7 +62,7 @@ export const PostHeroEditable: React.FC<PostHeroEditableProps> = ({
   const heroLayoutClass = heroImageObject
     ? cn(
         'flex-col-reverse',
-        'lg:grid lg:mx-auto lg:max-w-5xl lg:items-center lg:justify-center lg:gap-12',
+        'lg:grid lg:mx-auto md:max-w-7xl md:items-center md:justify-center md:gap-12',
         isPortrait
           ? 'lg:grid-cols-[minmax(0,32rem)_minmax(0,24rem)]'
           : 'lg:grid-cols-[minmax(0,36rem)_minmax(0,30rem)]',
