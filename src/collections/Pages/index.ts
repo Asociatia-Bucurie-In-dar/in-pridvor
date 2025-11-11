@@ -10,6 +10,7 @@ import { MediaBlock } from '../../blocks/MediaBlock/config'
 import { HeroCarousel } from '../../blocks/HeroCarousel/config'
 import { TitleBar } from '../../blocks/TitleBar/config'
 import { FeaturedArchive } from '../../blocks/FeaturedArchive/config'
+import { LatestCommentsRail } from '../../blocks/LatestCommentsRail/config'
 import { hero } from '@/heros/config'
 import { slugField } from '@/fields/slug'
 import { preventStaleTitle } from '@/hooks/preventStaleTitle'
@@ -86,6 +87,7 @@ export const Pages: CollectionConfig<'pages'> = {
                 MediaBlock,
                 Archive,
                 FeaturedArchive,
+                LatestCommentsRail,
                 FormBlock,
                 TitleBar,
               ],

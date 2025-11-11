@@ -198,6 +198,14 @@ export interface Page {
     | MediaBlock
     | ArchiveBlock
     | FeaturedArchiveBlock
+    | {
+        heading?: string | null;
+        subheading?: string | null;
+        limit?: number | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'latestCommentsRail';
+      }
     | FormBlock
     | TitleBarBlock
   )[];
@@ -1130,6 +1138,15 @@ export interface PagesSelect<T extends boolean = true> {
         mediaBlock?: T | MediaBlockSelect<T>;
         archive?: T | ArchiveBlockSelect<T>;
         featuredArchive?: T | FeaturedArchiveBlockSelect<T>;
+        latestCommentsRail?:
+          | T
+          | {
+              heading?: T;
+              subheading?: T;
+              limit?: T;
+              id?: T;
+              blockName?: T;
+            };
         formBlock?: T | FormBlockSelect<T>;
         titleBar?: T | TitleBarBlockSelect<T>;
       };

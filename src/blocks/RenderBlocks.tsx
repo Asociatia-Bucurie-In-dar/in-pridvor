@@ -9,6 +9,7 @@ import { HeroCarouselBlock } from '@/blocks/HeroCarousel/Component'
 import { VideoEmbedBlock } from '@/blocks/VideoEmbed/Component'
 import { TitleBarBlock } from '@/blocks/TitleBar/Component'
 import { LatestCommentsBlock } from '@/blocks/LatestComments/Component'
+import { LatestCommentsRailBlock } from '@/blocks/LatestCommentsRail/Component'
 import { FeaturedArchiveBlock } from '@/blocks/FeaturedArchive/Component'
 
 const blockComponents = {
@@ -21,6 +22,7 @@ const blockComponents = {
   videoEmbed: VideoEmbedBlock,
   titleBar: TitleBarBlock,
   latestComments: LatestCommentsBlock,
+  latestCommentsRail: LatestCommentsRailBlock,
   featuredArchive: FeaturedArchiveBlock,
 }
 
