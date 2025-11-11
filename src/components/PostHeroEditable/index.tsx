@@ -61,10 +61,31 @@ export const PostHeroEditable: React.FC<PostHeroEditableProps> = ({
   const aspectRatioStyle = ratio
     ? { aspectRatio: `${imageWidth} / ${imageHeight}` }
     : { aspectRatio: isPortrait ? '3 / 4' : '16 / 9' }
+  const heroLayoutClass = heroImageObject
+    ? cn(
+        'flex-col-reverse',
+        'lg:grid lg:mx-auto lg:max-w-5xl lg:items-center lg:justify-center lg:gap-12',
+        isPortrait
+          ? 'lg:grid-cols-[minmax(0,32rem)_minmax(0,24rem)]'
+          : 'lg:grid-cols-[minmax(0,36rem)_minmax(0,30rem)]',
+      )
+    : 'flex-col'
+  const textContainerClass = cn(
+    'flex flex-col gap-8',
+    heroImageObject
+      ? cn('lg:justify-self-center', isPortrait ? 'lg:max-w-[32rem]' : 'lg:max-w-[36rem]')
+      : '',
+  )
+  const imageContainerClass = cn(
+    'w-full',
+    isPortrait
+      ? 'max-w-sm mx-auto lg:mx-0 lg:justify-self-center'
+      : 'lg:max-w-[30rem] lg:justify-self-center',
+  )
 
   const handleUpdate = () => {}
   const backgroundImageClass = cn(
-    'object-cover scale-[1.08] blur-[120px] brightness-[0.35]',
+    'object-cover scale-[1.08] blur-[3px] brightness-[0.35]',
     alignmentClass,
   )
 
@@ -72,31 +93,19 @@ export const PostHeroEditable: React.FC<PostHeroEditableProps> = ({
     <section className={cn('relative isolate -mt-16 overflow-hidden text-white')}>
       <div className="absolute inset-0 -z-10 bg-neutral-950">
         {heroImageObject && (
-          <Media fill priority imgClassName={backgroundImageClass} resource={heroImageObject} />
+          <Media
+            fill
+            priority
+            imgClassName={backgroundImageClass}
+            resource={heroImageObject}
+            className=""
+          />
         )}
-        <div className="absolute inset-0 bg-linear-to-b from-neutral-950 via-neutral-950/85 to-neutral-950" />
       </div>
 
       <div className="container relative flex flex-col gap-12 py-16 lg:py-24">
-        <div
-          className={cn(
-            'flex gap-12',
-            heroImageObject
-              ? cn(
-                  'flex-col-reverse',
-                  isPortrait
-                    ? 'lg:grid lg:grid-cols-[minmax(0,26rem)_1fr] lg:items-end lg:gap-16'
-                    : 'lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(0,36rem)] lg:items-end lg:gap-16',
-                )
-              : 'flex-col',
-          )}
-        >
-          <div
-            className={cn(
-              'flex flex-col gap-8',
-              heroImageObject ? (isPortrait ? 'lg:pr-10' : 'lg:pr-12') : '',
-            )}
-          >
+        <div className={cn('flex gap-12', heroLayoutClass)}>
+          <div className={textContainerClass}>
             {isAdmin ? (
               <EditableCategories
                 post={post}
@@ -167,14 +176,7 @@ export const PostHeroEditable: React.FC<PostHeroEditableProps> = ({
           </div>
 
           {heroImageObject && (
-            <div
-              className={cn(
-                'w-full',
-                isPortrait
-                  ? 'max-w-sm mx-auto lg:mx-0 lg:justify-self-start'
-                  : 'lg:max-w-4xl lg:justify-self-end',
-              )}
-            >
+            <div className={imageContainerClass}>
               <div
                 className="relative w-full overflow-hidden rounded-3xl border border-white/12 bg-white/5 shadow-[0_32px_80px_-32px_rgba(0,0,0,0.8)] backdrop-blur"
                 style={aspectRatioStyle}
