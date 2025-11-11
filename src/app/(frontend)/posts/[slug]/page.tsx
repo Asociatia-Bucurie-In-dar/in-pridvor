@@ -102,7 +102,7 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
   const post = await queryPostBySlug({ slug })
   const path = slug ? `/posts/${slug}` : '/posts'
 
-  return generateMeta({ doc: post, path })
+  return generateMeta({ doc: post, path, ogType: 'article' })
 }
 
 const queryPostBySlug = cache(async ({ slug }: { slug: string }) => {

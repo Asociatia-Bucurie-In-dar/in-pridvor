@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 
-import type { Media, Page, Post, Config } from '../payload-types'
+import type { Media, Page, Post } from '../payload-types'
 
 import { mergeOpenGraph } from './mergeOpenGraph'
 import { getServerSideURL } from './getURL'
@@ -35,23 +35,58 @@ const _derivePath = (doc?: Partial<Page> | Partial<Post> | null) => {
   return '/'
 }
 
-const getImageURL = (image?: Media | Config['db']['defaultIDType'] | null, serverUrl?: string) => {
-  const base = serverUrl || getServerSideURL()
-  const fallback = _resolveUrl('/logo-in-pridvor-1.jpg', base)
+const _isMedia = (value: unknown): value is Media => {
+  return !!value && typeof value === 'object' && 'url' in (value as Record<string, unknown>)
+}
 
-  if (!image || typeof image !== 'object' || !('url' in image)) return fallback
+const _selectMedia = (doc?: Partial<Page> | Partial<Post> | null): Media | null => {
+  if (!doc) return null
 
-  const _ogUrl = image.sizes?.og?.url
-  const _url = _ogUrl || image.url
+  const _postDoc = doc as Partial<Post>
+  const _pageDoc = doc as Partial<Page>
 
-  if (typeof _url !== 'string' || _url.length === 0) return fallback
+  const _rawMetaImage = _postDoc?.meta?.image
+  if (_isMedia(_rawMetaImage)) return _rawMetaImage
 
-  return _resolveUrl(_url, base)
+  const _rawHeroImage = _postDoc?.heroImage
+  if (_isMedia(_rawHeroImage)) return _rawHeroImage
+
+  const _rawHeroGroupImage = _pageDoc?.hero?.media
+  if (_isMedia(_rawHeroGroupImage)) return _rawHeroGroupImage
+
+  return null
+}
+
+const _resolveImageMeta = (media: Media | null, serverUrl: string) => {
+  const _fallbackUrl = _resolveUrl('/logo-in-pridvor-1.jpg', serverUrl)
+
+  if (!media) {
+    return {
+      alt: undefined,
+      height: undefined,
+      url: _fallbackUrl,
+      width: undefined,
+    }
+  }
+
+  const _ogSize = media.sizes?.og
+  const _selectedUrl = _ogSize?.url || media.url || _fallbackUrl
+  const _url = _resolveUrl(_selectedUrl, serverUrl)
+  const _alt =
+    typeof media.alt === 'string' && media.alt.trim().length > 0 ? media.alt.trim() : undefined
+
+  return {
+    alt: _alt,
+    height: _ogSize?.height || media.height || undefined,
+    url: _url,
+    width: _ogSize?.width || media.width || undefined,
+  }
 }
 
 export const generateMeta = async (args: {
   doc: Partial<Page> | Partial<Post> | null
   path?: string
+  ogType?: string
 }): Promise<Metadata> => {
   const { doc } = args
   const serverUrl = getServerSideURL()
@@ -66,9 +101,12 @@ export const generateMeta = async (args: {
       ? descriptionValue.trim()
       : undefined
 
-  const ogImage = getImageURL(doc?.meta?.image, serverUrl)
-
+  const _media = _selectMedia(doc)
+  const _imageMeta = _resolveImageMeta(_media, serverUrl)
   const title = doc?.meta?.title ? doc?.meta?.title + ' | ' + websiteTitle : websiteTitle
+  const _publishedAt =
+    doc && 'publishedAt' in doc && doc.publishedAt ? new Date(doc.publishedAt) : undefined
+  const _ogType = args.ogType || (doc && 'content' in doc ? 'article' : undefined)
 
   return {
     alternates: {
@@ -77,13 +115,18 @@ export const generateMeta = async (args: {
     description,
     openGraph: mergeOpenGraph({
       ...(description ? { description } : {}),
-      images: ogImage
-        ? [
-            {
-              url: ogImage,
-            },
-          ]
-        : undefined,
+      ...(typeof _ogType === 'string' ? { type: _ogType } : {}),
+      ...(typeof _publishedAt !== 'undefined' && !Number.isNaN(_publishedAt.valueOf())
+        ? { publishedTime: _publishedAt.toISOString() }
+        : {}),
+      images: [
+        {
+          alt: _imageMeta.alt,
+          height: _imageMeta.height,
+          url: _imageMeta.url,
+          width: _imageMeta.width,
+        },
+      ],
       title,
       url: canonical,
     }),
@@ -91,7 +134,12 @@ export const generateMeta = async (args: {
     twitter: {
       card: 'summary_large_image',
       ...(description ? { description } : {}),
-      images: ogImage ? [ogImage] : undefined,
+      images: [
+        {
+          alt: _imageMeta.alt,
+          url: _imageMeta.url,
+        },
+      ],
       title,
     },
   }
