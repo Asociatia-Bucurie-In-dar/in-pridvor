@@ -55,91 +55,146 @@ export const PostHeroEditable: React.FC<PostHeroEditableProps> = ({
   }
   const alignmentClass = getAlignmentClass(alignment)
 
-  const handleUpdate = () => {
-    // This will be handled by the individual components via page reload
-  }
+  const heroImageObject = typeof heroImage === 'object' ? heroImage : null
+  const imageWidth = heroImageObject?.width || null
+  const imageHeight = heroImageObject?.height || null
+  const ratio = imageWidth && imageHeight ? imageWidth / imageHeight : null
+  const isPortrait = ratio ? ratio < 1 : false
+  const aspectRatioStyle = ratio
+    ? { aspectRatio: `${imageWidth} / ${imageHeight}` }
+    : { aspectRatio: isPortrait ? '3 / 4' : '16 / 9' }
+
+  const handleUpdate = () => {}
+  const heroHeightStyle = fullHeight ? { minHeight: fullHeightMinHeight } : undefined
 
   return (
-    <div
-      className={cn('relative -mt-[10.4rem] flex items-end', fullHeight && 'min-h-screen')}
-      style={fullHeight ? { minHeight: fullHeightMinHeight } : undefined}
+    <section
+      className={cn(
+        'relative isolate -mt-[4rem] overflow-hidden bg-neutral-950 text-white',
+        fullHeight && 'min-h-screen',
+      )}
+      style={heroHeightStyle}
     >
-      <div className="container z-10 relative lg:grid lg:grid-cols-[1fr_48rem_1fr] text-white pb-8">
-        <div className="col-start-1 col-span-1 md:col-start-2 md:col-span-2">
-          {isAdmin ? (
-            <EditableCategories post={post} categories={categories || []} onUpdate={handleUpdate} />
-          ) : (
-            <div className="uppercase text-sm mb-6">
-              {categories && categories.length > 0 && <CategoryLinks categories={categories} />}
-            </div>
+      <div className="absolute inset-0 -z-10">
+        {heroImageObject && (
+          <Media
+            fill
+            priority
+            imgClassName={cn('object-cover opacity-30 blur-3xl scale-110')}
+            resource={heroImageObject}
+          />
+        )}
+        <div className="absolute inset-0 bg-linear-to-b from-neutral-950 via-neutral-950/85 to-neutral-950" />
+      </div>
+
+      <div className="container relative flex flex-col gap-12 py-16 lg:py-24">
+        <div
+          className={cn(
+            'flex gap-12',
+            heroImageObject
+              ? cn(
+                  'flex-col-reverse',
+                  isPortrait
+                    ? 'lg:grid lg:grid-cols-[minmax(0,26rem)_1fr] lg:items-end lg:gap-16'
+                    : 'lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(0,36rem)] lg:items-end lg:gap-16',
+                )
+              : 'flex-col',
           )}
+        >
+          <div
+            className={cn(
+              'flex flex-col gap-8',
+              heroImageObject ? (isPortrait ? 'lg:pr-10' : 'lg:pr-12') : '',
+            )}
+          >
+            {isAdmin ? (
+              <EditableCategories
+                post={post}
+                categories={categories || []}
+                onUpdate={handleUpdate}
+              />
+            ) : (
+              categories &&
+              categories.length > 0 && (
+                <div className="text-sm uppercase tracking-[0.2em] text-white/70">
+                  <CategoryLinks categories={categories} />
+                </div>
+              )
+            )}
 
-          <div className="">
-            <h1 className="mb-6 text-3xl md:text-5xl lg:text-6xl font-bold">{title}</h1>
-          </div>
+            <h1 className="text-3xl font-bold leading-tight md:text-5xl lg:text-6xl">{title}</h1>
 
-          <div className="flex flex-col md:flex-row gap-4 md:gap-16">
-            {hasAuthors && populatedAuthors && (
-              <div className="flex flex-col gap-4">
-                {isAdmin ? (
-                  <EditableAuthor post={post} authors={populatedAuthors} onUpdate={handleUpdate} />
-                ) : (
-                  <div className="flex flex-col gap-1">
-                    <p className="text-sm">Autor</p>
-                    <p>
-                      <AuthorLinks authors={populatedAuthors} />
-                    </p>
-                  </div>
-                )}
-              </div>
-            )}
-            {!hasAuthors && isAdmin && (
-              <div className="flex flex-col gap-4">
-                <EditableAuthor post={post} authors={[]} onUpdate={handleUpdate} />
-              </div>
-            )}
-            {publishedAt && (
-              <div className="flex flex-col gap-1">
-                <p className="text-sm">Data Publicării</p>
-                <time dateTime={publishedAt}>{formatDateTime(publishedAt)}</time>
-              </div>
-            )}
-            {isAdmin && (
-              <>
+            <div className="flex flex-col gap-6 text-sm md:flex-row md:items-center md:gap-12">
+              {hasAuthors && populatedAuthors && (
+                <div className="flex flex-col gap-2">
+                  {isAdmin ? (
+                    <EditableAuthor
+                      post={post}
+                      authors={populatedAuthors}
+                      onUpdate={handleUpdate}
+                    />
+                  ) : (
+                    <>
+                      <p className="text-white/60">Autor</p>
+                      <p className="text-base">
+                        <AuthorLinks authors={populatedAuthors} />
+                      </p>
+                    </>
+                  )}
+                </div>
+              )}
+              {!hasAuthors && isAdmin && (
+                <div className="flex flex-col gap-2">
+                  <EditableAuthor post={post} authors={[]} onUpdate={handleUpdate} />
+                </div>
+              )}
+
+              {publishedAt && (
                 <div className="flex flex-col gap-1">
+                  <p className="text-white/60">Data Publicării</p>
+                  <time className="text-base" dateTime={publishedAt}>
+                    {formatDateTime(publishedAt)}
+                  </time>
+                </div>
+              )}
+
+              {isAdmin && (
+                <div className="flex flex-col gap-4 md:flex-row md:items-center md:gap-6">
                   <EditableDropCap
                     post={post}
                     showDropCap={showDropCap}
                     dropCapIndex={dropCapIndex}
                     onUpdate={handleUpdate}
                   />
-                </div>
-                <div className="flex flex-col gap-1">
                   <EditableHeroImageAlignment
                     post={post}
                     alignment={alignment}
                     onUpdate={handleUpdate}
                   />
                 </div>
-              </>
-            )}
+              )}
+            </div>
           </div>
+
+          {heroImageObject && (
+            <div
+              className={cn(
+                'w-full',
+                isPortrait
+                  ? 'max-w-sm mx-auto lg:mx-0 lg:justify-self-start'
+                  : 'lg:max-w-4xl lg:justify-self-end',
+              )}
+            >
+              <div
+                className="relative w-full overflow-hidden rounded-3xl border border-white/12 bg-white/5 shadow-[0_32px_80px_-32px_rgba(0,0,0,0.8)] backdrop-blur"
+                style={aspectRatioStyle}
+              >
+                <Media fill priority imgClassName="object-contain" resource={heroImageObject} />
+              </div>
+            </div>
+          )}
         </div>
       </div>
-      <div
-        className={cn(fullHeight ? 'min-h-screen' : 'min-h-[80vh]', 'select-none')}
-        style={fullHeight ? { minHeight: fullHeightMinHeight } : undefined}
-      >
-        {heroImage && typeof heroImage !== 'string' && (
-          <Media
-            fill
-            priority
-            imgClassName={`-z-10 object-cover ${alignmentClass}`}
-            resource={heroImage}
-          />
-        )}
-        <div className="absolute pointer-events-none left-0 bottom-0 w-full h-1/2 bg-linear-to-t from-black to-transparent" />
-      </div>
-    </div>
+    </section>
   )
 }

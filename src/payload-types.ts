@@ -200,42 +200,6 @@ export interface Page {
     | FeaturedArchiveBlock
     | FormBlock
     | TitleBarBlock
-    | {
-        main: (
-          | ArchiveBlock
-          | FeaturedArchiveBlock
-          | ContentBlock
-          | CallToActionBlock
-          | MediaBlock
-          | FormBlock
-          | TitleBarBlock
-        )[];
-        sidebar?:
-          | (
-              | {
-                  heading?: string | null;
-                  subheading?: string | null;
-                  limit?: number | null;
-                  id?: string | null;
-                  blockName?: string | null;
-                  blockType: 'latestComments';
-                }
-              | {
-                  heading?: string | null;
-                  subheading?: string | null;
-                  limit?: number | null;
-                  id?: string | null;
-                  blockName?: string | null;
-                  blockType: 'popularPosts';
-                }
-              | ContentBlock
-              | CallToActionBlock
-            )[]
-          | null;
-        id?: string | null;
-        blockName?: string | null;
-        blockType: 'twoColumnLayout';
-      }
   )[];
   meta?: {
     title?: string | null;
@@ -1168,47 +1132,6 @@ export interface PagesSelect<T extends boolean = true> {
         featuredArchive?: T | FeaturedArchiveBlockSelect<T>;
         formBlock?: T | FormBlockSelect<T>;
         titleBar?: T | TitleBarBlockSelect<T>;
-        twoColumnLayout?:
-          | T
-          | {
-              main?:
-                | T
-                | {
-                    archive?: T | ArchiveBlockSelect<T>;
-                    featuredArchive?: T | FeaturedArchiveBlockSelect<T>;
-                    content?: T | ContentBlockSelect<T>;
-                    cta?: T | CallToActionBlockSelect<T>;
-                    mediaBlock?: T | MediaBlockSelect<T>;
-                    formBlock?: T | FormBlockSelect<T>;
-                    titleBar?: T | TitleBarBlockSelect<T>;
-                  };
-              sidebar?:
-                | T
-                | {
-                    latestComments?:
-                      | T
-                      | {
-                          heading?: T;
-                          subheading?: T;
-                          limit?: T;
-                          id?: T;
-                          blockName?: T;
-                        };
-                    popularPosts?:
-                      | T
-                      | {
-                          heading?: T;
-                          subheading?: T;
-                          limit?: T;
-                          id?: T;
-                          blockName?: T;
-                        };
-                    content?: T | ContentBlockSelect<T>;
-                    cta?: T | CallToActionBlockSelect<T>;
-                  };
-              id?: T;
-              blockName?: T;
-            };
       };
   meta?:
     | T
