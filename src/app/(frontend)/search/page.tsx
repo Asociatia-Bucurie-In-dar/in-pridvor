@@ -17,6 +17,7 @@ type Args = {
 export default async function Page({ searchParams: searchParamsPromise }: Args) {
   const { q: query } = await searchParamsPromise
   const payload = await getPayload({ config: configPromise })
+  const nowISO = new Date().toISOString()
 
   const posts = await payload.find({
     collection: 'posts',
@@ -24,29 +25,38 @@ export default async function Page({ searchParams: searchParamsPromise }: Args) 
     limit: 12,
     sort: '-publishedAt',
     select: getPostsCardSelect(),
-    ...(query
-      ? {
-          where: {
-            or: [
-              {
-                title: {
-                  like: query,
-                },
-              },
-              {
-                'meta.title': {
-                  like: query,
-                },
-              },
-              {
-                slug: {
-                  like: query,
-                },
-              },
-            ],
+    where: {
+      and: [
+        {
+          publishedAt: {
+            less_than_equal: nowISO,
           },
-        }
-      : {}),
+        },
+        ...(query
+          ? [
+              {
+                or: [
+                  {
+                    title: {
+                      like: query,
+                    },
+                  },
+                  {
+                    'meta.title': {
+                      like: query,
+                    },
+                  },
+                  {
+                    slug: {
+                      like: query,
+                    },
+                  },
+                ],
+              },
+            ]
+          : []),
+      ],
+    },
   })
 
   return (

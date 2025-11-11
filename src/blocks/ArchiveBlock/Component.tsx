@@ -28,6 +28,8 @@ export const ArchiveBlock: React.FC<
   } = props
 
   const limit = limitFromProps || 3
+  const now = new Date()
+  const nowISO = now.toISOString()
 
   let posts: Post[] = []
 
@@ -52,6 +54,22 @@ export const ArchiveBlock: React.FC<
       allCategoryIds = Array.from(new Set(categoryHierarchies.flat()))
     }
 
+    const whereConditions: any[] = [
+      {
+        publishedAt: {
+          less_than_equal: nowISO,
+        },
+      },
+    ]
+
+    if (allCategoryIds.length > 0) {
+      whereConditions.push({
+        categories: {
+          in: allCategoryIds,
+        },
+      })
+    }
+
     const fetchedPosts = await payload.find({
       collection: 'posts',
       depth: 1,
@@ -71,15 +89,9 @@ export const ArchiveBlock: React.FC<
         updatedAt: true,
         createdAt: true,
       },
-      ...(allCategoryIds.length > 0
-        ? {
-            where: {
-              categories: {
-                in: allCategoryIds,
-              },
-            },
-          }
-        : {}),
+      where: {
+        and: whereConditions,
+      },
     })
 
     posts = fetchedPosts.docs
@@ -89,7 +101,10 @@ export const ArchiveBlock: React.FC<
         if (typeof post.value === 'object') return post.value
       }) as Post[]
 
-      posts = filteredSelectedPosts
+      posts = filteredSelectedPosts.filter((post) => {
+        if (!post?.publishedAt) return true
+        return new Date(post.publishedAt) <= now
+      })
     }
   }
 

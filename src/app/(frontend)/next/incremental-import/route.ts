@@ -57,8 +57,9 @@ export async function POST(request: Request): Promise<Response> {
 
     const xmlData = parser.parse(xmlContent)
     const posts = xmlData.rss.channel.item || []
+    const totalPostsInXml = posts.length
 
-    payload.logger.info(`📊 Found ${posts.length} items in XML`)
+    payload.logger.info(`📊 Found ${totalPostsInXml} items in XML`)
 
     // Create a Payload request object
     const payloadReq = await createLocalReq({ user }, payload)
@@ -458,7 +459,7 @@ export async function POST(request: Request): Promise<Response> {
     }).length
 
     payload.logger.info(`📊 Import Statistics:`)
-    payload.logger.info(`   Total items in XML: ${posts.length}`)
+    payload.logger.info(`   Total items in XML: ${totalPostsInXml}`)
     payload.logger.info(`   Eligible posts in XML (publish or future): ${totalEligiblePostsInXml}`)
     payload.logger.info(`   Parsed posts ready to import: ${parsedPosts.length}`)
 
