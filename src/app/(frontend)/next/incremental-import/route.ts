@@ -18,6 +18,7 @@ interface ParsedPost {
   featuredImageFileName?: string
   wpPostId?: string
   originalPostItem?: any
+  status: 'publish' | 'future'
 }
 
 export async function POST(request: Request): Promise<Response> {
@@ -213,7 +214,10 @@ export async function POST(request: Request): Promise<Response> {
 
     const parsedPosts: ParsedPost[] = []
     const imageMap = new Map<string, { fileName: string; url: string }>() // postId -> {fileName, url}
-    const imageVariants = new Map<string, Array<{ attachmentId: string; fileName: string; url: string; size: number }>>() // baseFileName -> variants[]
+    const imageVariants = new Map<
+      string,
+      Array<{ attachmentId: string; fileName: string; url: string; size: number }>
+    >() // baseFileName -> variants[]
 
     function getBaseFileName(fileName: string): string {
       const parsed = path.parse(fileName.toLowerCase())
@@ -234,7 +238,9 @@ export async function POST(request: Request): Promise<Response> {
       return Infinity
     }
 
-    function getBestVariant(variants: Array<{ attachmentId: string; fileName: string; url: string; size: number }>): { attachmentId: string; fileName: string; url: string } {
+    function getBestVariant(
+      variants: Array<{ attachmentId: string; fileName: string; url: string; size: number }>,
+    ): { attachmentId: string; fileName: string; url: string } {
       if (variants.length === 0) {
         throw new Error('No variants provided')
       }
@@ -316,7 +322,7 @@ export async function POST(request: Request): Promise<Response> {
 
       // Import published posts, but also log what we're skipping
       if (postType === 'post') {
-        if (postStatus !== 'publish') {
+        if (postStatus !== 'publish' && postStatus !== 'future') {
           const title = post.title || 'Untitled'
           payload.logger.info(`⏭️  Skipping post "${title}" with status: ${postStatus}`)
           return
@@ -420,7 +426,7 @@ export async function POST(request: Request): Promise<Response> {
           if (meta['wp:meta_key'] === '_thumbnail_id' && meta['wp:meta_value']) {
             const thumbnailId = String(meta['wp:meta_value'])
             const imageData = imageMap.get(thumbnailId)
-            
+
             if (imageData) {
               // imageMap already points to the best variant for this base filename
               featuredImageFileName = imageData.fileName
@@ -441,21 +447,24 @@ export async function POST(request: Request): Promise<Response> {
         featuredImageUrl,
         wpPostId: post['wp:post_id'],
         originalPostItem: post,
+        status: postStatus === 'future' ? 'future' : 'publish',
       })
     })
 
-    const totalPostsInXml = posts.filter(
-      (p: any) => p['wp:post_type'] === 'post' && p['wp:status'] === 'publish',
-    ).length
+    const totalEligiblePostsInXml = posts.filter((p: any) => {
+      if (p['wp:post_type'] !== 'post') return false
+      const status = p['wp:status']
+      return status === 'publish' || status === 'future'
+    }).length
 
     payload.logger.info(`📊 Import Statistics:`)
     payload.logger.info(`   Total items in XML: ${posts.length}`)
-    payload.logger.info(`   Published posts in XML: ${totalPostsInXml}`)
+    payload.logger.info(`   Eligible posts in XML (publish or future): ${totalEligiblePostsInXml}`)
     payload.logger.info(`   Parsed posts ready to import: ${parsedPosts.length}`)
 
-    if (parsedPosts.length < totalPostsInXml) {
+    if (parsedPosts.length < totalEligiblePostsInXml) {
       payload.logger.warn(
-        `⚠️  ${totalPostsInXml - parsedPosts.length} posts from XML were not parsed (might be duplicates by slug or missing required fields)`,
+        `⚠️  ${totalEligiblePostsInXml - parsedPosts.length} posts from XML were not parsed (might be duplicates by slug or missing required fields)`,
       )
     }
 
@@ -646,20 +655,28 @@ export async function POST(request: Request): Promise<Response> {
           try {
             const [rawFileName] = imageUrl.split('?')
             const fileName = path.basename(rawFileName ?? imageUrl)
-            
+
             // Check if media already exists
             const matchingMedia = allMedia.docs.find((media) => {
               if (!media.filename) return false
               const mediaBaseName = path.parse(media.filename).name.toLowerCase()
               const urlBaseName = path.parse(fileName).name.toLowerCase()
-              return mediaBaseName === urlBaseName || media.filename.toLowerCase() === fileName.toLowerCase()
+              return (
+                mediaBaseName === urlBaseName ||
+                media.filename.toLowerCase() === fileName.toLowerCase()
+              )
             })
 
             if (matchingMedia) {
-              const mediaId = typeof matchingMedia.id === 'number' ? matchingMedia.id : parseInt(String(matchingMedia.id), 10)
+              const mediaId =
+                typeof matchingMedia.id === 'number'
+                  ? matchingMedia.id
+                  : parseInt(String(matchingMedia.id), 10)
               if (!isNaN(mediaId)) {
                 imageMediaMap.set(imageUrl, mediaId)
-                payload.logger.info(`   ♻️  Reusing existing image: ${matchingMedia.filename} (ID: ${mediaId})`)
+                payload.logger.info(
+                  `   ♻️  Reusing existing image: ${matchingMedia.filename} (ID: ${mediaId})`,
+                )
               }
             } else {
               // Download and upload image
@@ -683,7 +700,10 @@ export async function POST(request: Request): Promise<Response> {
                   req: payloadReq,
                 })
 
-                const uploadedId = typeof uploadedMedia.id === 'number' ? uploadedMedia.id : parseInt(String(uploadedMedia.id), 10)
+                const uploadedId =
+                  typeof uploadedMedia.id === 'number'
+                    ? uploadedMedia.id
+                    : parseInt(String(uploadedMedia.id), 10)
                 if (!isNaN(uploadedId)) {
                   imageMediaMap.set(imageUrl, uploadedId)
                   allMedia.docs.push(uploadedMedia as any)
@@ -801,13 +821,21 @@ export async function POST(request: Request): Promise<Response> {
           }
         }
 
+        const isFuturePost = post.status === 'future'
+
         const postPayload: any = {
           title: post.title,
           slug: post.slug,
           content: lexicalContent,
           publishedAt: post.publishedDate,
-          _status: 'published' as const,
+          _status: isFuturePost ? ('draft' as const) : ('published' as const),
           authors: [ancaUser.id],
+        }
+
+        if (isFuturePost) {
+          payload.logger.info(
+            `   ⏳ Scheduling post "${post.title}" for future publication at ${post.publishedDate}`,
+          )
         }
 
         // Only set categories if we have any
@@ -832,17 +860,18 @@ export async function POST(request: Request): Promise<Response> {
         // Import comments for this post
         if (post.originalPostItem) {
           const comments = post.originalPostItem['wp:comment'] || []
-          const postComments = (Array.isArray(comments) ? comments : comments ? [comments] : [])
-            .filter((comment: any) => {
-              const commentType = comment['wp:comment_type']
-              const approved = comment['wp:comment_approved']
-              return commentType === 'comment' && (approved === '1' || approved === 1)
-            })
+          const postComments = (
+            Array.isArray(comments) ? comments : comments ? [comments] : []
+          ).filter((comment: any) => {
+            const commentType = comment['wp:comment_type']
+            const approved = comment['wp:comment_approved']
+            return commentType === 'comment' && (approved === '1' || approved === 1)
+          })
 
           if (postComments.length > 0) {
             payload.logger.info(`   💬 Found ${postComments.length} comments for "${post.title}"`)
             const commentMap = new Map<string, any>()
-            
+
             // First pass: create all comments and build map
             for (const comment of postComments) {
               try {
@@ -851,7 +880,7 @@ export async function POST(request: Request): Promise<Response> {
                 const commentAuthor = comment['wp:comment_author'] || 'Anonymous'
                 const commentContent = comment['wp:comment_content'] || ''
                 const commentEmail = comment['wp:comment_author_email'] || ''
-                
+
                 if (!commentContent || commentContent.trim().length === 0) {
                   payload.logger.warn(`   ⚠️  Skipping empty comment from ${commentAuthor}`)
                   continue
@@ -872,7 +901,9 @@ export async function POST(request: Request): Promise<Response> {
                 })
 
                 commentMap.set(commentId, createdComment.id)
-                payload.logger.info(`   ✅ Imported comment from ${commentAuthor} (ID: ${commentId})`)
+                payload.logger.info(
+                  `   ✅ Imported comment from ${commentAuthor} (ID: ${commentId})`,
+                )
               } catch (commentError: any) {
                 payload.logger.error(`   ❌ Failed to import comment: ${commentError.message}`)
                 if (commentError.stack) {

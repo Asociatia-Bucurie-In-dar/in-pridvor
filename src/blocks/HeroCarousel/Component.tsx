@@ -1,10 +1,10 @@
 import type { Post, HeroCarouselBlock as HeroCarouselBlockProps } from '@/payload-types'
+import type { Where } from 'payload'
 
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import React from 'react'
 import { HeroCarouselClient } from './Component.client'
-import { getCategoryHierarchyIds } from '@/utilities/getCategoryHierarchy'
 
 export const HeroCarouselBlock: React.FC<
   HeroCarouselBlockProps & {
@@ -13,7 +13,6 @@ export const HeroCarouselBlock: React.FC<
 > = async (props) => {
   const {
     id,
-    categories,
     limit: limitFromProps,
     populateBy,
     selectedDocs,
@@ -22,7 +21,10 @@ export const HeroCarouselBlock: React.FC<
     showPagination,
   } = props
 
-  const limit = limitFromProps || 3
+  const limit =
+    typeof limitFromProps === 'number' && Number.isFinite(limitFromProps) && limitFromProps > 0
+      ? limitFromProps
+      : 3
   const now = Date.now()
   const nowIso = new Date(now).toISOString()
 
@@ -31,41 +33,43 @@ export const HeroCarouselBlock: React.FC<
   if (populateBy === 'collection') {
     const payload = await getPayload({ config: configPromise })
 
-    let allCategoryIds: number[] = []
-
-    if (categories && categories.length > 0) {
-      // Get all category IDs including subcategories for each selected category
-      const categoryHierarchyPromises = categories.map(async (category) => {
-        const categoryId = typeof category === 'object' ? category.id : category
-        if (categoryId) {
-          return getCategoryHierarchyIds(categoryId)
-        }
-        return []
-      })
-
-      const categoryHierarchies = await Promise.all(categoryHierarchyPromises)
-
-      // Flatten and deduplicate all category IDs
-      allCategoryIds = Array.from(new Set(categoryHierarchies.flat()))
-    }
-
-    const where: Record<string, unknown> = {
-      publishedAt: {
-        less_than_equal: nowIso,
+    const whereFilters: Where[] = [
+      {
+        _status: {
+          equals: 'published',
+        },
       },
-    }
+      {
+        or: [
+          {
+            publishedAt: {
+              less_than_equal: nowIso,
+            },
+          },
+          {
+            publishedAt: {
+              equals: null,
+            },
+          },
+          {
+            publishedAt: {
+              exists: false,
+            },
+          },
+        ],
+      },
+    ]
 
-    if (allCategoryIds.length > 0) {
-      where.categories = {
-        in: allCategoryIds,
-      }
+    const whereWithCategories: Where = {
+      and: whereFilters,
     }
 
     const fetchedPosts = await payload.find({
       collection: 'posts',
       depth: 1,
-      limit,
-      sort: '-publishedAt',
+      limit: limit + 10,
+      where: whereWithCategories,
+      sort: '-publishedAt,-updatedAt,-createdAt',
       select: {
         title: true,
         slug: true,
@@ -95,11 +99,24 @@ export const HeroCarouselBlock: React.FC<
       .slice(0, limit)
   } else {
     if (selectedDocs?.length) {
-      const filteredSelectedPosts = selectedDocs.map((post) => {
-        if (typeof post.value === 'object') return post.value
-      }) as Post[]
+      const filteredSelectedPosts = selectedDocs
+        .map((post) => {
+          if (typeof post.value === 'object') return post.value
+        })
+        .filter((post): post is Post => {
+          if (!post) return false
+          if (!post.publishedAt) return true
+          const published = new Date(post.publishedAt).getTime()
+          return Number.isFinite(published) && published <= now
+        })
 
       posts = filteredSelectedPosts
+        .sort((a, b) => {
+          const dateB = new Date(b.publishedAt || b.updatedAt || b.createdAt || 0).getTime() || 0
+          const dateA = new Date(a.publishedAt || a.updatedAt || a.createdAt || 0).getTime() || 0
+          return dateB - dateA
+        })
+        .slice(0, limit)
     }
   }
 
