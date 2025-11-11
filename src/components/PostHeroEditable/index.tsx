@@ -21,14 +21,12 @@ interface PostHeroEditableProps {
   post: Post
   showDropCap: boolean
   dropCapIndex: number
-  fullHeight?: boolean
 }
 
 export const PostHeroEditable: React.FC<PostHeroEditableProps> = ({
   post,
   showDropCap,
   dropCapIndex,
-  fullHeight,
 }) => {
   const { isAdmin } = useAdmin()
   const { categories, heroImage, heroImageAlignment, populatedAuthors, publishedAt, title } = post
@@ -65,24 +63,16 @@ export const PostHeroEditable: React.FC<PostHeroEditableProps> = ({
     : { aspectRatio: isPortrait ? '3 / 4' : '16 / 9' }
 
   const handleUpdate = () => {}
-  const heroHeightStyle = fullHeight ? { minHeight: fullHeightMinHeight } : undefined
+  const backgroundImageClass = cn(
+    'object-cover scale-[1.08] blur-[120px] brightness-[0.35]',
+    alignmentClass,
+  )
 
   return (
-    <section
-      className={cn(
-        'relative isolate -mt-[4rem] overflow-hidden bg-neutral-950 text-white',
-        fullHeight && 'min-h-screen',
-      )}
-      style={heroHeightStyle}
-    >
-      <div className="absolute inset-0 -z-10">
+    <section className={cn('relative isolate -mt-16 overflow-hidden text-white')}>
+      <div className="absolute inset-0 -z-10 bg-neutral-950">
         {heroImageObject && (
-          <Media
-            fill
-            priority
-            imgClassName={cn('object-cover opacity-30 blur-3xl scale-110')}
-            resource={heroImageObject}
-          />
+          <Media fill priority imgClassName={backgroundImageClass} resource={heroImageObject} />
         )}
         <div className="absolute inset-0 bg-linear-to-b from-neutral-950 via-neutral-950/85 to-neutral-950" />
       </div>
