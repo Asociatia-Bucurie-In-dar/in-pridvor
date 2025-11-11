@@ -140,7 +140,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
     <div className="w-full">
       {/* BIG Logo */}
       <div className="flex justify-center mt-3 bg-white relative">
-        <Link href="/" className="relative z-10 block">
+        <Link href="/" className="relative z-10 block cursor-pointer">
           <Logo loading="eager" priority="high" width={525} height={525} />
         </Link>
 
