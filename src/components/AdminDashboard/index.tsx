@@ -1,12 +1,6 @@
 import React from 'react'
-import { ImportPostsWidget } from './ImportPostsWidget'
-
 const AdminDashboard: React.FC = () => {
-  return (
-    <div>
-      <ImportPostsWidget />
-    </div>
-  )
+  return <div />
 }
 
 export default AdminDashboard
