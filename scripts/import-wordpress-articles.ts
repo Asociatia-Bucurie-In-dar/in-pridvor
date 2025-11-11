@@ -1,4 +1,4 @@
-import type { Post, Category, User, Media } from '../src/payload-types'
+import type { Category, User, Media } from '../src/payload-types'
 import * as fs from 'fs'
 import * as path from 'path'
 import { fileURLToPath } from 'url'
@@ -257,7 +257,7 @@ async function downloadImage(url: string): Promise<Buffer | null> {
           return
         }
 
-        const chunks: Buffer[] = []
+        const chunks: Uint8Array[] = []
         response.on('data', (chunk) => chunks.push(chunk))
         response.on('end', () => resolve(Buffer.concat(chunks)))
         response.on('error', () => resolve(null))
@@ -324,6 +324,31 @@ async function uploadImageToPayload(imageUrl: string, payload: any): Promise<str
   }
 }
 
+async function loadAllPosts(payload: any): Promise<any[]> {
+  const allPosts: any[] = []
+  let page = 1
+  const limit = 100
+
+  while (true) {
+    const result = await payload.find({
+      collection: 'posts',
+      depth: 0,
+      limit,
+      page,
+    })
+
+    allPosts.push(...result.docs)
+
+    if (!result.hasNextPage) {
+      break
+    }
+
+    page += 1
+  }
+
+  return allPosts
+}
+
 async function importWordPressArticles() {
   console.log('🚀 Starting WordPress article import...\n')
 
@@ -352,25 +377,58 @@ async function importWordPressArticles() {
   // Initialize Payload
   const payload = await getPayload({ config })
 
-  // Get all existing posts to compare by slug
-  const existingPosts = await payload.find({
-    collection: 'posts',
-    limit: 1000,
-    depth: 0,
-  })
+  const existingPosts = await loadAllPosts(payload)
 
-  console.log(`📊 Found ${existingPosts.docs.length} posts in database`)
+  console.log(`📊 Found ${existingPosts.length} posts in database`)
 
-  // Create a set of existing slugs for fast lookup
-  const existingSlugs = new Set(existingPosts.docs.map((post) => post.slug))
+  const existingSlugs = new Set(existingPosts.map((post) => post.slug))
 
-  // Find posts that don't exist yet
-  const newPosts = xmlPosts.filter((post) => !existingSlugs.has(post.slug))
+  let latestPublishedAt = 0
+  for (const post of existingPosts) {
+    if (!post.publishedAt) continue
+    const publishedTime = new Date(post.publishedAt).getTime()
+    if (Number.isNaN(publishedTime)) continue
+    if (publishedTime > latestPublishedAt) {
+      latestPublishedAt = publishedTime
+    }
+  }
+
+  if (latestPublishedAt > 0) {
+    console.log(`🗓️ Latest published post: ${new Date(latestPublishedAt).toISOString()}`)
+  } else {
+    console.log('🗓️ No published posts found in database')
+  }
+
+  let skippedExistingCount = 0
+  let skippedOlderCount = 0
+  const newPosts: WordPressPost[] = []
+
+  for (const post of xmlPosts) {
+    if (existingSlugs.has(post.slug)) {
+      skippedExistingCount++
+      continue
+    }
+
+    const publishedTime = new Date(post.pubDate).getTime()
+    if (Number.isNaN(publishedTime)) {
+      skippedOlderCount++
+      console.log(`⏭️  Skipping post with invalid date: ${post.title}`)
+      continue
+    }
+
+    if (latestPublishedAt > 0 && publishedTime <= latestPublishedAt) {
+      skippedOlderCount++
+      console.log(`⏭️  Skipping older post: ${post.title} (${post.pubDate})`)
+      continue
+    }
+
+    newPosts.push(post)
+  }
 
   console.log(`🆕 Found ${newPosts.length} new posts to import\n`)
 
   if (newPosts.length === 0) {
-    console.log('✅ No new posts to import! All XML posts already exist.')
+    console.log('✅ No new posts to import! XML posts already exist or are not newer.')
     return
   }
 
@@ -394,7 +452,7 @@ async function importWordPressArticles() {
   console.log(`📂 Found ${categories.docs.length} categories in database`)
 
   // Create category mapping
-  const categoryMap = new Map<string, string>()
+  const categoryMap = new Map<string, string | number>()
   for (const category of categories.docs) {
     categoryMap.set(category.title, category.id)
   }
@@ -409,7 +467,7 @@ async function importWordPressArticles() {
   console.log(`👥 Found ${users.docs.length} users in database`)
 
   // Create user mapping
-  const userMap = new Map<string, string>()
+  const userMap = new Map<string, string | number>()
   if (users.docs.length > 0) {
     userMap.set('adminpdv', users.docs[0].id)
     userMap.set('admin', users.docs[0].id)
@@ -420,8 +478,8 @@ async function importWordPressArticles() {
 
   // Statistics
   let importedCount = 0
-  let skippedCount = 0
   let errorCount = 0
+  let duplicateDuringImportCount = 0
 
   console.log('\n📥 Starting import process...\n')
 
@@ -432,7 +490,7 @@ async function importWordPressArticles() {
       console.log(`   Slug: ${xmlPost.slug}`)
 
       // Map categories
-      const categoryIds: string[] = []
+      const categoryIds: (string | number)[] = []
       for (const categoryName of xmlPost.categories) {
         const categoryId = categoryMap.get(categoryName)
         if (categoryId) {
@@ -470,9 +528,26 @@ async function importWordPressArticles() {
       const publishedAt = new Date(xmlPost.pubDate)
 
       // Get hero image (first image if available)
-      let heroImageId: string | undefined
+      let heroImageId: string | number | undefined
       if (xmlPost.images.length > 0 && imageMap.has(xmlPost.images[0])) {
         heroImageId = imageMap.get(xmlPost.images[0])
+      }
+
+      const duplicateCheck = await payload.find({
+        collection: 'posts',
+        where: {
+          slug: {
+            equals: xmlPost.slug,
+          },
+        },
+        limit: 1,
+        depth: 0,
+      })
+
+      if (duplicateCheck.docs.length > 0) {
+        console.log(`   ⏭️  Skipping duplicate detected during import: ${xmlPost.slug}`)
+        duplicateDuringImportCount++
+        continue
       }
 
       // Create the post
@@ -482,10 +557,10 @@ async function importWordPressArticles() {
           title: xmlPost.title,
           slug: xmlPost.slug,
           content: lexicalContent,
-          categories: categoryIds,
-          authors: [authorId],
+          categories: categoryIds as any,
+          authors: [authorId] as any,
           publishedAt: publishedAt.toISOString(),
-          heroImage: heroImageId,
+          heroImage: (heroImageId ?? undefined) as any,
           _status: 'published',
         },
         context: {
@@ -508,6 +583,9 @@ async function importWordPressArticles() {
   console.log(`Total posts in XML: ${xmlPosts.length}`)
   console.log(`New posts found: ${newPosts.length}`)
   console.log(`Successfully imported: ${importedCount}`)
+  console.log(`Skipped (existing slug): ${skippedExistingCount}`)
+  console.log(`Skipped (older or invalid date): ${skippedOlderCount}`)
+  console.log(`Skipped during import (duplicate detected): ${duplicateDuringImportCount}`)
   console.log(`Errors: ${errorCount}`)
   console.log('='.repeat(60))
 
