@@ -28,14 +28,14 @@ export async function Footer() {
       icon: SiFacebook,
     },
     {
-      name: 'WhatsApp',
-      href: 'https://wa.me/40727786725',
-      icon: SiWhatsapp,
-    },
-    {
       name: 'YouTube',
       href: 'https://www.youtube.com/@BucurieinDar',
       icon: SiYoutube,
+    },
+    {
+      name: 'WhatsApp',
+      href: 'https://wa.me/40727786725',
+      icon: SiWhatsapp,
     },
   ]
 
