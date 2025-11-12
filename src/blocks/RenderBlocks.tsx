@@ -44,8 +44,9 @@ export const RenderBlocks: React.FC<RenderBlocksProps> = (props) => {
 
   return (
     <Fragment>
-      {blocks.map((block, index) => {
+      {blocks.map((block) => {
         const blockType = block?.blockType as BlockType | undefined
+        let index = Math.random() * 999999
 
         if (!blockType || !(blockType in blockComponents)) {
           return null

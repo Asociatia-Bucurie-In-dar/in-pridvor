@@ -16,6 +16,7 @@ import { slugField } from '@/fields/slug'
 import { preventStaleTitle } from '@/hooks/preventStaleTitle'
 import { populatePublishedAt } from '../../hooks/populatePublishedAt'
 import { generatePreviewPath } from '../../utilities/generatePreviewPath'
+import { ensureUniqueLayoutBlockIDs } from '../../hooks/ensureUniqueLayoutBlockIDs'
 import { revalidateDelete, revalidatePage } from './hooks/revalidatePage'
 
 import {
@@ -138,6 +139,7 @@ export const Pages: CollectionConfig<'pages'> = {
     ...slugField(),
   ],
   hooks: {
+    beforeValidate: [ensureUniqueLayoutBlockIDs],
     afterChange: [revalidatePage],
     beforeChange: [preventStaleTitle, populatePublishedAt],
     afterDelete: [revalidateDelete],
