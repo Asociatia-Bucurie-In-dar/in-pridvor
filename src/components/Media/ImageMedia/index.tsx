@@ -4,7 +4,7 @@ import type { StaticImageData } from 'next/image'
 
 import { cn } from '@/utilities/ui'
 import NextImage from 'next/image'
-import React from 'react'
+import React, { useState } from 'react'
 
 import type { Props as MediaProps } from '../types'
 
@@ -29,10 +29,20 @@ export const ImageMedia: React.FC<MediaProps> = (props) => {
     loading: loadingFromProps,
   } = props
 
+  const [imageError, setImageError] = useState(false)
+  const [useFallback, setUseFallback] = useState(false)
+
   let width: number | undefined
   let height: number | undefined
   let alt = altFromProps
   let src: StaticImageData | string = srcFromProps || ''
+  let rawUrl: string | undefined
+  let shouldUseDirectImage = false
+
+  // Store raw URL for fallback if srcFromProps is provided
+  if (srcFromProps && typeof srcFromProps === 'string') {
+    rawUrl = srcFromProps
+  }
 
   if (!src && resource && typeof resource === 'object') {
     const { alt: altFromResource, height: fullHeight, url, width: fullWidth } = resource
@@ -45,7 +55,77 @@ export const ImageMedia: React.FC<MediaProps> = (props) => {
 
     // Check if URL is already absolute (from R2/external storage) or relative (local)
     const isAbsoluteURL = url?.startsWith('http://') || url?.startsWith('https://')
-    src = isAbsoluteURL ? `${url}?${cacheTag}` : `${getClientSideURL()}${url}?${cacheTag}`
+    
+    if (isAbsoluteURL) {
+      // Store raw URL for fallback
+      rawUrl = url
+      
+      // Check if this is an R2 URL - if so, bypass Next.js Image Optimization
+      // to avoid 402 errors. R2 images are already optimized by Payload.
+      const isR2Url = url.includes('.r2.dev') || url.includes('r2.cloudflarestorage.com')
+      
+      if (isR2Url) {
+        // For R2 images, use direct URL to bypass Next.js Image Optimization
+        // This avoids 402 errors from Vercel Image Optimization service
+        shouldUseDirectImage = true
+        if (cacheTag && !url.includes(cacheTag)) {
+          const separator = url.includes('?') ? '&' : '?'
+          src = `${url}${separator}${cacheTag}`
+        } else {
+          src = url
+        }
+      } else {
+        // For other external URLs, use Next.js Image Optimization
+        if (cacheTag && !url.includes(cacheTag)) {
+          const separator = url.includes('?') ? '&' : '?'
+          src = `${url}${separator}${cacheTag}`
+        } else {
+          src = url
+        }
+      }
+    } else if (url) {
+      // For relative URLs, construct full URL
+      const baseUrl = getClientSideURL()
+      const normalizedUrl = url.startsWith('/') ? url : `/${url}`
+      rawUrl = `${baseUrl}${normalizedUrl}`
+      if (cacheTag && !normalizedUrl.includes(cacheTag)) {
+        src = `${baseUrl}${normalizedUrl}?${cacheTag}`
+      } else {
+        src = `${baseUrl}${normalizedUrl}`
+      }
+    }
+  }
+
+  // If this is an R2 image or NextImage failed, use direct img tag
+  if ((shouldUseDirectImage || useFallback) && rawUrl) {
+    if (fill) {
+      return (
+        <img
+          alt={alt || ''}
+          className={cn('absolute inset-0 w-full h-full object-cover', imgClassName)}
+          src={rawUrl}
+          onError={() => setImageError(true)}
+        />
+      )
+    }
+    return (
+      <img
+        alt={alt || ''}
+        className={cn(imgClassName)}
+        src={rawUrl}
+        width={width}
+        height={height}
+        onError={() => setImageError(true)}
+      />
+    )
+  }
+
+  if (imageError && rawUrl) {
+    return (
+      <div className={cn('flex items-center justify-center bg-gray-100', imgClassName)}>
+        <span className="text-sm text-gray-400">Image unavailable</span>
+      </div>
+    )
   }
 
   const loading = loadingFromProps || (!priority ? 'lazy' : undefined)
@@ -72,6 +152,10 @@ export const ImageMedia: React.FC<MediaProps> = (props) => {
         sizes={sizes}
         src={src}
         width={!fill ? width : undefined}
+        onError={() => {
+          // If Next.js Image Optimization fails, fall back to direct image
+          setUseFallback(true)
+        }}
       />
     </picture>
   )
