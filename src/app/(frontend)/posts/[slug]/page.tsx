@@ -20,8 +20,6 @@ import { DropCapHandler } from '@/components/DropCapHandler'
 
 export async function generateStaticParams() {
   const payload = await getPayload({ config: configPromise })
-  const now = new Date().toISOString()
-
   const posts = await payload.find({
     collection: 'posts',
     draft: false,
@@ -30,15 +28,6 @@ export async function generateStaticParams() {
     pagination: false,
     select: {
       slug: true,
-    },
-    where: {
-      and: [
-        {
-          publishedAt: {
-            less_than_equal: now,
-          },
-        },
-      ],
     },
   })
 
@@ -64,7 +53,7 @@ export default async function Post({ params: paramsPromise }: Args) {
   const url = '/posts/' + slug
   const post = await queryPostBySlug({ slug })
 
-  if (!post) return <PayloadRedirects disableNotFound url={url} />
+  if (!post) return <PayloadRedirects url={url} />
 
   // Use the enableDropCap field from the post (defaults to true)
   const showDropCap = post.enableDropCap !== false
@@ -121,23 +110,6 @@ const queryPostBySlug = cache(async ({ slug }: { slug: string }) => {
   const { isEnabled: draft } = await draftMode()
 
   const payload = await getPayload({ config: configPromise })
-  const now = new Date().toISOString()
-
-  const whereConditions: any[] = [
-    {
-      slug: {
-        equals: slug,
-      },
-    },
-  ]
-
-  if (!draft) {
-    whereConditions.push({
-      publishedAt: {
-        less_than_equal: now,
-      },
-    })
-  }
 
   const result = await payload.find({
     collection: 'posts',
@@ -146,7 +118,9 @@ const queryPostBySlug = cache(async ({ slug }: { slug: string }) => {
     overrideAccess: draft,
     pagination: false,
     where: {
-      and: whereConditions,
+      slug: {
+        equals: slug,
+      },
     },
   })
 
