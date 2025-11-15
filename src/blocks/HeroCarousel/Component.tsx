@@ -1,10 +1,10 @@
 import type { Post, HeroCarouselBlock as HeroCarouselBlockProps } from '@/payload-types'
-import type { Where } from 'payload'
 
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import React from 'react'
 import { HeroCarouselClient } from './Component.client'
+import { getCategoryHierarchyIds } from '@/utilities/getCategoryHierarchy'
 
 export const HeroCarouselBlock: React.FC<
   HeroCarouselBlockProps & {
@@ -16,60 +16,34 @@ export const HeroCarouselBlock: React.FC<
     limit: limitFromProps,
     populateBy,
     selectedDocs,
+    categories,
     autoplayDelay,
     showNavigation,
     showPagination,
   } = props
 
-  const limit =
-    typeof limitFromProps === 'number' && Number.isFinite(limitFromProps) && limitFromProps > 0
-      ? limitFromProps
-      : 3
-  const now = Date.now()
-  const nowIso = new Date(now).toISOString()
+  const limit = limitFromProps || 3
+  const now = new Date()
+  const nowISO = now.toISOString()
 
   let posts: Post[] = []
 
   if (populateBy === 'collection') {
     const payload = await getPayload({ config: configPromise })
 
-    const whereFilters: Where[] = [
+    const whereConditions: any[] = [
       {
-        _status: {
-          equals: 'published',
+        publishedAt: {
+          less_than_equal: nowISO,
         },
       },
-      {
-        or: [
-          {
-            publishedAt: {
-              less_than_equal: nowIso,
-            },
-          },
-          {
-            publishedAt: {
-              equals: null,
-            },
-          },
-          {
-            publishedAt: {
-              exists: false,
-            },
-          },
-        ],
-      },
     ]
-
-    const whereWithCategories: Where = {
-      and: whereFilters,
-    }
 
     const fetchedPosts = await payload.find({
       collection: 'posts',
       depth: 1,
-      limit: limit + 10,
-      where: whereWithCategories,
-      sort: '-publishedAt,-updatedAt,-createdAt',
+      limit,
+      sort: '-publishedAt',
       select: {
         title: true,
         slug: true,
@@ -78,45 +52,31 @@ export const HeroCarouselBlock: React.FC<
         heroImage: true,
         heroImageAlignment: true,
         content: true,
-        publishedAt: true,
         authors: true,
+        populatedAuthors: true,
+        publishedAt: true,
         updatedAt: true,
         createdAt: true,
+      },
+      where: {
+        and: whereConditions,
       },
     })
 
     posts = fetchedPosts.docs
-      .filter((post) => {
-        if (!post.publishedAt) return true
-        const published = new Date(post.publishedAt).getTime()
-        return Number.isFinite(published) && published <= now
-      })
-      .sort((a, b) => {
-        const dateB = new Date(b.publishedAt || b.updatedAt || b.createdAt || 0).getTime() || 0
-        const dateA = new Date(a.publishedAt || a.updatedAt || a.createdAt || 0).getTime() || 0
-        return dateB - dateA
-      })
-      .slice(0, limit)
   } else {
     if (selectedDocs?.length) {
       const filteredSelectedPosts = selectedDocs
         .map((post) => {
           if (typeof post.value === 'object') return post.value
+          return null
         })
-        .filter((post): post is Post => {
-          if (!post) return false
-          if (!post.publishedAt) return true
-          const published = new Date(post.publishedAt).getTime()
-          return Number.isFinite(published) && published <= now
-        })
+        .filter((post): post is Post => post !== null)
 
-      posts = filteredSelectedPosts
-        .sort((a, b) => {
-          const dateB = new Date(b.publishedAt || b.updatedAt || b.createdAt || 0).getTime() || 0
-          const dateA = new Date(a.publishedAt || a.updatedAt || a.createdAt || 0).getTime() || 0
-          return dateB - dateA
-        })
-        .slice(0, limit)
+      posts = filteredSelectedPosts.filter((post) => {
+        if (!post?.publishedAt) return true
+        return new Date(post.publishedAt) <= now
+      })
     }
   }
 
