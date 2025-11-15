@@ -13,7 +13,7 @@ import { websiteTitle } from '@/utilities/commonInfo'
 import { getPostsCardSelect } from '@/utilities/getPostsCardSelect'
 
 export const dynamic = 'force-static'
-// Removed time-based revalidation - now using on-demand revalidation via hooks
+export const revalidate = 60
 
 type Args = {
   params: Promise<{
@@ -24,6 +24,7 @@ type Args = {
 export default async function Page({ params: paramsPromise }: Args) {
   const { pageNumber } = await paramsPromise
   const payload = await getPayload({ config: configPromise })
+  const now = new Date().toISOString()
 
   const sanitizedPageNumber = Number(pageNumber)
 
@@ -37,6 +38,15 @@ export default async function Page({ params: paramsPromise }: Args) {
     sort: '-publishedAt',
     overrideAccess: false,
     select: getPostsCardSelect(),
+    where: {
+      and: [
+        {
+          publishedAt: {
+            less_than_equal: now,
+          },
+        },
+      ],
+    },
   })
 
   return (

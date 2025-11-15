@@ -38,6 +38,7 @@ export async function generateStaticParams() {
 }
 
 export const dynamicParams = true
+export const revalidate = 60
 
 type Args = {
   params: Promise<{
@@ -168,6 +169,7 @@ const queryCategoryBySlug = cache(async ({ params }: { params: string[] }) => {
 
 const queryPostsByCategoryIds = cache(async (categoryIds: number[], page: number = 1) => {
   const payload = await getPayload({ config: configPromise })
+  const now = new Date().toISOString()
 
   const result = await payload.find({
     collection: 'posts',
@@ -177,9 +179,18 @@ const queryPostsByCategoryIds = cache(async (categoryIds: number[], page: number
     overrideAccess: false,
     select: getPostsCardSelect(),
     where: {
-      categories: {
-        in: categoryIds,
-      },
+      and: [
+        {
+          publishedAt: {
+            less_than_equal: now,
+          },
+        },
+        {
+          categories: {
+            in: categoryIds,
+          },
+        },
+      ],
     },
   })
 
