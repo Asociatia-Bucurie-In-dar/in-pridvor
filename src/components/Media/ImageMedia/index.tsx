@@ -56,7 +56,7 @@ export const ImageMedia: React.FC<MediaProps> = (props) => {
     // Check if URL is already absolute (from R2/external storage) or relative (local)
     const isAbsoluteURL = url?.startsWith('http://') || url?.startsWith('https://')
     
-    if (isAbsoluteURL) {
+    if (isAbsoluteURL && url) {
       // Store raw URL for fallback
       rawUrl = url
       
