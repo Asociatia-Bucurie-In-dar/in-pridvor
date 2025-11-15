@@ -16,6 +16,7 @@ import { Code } from '../../blocks/Code/config'
 import { MediaBlock } from '../../blocks/MediaBlock/config'
 import { VideoEmbed } from '../../blocks/VideoEmbed/config'
 import { generatePreviewPath } from '../../utilities/generatePreviewPath'
+import { autoPublishScheduled } from './hooks/autoPublishScheduled'
 import { cleanupPostRelations } from './hooks/cleanupPostRelations'
 import { populateAuthors } from './hooks/populateAuthors'
 import { revalidateDelete, revalidatePost } from './hooks/revalidatePost'
@@ -271,6 +272,7 @@ export const Posts: CollectionConfig<'posts'> = {
   hooks: {
     beforeChange: [preventStaleTitle, syncHeroImageToMeta],
     beforeDelete: [cleanupPostRelations],
+    beforeRead: [autoPublishScheduled],
     afterChange: [revalidatePost],
     afterRead: [fillMetaFromHero, populateAuthors],
     afterDelete: [revalidateDelete],
