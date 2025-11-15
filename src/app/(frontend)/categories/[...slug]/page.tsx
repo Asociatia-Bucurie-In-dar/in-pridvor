@@ -121,7 +121,9 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
   const post = await queryCategoryBySlug({ params: categorySlug })
   const filteredCategorySlug = categorySlug.filter((segment) => segment !== 'categories')
   const path =
-    filteredCategorySlug.length > 0 ? `/categories/${filteredCategorySlug.join('/')}` : '/categories'
+    filteredCategorySlug.length > 0
+      ? `/categories/${filteredCategorySlug.join('/')}`
+      : '/categories'
 
   return generateMeta({ doc: post, path })
 }
@@ -175,6 +177,7 @@ const queryPostsByCategoryIds = cache(async (categoryIds: number[], page: number
     collection: 'posts',
     depth: 1,
     limit: 12,
+    sort: '-publishedAt',
     page,
     overrideAccess: false,
     select: getPostsCardSelect(),

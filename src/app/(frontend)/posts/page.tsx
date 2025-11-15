@@ -25,13 +25,9 @@ export default async function Page() {
     overrideAccess: false,
     select: getPostsCardSelect(),
     where: {
-      and: [
-        {
-          publishedAt: {
-            less_than_equal: now,
-          },
-        },
-      ],
+      publishedAt: {
+        less_than_equal: now,
+      },
     },
   })
 
