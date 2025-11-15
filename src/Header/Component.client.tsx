@@ -353,11 +353,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
                                   : '/')
                               }
                               className="flex-1 rounded-lg px-3 py-2 text-base font-semibold text-gray-900 hover:bg-gray-50 font-playfair transition-colors"
-                              onClick={() => {
-                                if (!item.sublinks || item.sublinks.length === 0) {
-                                  setMobileMenuOpen(false)
-                                }
-                              }}
+                              onClick={() => setMobileMenuOpen(false)}
                             >
                               {item.link.label}
                             </Link>
