@@ -18,6 +18,7 @@ import { LivePreviewListener } from '@/components/LivePreviewListener'
 import { Comments } from '@/components/Comments/Comments'
 import { DropCapHandler } from '@/components/DropCapHandler'
 import { EditPostLink } from '@/components/EditPostLink'
+import { ArticleStructuredData } from '@/components/StructuredData/ArticleStructuredData'
 
 export async function generateStaticParams() {
   const payload = await getPayload({ config: configPromise })
@@ -62,6 +63,7 @@ export default async function Post({ params: paramsPromise }: Args) {
 
   return (
     <article className="pt-16 pb-16">
+      <ArticleStructuredData post={post} />
       <PageClient />
 
       {/* Allows redirects for valid pages too */}

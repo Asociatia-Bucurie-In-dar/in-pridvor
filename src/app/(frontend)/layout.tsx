@@ -19,6 +19,7 @@ import { SpeedInsights } from '@vercel/speed-insights/next'
 
 import './globals.css'
 import { getServerSideURL } from '@/utilities/getURL'
+import { OrganizationStructuredData } from '@/components/StructuredData/OrganizationStructuredData'
 
 const FairPlay = Playfair_Display({
   subsets: ['latin'],
@@ -38,10 +39,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 
   return (
     <html className={cn(FairPlay.variable, InterVar.variable)} lang="en" suppressHydrationWarning>
-      <head>
-        <link href="/favicon.ico" rel="icon" sizes="32x32" />
-      </head>
       <body suppressHydrationWarning>
+        <OrganizationStructuredData />
         <Providers>
           <AdminProvider>
             <AdminBar
@@ -63,6 +62,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 
 export const metadata: Metadata = {
   metadataBase: new URL(getServerSideURL()),
+  icons: {
+    icon: '/favicon.ico?v=2',
+  },
   openGraph: mergeOpenGraph(),
   twitter: {
     card: 'summary_large_image',
