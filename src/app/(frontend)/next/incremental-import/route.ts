@@ -319,6 +319,7 @@ export async function POST(request: Request): Promise<Response> {
 
     // Second pass: parse posts
     const parsedSlugs = new Map<string, number>() // Track slugs to handle conflicts
+    const parsedTitles = new Set<string>() // Track titles to avoid duplicates within same XML
 
     posts.forEach((post: any) => {
       // Log all post types and statuses for debugging
@@ -343,6 +344,14 @@ export async function POST(request: Request): Promise<Response> {
       const normalizedTitle = title.toLowerCase().trim()
       if (existingTitles.has(normalizedTitle)) {
         payload.logger.info(`⏭️  Skipping existing post by title during parsing: "${title}"`)
+        return
+      }
+
+      // Also check if we've already parsed a post with this title in this XML file
+      if (parsedTitles.has(normalizedTitle)) {
+        payload.logger.info(
+          `⏭️  Skipping duplicate post by title within XML: "${title}" (already parsed in this import)`,
+        )
         return
       }
 
@@ -391,6 +400,7 @@ export async function POST(request: Request): Promise<Response> {
       }
 
       parsedSlugs.set(slug, 1)
+      parsedTitles.add(normalizedTitle)
 
       let content = post['content:encoded'] || post.description || ''
 
@@ -862,6 +872,27 @@ export async function POST(request: Request): Promise<Response> {
 
         if (heroImageId) {
           postPayload.heroImage = heroImageId
+        }
+
+        // Final safety check: verify post doesn't exist right before creating
+        const finalCheck = await payload.find({
+          collection: 'posts',
+          where: {
+            or: [
+              { title: { equals: post.title } },
+              { slug: { equals: post.slug } },
+            ],
+          },
+          limit: 1,
+          depth: 0,
+          req: payloadReq,
+        })
+
+        if (finalCheck.docs.length > 0) {
+          payload.logger.warn(
+            `⏭️  Final check: Skipping post that already exists: "${post.title}" (slug: "${post.slug}")`,
+          )
+          continue
         }
 
         const createdPost = await payload.create({
