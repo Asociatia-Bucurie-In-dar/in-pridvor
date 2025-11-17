@@ -17,6 +17,7 @@ import PageClient from './page.client'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
 import { Comments } from '@/components/Comments/Comments'
 import { DropCapHandler } from '@/components/DropCapHandler'
+import { EditPostLink } from '@/components/EditPostLink'
 
 export async function generateStaticParams() {
   const payload = await getPayload({ config: configPromise })
@@ -67,6 +68,8 @@ export default async function Post({ params: paramsPromise }: Args) {
       <PayloadRedirects disableNotFound url={url} />
 
       {draft && <LivePreviewListener />}
+
+      <EditPostLink postId={post.id} />
 
       <PostHeroEditable post={post} showDropCap={showDropCap} dropCapIndex={dropCapIndex} />
 
