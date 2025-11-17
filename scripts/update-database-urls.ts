@@ -22,6 +22,14 @@ interface MediaRecord {
   sizes?: Record<string, { url: string }>
 }
 
+const normalizeURL = (urlString: string | undefined): string => {
+  if (!urlString) return 'http://localhost:3000'
+  if (urlString.startsWith('http://') || urlString.startsWith('https://')) {
+    return urlString
+  }
+  return `https://${urlString}`
+}
+
 class DatabaseUpdater {
   private r2PublicUrl: string
   private localMediaUrl: string
@@ -30,7 +38,7 @@ class DatabaseUpdater {
 
   constructor() {
     this.r2PublicUrl = process.env.R2_PUBLIC_URL!
-    this.localMediaUrl = process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'
+    this.localMediaUrl = normalizeURL(process.env.NEXT_PUBLIC_SERVER_URL)
 
     if (!this.r2PublicUrl) {
       throw new Error('R2_PUBLIC_URL environment variable is required')

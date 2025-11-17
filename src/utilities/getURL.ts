@@ -1,21 +1,27 @@
 import canUseDOM from './canUseDOM'
 
-export const getServerSideURL = () => {
-  let url = process.env.NEXT_PUBLIC_SERVER_URL
+const normalizeURL = (urlString: string): string => {
+  if (!urlString) return urlString
+  if (urlString.startsWith('http://') || urlString.startsWith('https://')) {
+    return urlString
+  }
+  return `https://${urlString}`
+}
 
-  if (!url && process.env.VERCEL_PROJECT_PRODUCTION_URL) {
+export const getServerSideURL = () => {
+  if (process.env.NEXT_PUBLIC_SERVER_URL) {
+    return normalizeURL(process.env.NEXT_PUBLIC_SERVER_URL)
+  }
+
+  if (process.env.VERCEL_PROJECT_PRODUCTION_URL) {
     return `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
   }
 
-  if (!url && process.env.VERCEL_URL) {
+  if (process.env.VERCEL_URL) {
     return `https://${process.env.VERCEL_URL}`
   }
 
-  if (!url) {
-    url = 'http://localhost:3000'
-  }
-
-  return url
+  return 'http://localhost:3000'
 }
 
 export const getClientSideURL = () => {
@@ -28,16 +34,16 @@ export const getClientSideURL = () => {
   }
 
   // Server-side fallbacks (in order of preference)
+  if (process.env.NEXT_PUBLIC_SERVER_URL) {
+    return normalizeURL(process.env.NEXT_PUBLIC_SERVER_URL)
+  }
+
   if (process.env.VERCEL_PROJECT_PRODUCTION_URL) {
     return `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
   }
 
   if (process.env.VERCEL_URL) {
     return `https://${process.env.VERCEL_URL}`
-  }
-
-  if (process.env.NEXT_PUBLIC_SERVER_URL) {
-    return process.env.NEXT_PUBLIC_SERVER_URL
   }
 
   return 'http://localhost:3000'

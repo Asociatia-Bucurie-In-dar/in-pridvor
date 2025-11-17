@@ -64,17 +64,21 @@ export async function POST(request: Request): Promise<Response> {
     // Create a Payload request object
     const payloadReq = await createLocalReq({ user }, payload)
 
-    // Get existing post slugs to avoid duplicates
+    // Get existing posts with title and slug to avoid duplicates
     const existingPosts = await payload.find({
       collection: 'posts',
       limit: 0,
       select: {
         slug: true,
+        title: true,
       },
       req: payloadReq,
     })
 
     const existingSlugs = new Set(existingPosts.docs.map((post) => post.slug))
+    const existingTitles = new Set(
+      existingPosts.docs.map((post) => (post.title || '').toLowerCase().trim()),
+    )
     payload.logger.info(`📋 Found ${existingSlugs.size} existing posts in database`)
 
     // Get Anca Stanciu user
@@ -334,6 +338,14 @@ export async function POST(request: Request): Promise<Response> {
 
       // Now process the post
       const title = post.title || 'Untitled'
+      
+      // Check if post already exists by title (most reliable check)
+      const normalizedTitle = title.toLowerCase().trim()
+      if (existingTitles.has(normalizedTitle)) {
+        payload.logger.info(`⏭️  Skipping existing post by title during parsing: "${title}"`)
+        return
+      }
+
       // Always normalize slug using our formatter so Romanian characters are handled correctly
       let rawSlug = post['wp:post_name'] || title
 
@@ -350,6 +362,7 @@ export async function POST(request: Request): Promise<Response> {
       let slug = formatSlug(rawSlug)
 
       // Handle slug conflicts by appending WordPress ID or a number
+      // Note: We only do this if the post doesn't already exist by title
       if (existingSlugs.has(slug) || parsedSlugs.has(slug)) {
         const wpPostId = post['wp:post_id']
         if (wpPostId) {
@@ -479,17 +492,20 @@ export async function POST(request: Request): Promise<Response> {
     // Import new posts
     for (const post of parsedPosts) {
       try {
-        // Check if post already exists by slug
-        const existingPost = await payload.find({
-          collection: 'posts',
-          where: { slug: { equals: post.slug } },
-          limit: 1,
-          depth: 0,
-          req: payloadReq,
-        })
+        // Check if post already exists by title (more reliable than slug)
+        const normalizedTitle = post.title.toLowerCase().trim()
+        if (existingTitles.has(normalizedTitle)) {
+          payload.logger.info(
+            `⏭️  Skipping existing post by title: "${post.title}" (slug: "${post.slug}")`,
+          )
+          continue
+        }
 
-        if (existingPost.docs.length > 0) {
-          payload.logger.info(`⏭️  Skipping existing post: "${post.title}" (slug: "${post.slug}")`)
+        // Also check by slug as a secondary check
+        if (existingSlugs.has(post.slug)) {
+          payload.logger.info(
+            `⏭️  Skipping existing post by slug: "${post.title}" (slug: "${post.slug}")`,
+          )
           continue
         }
 

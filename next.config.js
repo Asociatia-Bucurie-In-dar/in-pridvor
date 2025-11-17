@@ -2,9 +2,25 @@ import { withPayload } from '@payloadcms/next/withPayload'
 
 import redirects from './redirects.js'
 
-const NEXT_PUBLIC_SERVER_URL = process.env.VERCEL_PROJECT_PRODUCTION_URL
-  ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-  : undefined || process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'
+const normalizeURL = (urlString) => {
+  if (!urlString) return null
+  if (urlString.startsWith('http://') || urlString.startsWith('https://')) {
+    return urlString
+  }
+  return `https://${urlString}`
+}
+
+const getNEXT_PUBLIC_SERVER_URL = () => {
+  if (process.env.NEXT_PUBLIC_SERVER_URL) {
+    return normalizeURL(process.env.NEXT_PUBLIC_SERVER_URL)
+  }
+  if (process.env.VERCEL_PROJECT_PRODUCTION_URL) {
+    return `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+  }
+  return 'http://localhost:3000'
+}
+
+const NEXT_PUBLIC_SERVER_URL = getNEXT_PUBLIC_SERVER_URL()
 
 const getImageRemotePatterns = () => {
   const patterns = []
