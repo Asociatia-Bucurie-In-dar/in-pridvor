@@ -8,7 +8,8 @@ interface ArticleStructuredDataProps {
 
 export const ArticleStructuredData: React.FC<ArticleStructuredDataProps> = ({ post }) => {
   const siteUrl = getServerSideURL()
-  const postUrl = `${siteUrl}/posts/${typeof post.slug === 'string' ? post.slug : post.slug?.join('/') || ''}`
+  const slug = post.slug || ''
+  const postUrl = `${siteUrl}/posts/${slug}`
   
   const authors = post.populatedAuthors && post.populatedAuthors.length > 0
     ? post.populatedAuthors.map((author) => ({
@@ -24,15 +25,14 @@ export const ArticleStructuredData: React.FC<ArticleStructuredDataProps> = ({ po
         .filter((title) => title.length > 0)
     : []
 
-  const imageUrl = post.meta?.image && typeof post.meta.image === 'object' && 'url' in post.meta.image
-    ? post.meta.image.url.startsWith('http')
-      ? post.meta.image.url
-      : `${siteUrl}${post.meta.image.url}`
-    : post.heroImage && typeof post.heroImage === 'object' && 'url' in post.heroImage
-      ? post.heroImage.url.startsWith('http')
-        ? post.heroImage.url
-        : `${siteUrl}${post.heroImage.url}`
-      : `${siteUrl}/logo-in-pridvor-1.jpg`
+  const getImageUrl = (image: unknown): string | null => {
+    if (!image || typeof image !== 'object' || !('url' in image)) return null
+    const url = (image as { url?: string | null }).url
+    if (!url) return null
+    return url.startsWith('http') ? url : `${siteUrl}${url}`
+  }
+
+  const imageUrl = getImageUrl(post.meta?.image) || getImageUrl(post.heroImage) || `${siteUrl}/logo-in-pridvor-1.jpg`
 
   const publishedDate = post.publishedAt || new Date().toISOString()
   const modifiedDate = post.updatedAt || publishedDate
