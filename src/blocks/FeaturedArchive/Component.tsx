@@ -79,6 +79,7 @@ export const FeaturedArchiveBlock: React.FC<
       depth: 1,
       limit: 5,
       sort: '-publishedAt',
+      overrideAccess: false,
       select: {
         title: true,
         slug: true,

@@ -44,6 +44,7 @@ export const HeroCarouselBlock: React.FC<
       depth: 1,
       limit,
       sort: '-publishedAt',
+      overrideAccess: false,
       select: {
         title: true,
         slug: true,

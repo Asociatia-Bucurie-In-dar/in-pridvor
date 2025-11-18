@@ -224,10 +224,22 @@ export const Posts: CollectionConfig<'posts'> = {
       },
       hooks: {
         beforeChange: [
-          ({ siblingData, value }) => {
-            if (siblingData._status === 'published' && !value) {
+          ({ siblingData, value, req }) => {
+            const incomingValue = req.data?.publishedAt ?? value
+            const existingValue = siblingData.publishedAt
+
+            if (incomingValue) {
+              return incomingValue
+            }
+
+            if (existingValue) {
+              return existingValue
+            }
+
+            if (siblingData._status === 'published') {
               return new Date()
             }
+
             return value
           },
         ],
@@ -282,7 +294,6 @@ export const Posts: CollectionConfig<'posts'> = {
       autosave: {
         interval: 100, // We set this interval for optimal live preview
       },
-      schedulePublish: true,
     },
     maxPerDoc: 50,
   },
