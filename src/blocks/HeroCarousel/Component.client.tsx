@@ -154,6 +154,8 @@ export const HeroCarouselClient: React.FC<HeroCarouselClientProps> = ({
                       fill
                       className="object-cover"
                       imgClassName={`object-cover ${alignmentClass}`}
+                      priority={index === (shouldLoop ? posts.length : 0)}
+                      loading={index === (shouldLoop ? posts.length : 0) ? undefined : 'lazy'}
                     />
                   )}
                   {/* Gradient Overlay */}
