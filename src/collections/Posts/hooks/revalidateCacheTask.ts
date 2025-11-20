@@ -61,11 +61,9 @@ const revalidatePostPages = async (
   revalidateTag('posts-sitemap')
 }
 
-export const revalidateCacheTask = async ({ payload, req, input }: {
-  payload: any
-  req: any
-  input: unknown
-}) => {
+export const revalidateCacheTask = async (args: any): Promise<any> => {
+  const { payload, req, input } = args
+  
   try {
     const postId = typeof input === 'object' && input !== null && 'postId' in input
       ? input.postId
@@ -73,7 +71,7 @@ export const revalidateCacheTask = async ({ payload, req, input }: {
 
     if (!postId || typeof postId !== 'number') {
       payload.logger.error('❌ Invalid postId in revalidateCache task input')
-      return { success: false, error: 'Invalid postId' }
+      return { success: false }
     }
 
     const post = await payload.findByID({
@@ -85,7 +83,7 @@ export const revalidateCacheTask = async ({ payload, req, input }: {
 
     if (!post) {
       payload.logger.error(`❌ Post ${postId} not found for cache revalidation`)
-      return { success: false, error: 'Post not found' }
+      return { success: false }
     }
 
     const now = new Date()
@@ -96,18 +94,18 @@ export const revalidateCacheTask = async ({ payload, req, input }: {
       payload.logger.info(
         `✅ Cache revalidated for post "${post.title}" (ID: ${post.id})`,
       )
-      return { success: true, postId, postTitle: post.title }
+      return { success: true }
     } else {
       payload.logger.info(
         `ℹ️ Post "${post.title}" (ID: ${post.id}) is not ready for revalidation yet`,
       )
-      return { success: false, reason: 'Post not ready' }
+      return { success: false }
     }
   } catch (error) {
     payload.logger.error(
       `❌ Error in revalidateCache task: ${error instanceof Error ? error.message : 'Unknown error'}`,
     )
-    throw error
+    return { success: false, error: error instanceof Error ? error.message : 'Unknown error' }
   }
 }
 
