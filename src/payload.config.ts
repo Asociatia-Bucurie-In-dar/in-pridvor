@@ -38,8 +38,8 @@ export default buildConfig({
       //beforeDashboard: ['@/components/BeforeDashboard'],
       // Custom dashboard component with import functionality
       afterDashboard: ['@/components/AdminDashboard'],
-      // View Site button in admin header (similar to WordPress)
-      beforeDashboard: ['@/components/ViewSiteButton'],
+      // View Site button in admin header (similar to WordPress) - appears on all admin pages
+      actions: ['@/components/ViewSiteButton'],
     },
     importMap: {
       baseDir: path.resolve(dirname),

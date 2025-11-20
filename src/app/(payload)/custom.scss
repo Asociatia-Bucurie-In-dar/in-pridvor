@@ -1,3 +1,11 @@
 @import '@/components/ViewSiteButton/index.scss';
 
+body {
+  #payload-view-site-button {
+    display: inline-flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+}
+
 
