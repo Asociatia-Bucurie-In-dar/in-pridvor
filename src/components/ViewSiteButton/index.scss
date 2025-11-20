@@ -1,0 +1,44 @@
+.view-site-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  margin-left: 12px;
+  background-color: #0073aa;
+  color: white !important;
+  text-decoration: none;
+  border-radius: 3px;
+  font-size: 13px;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+  white-space: nowrap;
+  border: none;
+  cursor: pointer;
+  line-height: 1.5;
+
+  &:hover {
+    background-color: #005a87;
+    color: white !important;
+    text-decoration: none;
+  }
+
+  &:active {
+    background-color: #004a6f;
+  }
+
+  &:focus {
+    outline: 2px solid #0073aa;
+    outline-offset: 2px;
+  }
+
+  svg {
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+  }
+
+  span {
+    line-height: 1;
+  }
+}
+
