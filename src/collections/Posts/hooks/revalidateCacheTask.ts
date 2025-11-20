@@ -1,4 +1,3 @@
-import type { TaskJob } from 'payload'
 import { revalidatePath, revalidateTag } from 'next/cache'
 import type { Post, Category } from '@/payload-types'
 
@@ -62,7 +61,11 @@ const revalidatePostPages = async (
   revalidateTag('posts-sitemap')
 }
 
-export const revalidateCacheTask: TaskJob = async ({ payload, req, input }) => {
+export const revalidateCacheTask = async ({ payload, req, input }: {
+  payload: any
+  req: any
+  input: unknown
+}) => {
   try {
     const postId = typeof input === 'object' && input !== null && 'postId' in input
       ? input.postId
