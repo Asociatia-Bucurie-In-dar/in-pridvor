@@ -1,7 +1,7 @@
 {
   "crons": [
     {
-      "path": "/api/publish-scheduled?cron=true",
+      "path": "/api/payload-jobs/run",
       "schedule": "0 2 * * *"
     }
   ]

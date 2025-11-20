@@ -21,6 +21,7 @@ import { Header } from './Header/config'
 import { plugins } from './plugins'
 import { defaultLexical } from '@/fields/defaultLexical'
 import { getServerSideURL } from './utilities/getURL'
+import { revalidateCacheTask } from './collections/Posts/hooks/revalidateCacheTask'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -133,7 +134,12 @@ export default buildConfig({
         return authHeader === `Bearer ${process.env.CRON_SECRET}`
       },
     },
-    tasks: [],
+    tasks: [
+      {
+        slug: 'revalidateCache',
+        handler: revalidateCacheTask,
+      },
+    ],
   },
   i18n: {
     supportedLanguages: { en, ro },

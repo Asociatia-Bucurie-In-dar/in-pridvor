@@ -20,6 +20,7 @@ import { autoPublishScheduled } from './hooks/autoPublishScheduled'
 import { cleanupPostRelations } from './hooks/cleanupPostRelations'
 import { populateAuthors } from './hooks/populateAuthors'
 import { revalidateDelete, revalidatePost } from './hooks/revalidatePost'
+import { scheduleCacheRevalidation } from './hooks/scheduleCacheRevalidation'
 
 import { MetaImageField, MetaTitleField, PreviewField } from '@payloadcms/plugin-seo/fields'
 import { slugField } from '@/fields/slug'
@@ -285,7 +286,7 @@ export const Posts: CollectionConfig<'posts'> = {
     beforeChange: [preventStaleTitle, syncHeroImageToMeta],
     beforeDelete: [cleanupPostRelations],
     beforeRead: [autoPublishScheduled],
-    afterChange: [revalidatePost],
+    afterChange: [revalidatePost, scheduleCacheRevalidation],
     afterRead: [fillMetaFromHero, populateAuthors],
     afterDelete: [revalidateDelete],
   },
