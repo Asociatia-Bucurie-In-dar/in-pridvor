@@ -18,7 +18,7 @@ export const scheduleCacheRevalidation: CollectionAfterChangeHook<Post> = async 
       await req.payload.create({
         collection: 'payload-jobs',
         data: {
-          taskSlug: 'revalidateCache',
+          taskSlug: 'revalidateCache' as any,
           waitUntil: revalidationTime.toISOString(),
           input: {
             postId: doc.id,
