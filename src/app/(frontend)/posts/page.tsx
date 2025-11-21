@@ -34,6 +34,7 @@ export default async function Page() {
   return (
     <div className="pb-24">
       <PageClient />
+      <PublishScheduledTrigger />
       <TitleBar title="Toate Articolele" />
 
       <div className="container mb-8">

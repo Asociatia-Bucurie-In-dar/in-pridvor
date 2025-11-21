@@ -145,9 +145,13 @@ export async function GET(request: Request) {
         ],
       },
       limit: 200,
-      depth: 0,
+      depth: 1,
       overrideAccess: true,
     })
+
+    payload.logger.info(
+      `🔍 Checking for posts that became active: found ${futurePostsNowActive.docs.length} posts`,
+    )
 
     let revalidatedCount = 0
 
