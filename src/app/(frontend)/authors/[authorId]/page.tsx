@@ -117,6 +117,7 @@ const queryAuthorById = cache(async ({ authorId }: { authorId: string }) => {
 
 const queryPostsByAuthorId = cache(async (authorId: number | string) => {
   const payload = await getPayload({ config: configPromise })
+  const now = new Date().toISOString()
 
   const normalizedAuthorId =
     typeof authorId === 'number'
@@ -129,12 +130,23 @@ const queryPostsByAuthorId = cache(async (authorId: number | string) => {
     collection: 'posts',
     depth: 1,
     limit: 12,
+    page: 1,
+    sort: '-publishedAt',
     overrideAccess: false,
     select: getPostsCardSelect(),
     where: {
-      authors: {
-        equals: normalizedAuthorId,
-      },
+      and: [
+        {
+          publishedAt: {
+            less_than_equal: now,
+          },
+        },
+        {
+          authors: {
+            equals: normalizedAuthorId,
+          },
+        },
+      ],
     },
   })
 

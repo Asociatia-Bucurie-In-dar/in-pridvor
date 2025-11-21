@@ -37,17 +37,29 @@ export default async function AuthorPage({ params: paramsPromise }: Args) {
         ? String(author.id)
         : Number(author.id)
 
+  const now = new Date().toISOString()
+
   const posts = await payload.find({
     collection: 'posts',
     depth: 1,
     limit: 12,
     page: sanitizedPageNumber,
+    sort: '-publishedAt',
     overrideAccess: false,
     select: getPostsCardSelect(),
     where: {
-      authors: {
-        equals: authorRelationId,
-      },
+      and: [
+        {
+          publishedAt: {
+            less_than_equal: now,
+          },
+        },
+        {
+          authors: {
+            equals: authorRelationId,
+          },
+        },
+      ],
     },
   })
 
@@ -122,8 +134,8 @@ const queryAuthorById = cache(async ({ authorId }: { authorId: string }) => {
 
 export async function generateStaticParams() {
   const payload = await getPayload({ config: configPromise })
+  const now = new Date().toISOString()
 
-  // Get all users
   const users = await payload.find({
     collection: 'users',
     limit: 1000,
@@ -133,7 +145,6 @@ export async function generateStaticParams() {
 
   const params: { authorId: string; pageNumber: string }[] = []
 
-  // For each user, get their post count and generate page numbers
   for (const user of users.docs) {
     if (user.id === undefined || user.id === null) continue
 
@@ -144,15 +155,23 @@ export async function generateStaticParams() {
           ? String(user.id)
           : Number(user.id)
 
-    // Get the total number of posts by this author
     const postsCount = await payload.find({
       collection: 'posts',
       limit: 0,
       overrideAccess: true,
       where: {
-        authors: {
-          equals: normalizedUserId,
-        },
+        and: [
+          {
+            publishedAt: {
+              less_than_equal: now,
+            },
+          },
+          {
+            authors: {
+              equals: normalizedUserId,
+            },
+          },
+        ],
       },
     })
 
