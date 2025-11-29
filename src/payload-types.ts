@@ -411,6 +411,10 @@ export interface Post {
   dropCapParagraphIndex?: number | null;
   relatedPosts?: (number | Post)[] | null;
   categories?: (number | Category)[] | null;
+  /**
+   * Number of times this post has been viewed
+   */
+  viewCount?: number | null;
   meta?: {
     title?: string | null;
     /**
@@ -1303,6 +1307,7 @@ export interface PostsSelect<T extends boolean = true> {
   dropCapParagraphIndex?: T;
   relatedPosts?: T;
   categories?: T;
+  viewCount?: T;
   meta?:
     | T
     | {

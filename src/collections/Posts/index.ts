@@ -190,6 +190,19 @@ export const Posts: CollectionConfig<'posts'> = {
               hasMany: true,
               relationTo: 'categories',
             },
+            {
+              name: 'viewCount',
+              type: 'number',
+              defaultValue: 0,
+              admin: {
+                position: 'sidebar',
+                readOnly: true,
+                description: 'Number of times this post has been viewed',
+              },
+              access: {
+                update: () => false,
+              },
+            },
           ],
           label: 'Meta',
         },

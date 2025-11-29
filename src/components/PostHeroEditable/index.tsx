@@ -27,7 +27,7 @@ export const PostHeroEditable: React.FC<PostHeroEditableProps> = ({
   dropCapIndex,
 }) => {
   const { isAdmin } = useAdmin()
-  const { categories, heroImage, heroImageAlignment, populatedAuthors, publishedAt, title } = post
+  const { categories, heroImage, heroImageAlignment, populatedAuthors, publishedAt, title, viewCount } = post
 
   const hasAuthors =
     populatedAuthors && populatedAuthors.length > 0 && formatAuthors(populatedAuthors) !== ''
@@ -152,6 +152,13 @@ export const PostHeroEditable: React.FC<PostHeroEditableProps> = ({
                   <time className="text-base" dateTime={publishedAt}>
                     {formatDateTime(publishedAt)}
                   </time>
+                </div>
+              )}
+
+              {typeof viewCount === 'number' && (
+                <div className="flex flex-col gap-1">
+                  <p className="text-white/60">Vizualizări</p>
+                  <p className="text-base">{viewCount.toLocaleString()}</p>
                 </div>
               )}
 
