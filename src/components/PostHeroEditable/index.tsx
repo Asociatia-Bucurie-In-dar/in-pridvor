@@ -27,7 +27,15 @@ export const PostHeroEditable: React.FC<PostHeroEditableProps> = ({
   dropCapIndex,
 }) => {
   const { isAdmin } = useAdmin()
-  const { categories, heroImage, heroImageAlignment, populatedAuthors, publishedAt, title, viewCount } = post
+  const {
+    categories,
+    heroImage,
+    heroImageAlignment,
+    populatedAuthors,
+    publishedAt,
+    title,
+    viewCount,
+  } = post
 
   const hasAuthors =
     populatedAuthors && populatedAuthors.length > 0 && formatAuthors(populatedAuthors) !== ''
@@ -155,12 +163,12 @@ export const PostHeroEditable: React.FC<PostHeroEditableProps> = ({
                 </div>
               )}
 
-              {typeof viewCount === 'number' && (
+              {/* {typeof viewCount === 'number' && (
                 <div className="flex flex-col gap-1">
                   <p className="text-white/60">Vizualizări</p>
                   <p className="text-base">{viewCount.toLocaleString()}</p>
                 </div>
-              )}
+              )} */}
 
               {isAdmin && (
                 <div className="flex flex-col gap-4 md:flex-row md:items-center md:gap-6">
