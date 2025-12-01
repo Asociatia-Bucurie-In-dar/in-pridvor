@@ -95,7 +95,7 @@ export async function GET(request: Request) {
           },
         ],
       },
-      limit: 50,
+      limit: 20,
       depth: 0,
       overrideAccess: true,
     })
@@ -144,8 +144,8 @@ export async function GET(request: Request) {
           },
         ],
       },
-      limit: 200,
-      depth: 1,
+      limit: 50,
+      depth: 0,
       overrideAccess: true,
     })
 
@@ -154,19 +154,41 @@ export async function GET(request: Request) {
     )
 
     let revalidatedCount = 0
+    const pathsToRevalidate = new Set<string>()
 
     for (const post of futurePostsNowActive.docs) {
-      try {
-        await revalidatePostPages(post, payload, 'publish')
-        payload.logger.info(
-          `✅ Revalidated cache for post that became active: "${post.title}" (ID: ${post.id}, publishedAt: ${post.publishedAt})`,
-        )
-        revalidatedCount++
-      } catch (error) {
-        payload.logger.error(
-          `❌ Failed to revalidate post ${post.id}: ${error instanceof Error ? error.message : 'Unknown error'}`,
-        )
+      if (post.slug) {
+        pathsToRevalidate.add(`/posts/${post.slug}`)
       }
+      if (post.categories && Array.isArray(post.categories)) {
+        for (const category of post.categories) {
+          if (typeof category === 'object' && category !== null && 'slug' in category) {
+            pathsToRevalidate.add(`/categories/${category.slug}`)
+          }
+        }
+      }
+    }
+
+    if (futurePostsNowActive.docs.length > 0) {
+      pathsToRevalidate.add('/')
+      pathsToRevalidate.add('/posts')
+      pathsToRevalidate.add('/categories')
+
+      for (const path of pathsToRevalidate) {
+        try {
+          revalidatePath(path, 'page')
+          if (path === '/' || path === '/posts' || path === '/categories') {
+            revalidatePath(path, 'layout')
+          }
+        } catch (error) {
+          payload.logger.error(
+            `Failed to revalidate ${path}: ${error instanceof Error ? error.message : 'Unknown error'}`,
+          )
+        }
+      }
+
+      revalidateTag('posts-sitemap')
+      revalidatedCount = futurePostsNowActive.docs.length
     }
 
     return Response.json({

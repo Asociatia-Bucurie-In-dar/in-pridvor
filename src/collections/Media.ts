@@ -56,34 +56,11 @@ export const Media: CollectionConfig = {
         name: 'thumbnail',
         width: 300,
         height: 300,
-        crop: 'centre', // Crop from center for thumbnails
-        formatOptions: {
-          format: 'webp',
-          options: {
-            quality: 80,
-          },
-        },
-      },
-      {
-        name: 'square',
-        width: 500,
-        height: 500,
         crop: 'centre',
         formatOptions: {
           format: 'webp',
           options: {
-            quality: 85,
-          },
-        },
-      },
-      {
-        name: 'small',
-        width: 600,
-        withoutEnlargement: true, // Don't enlarge small images
-        formatOptions: {
-          format: 'webp',
-          options: {
-            quality: 85,
+            quality: 80,
           },
         },
       },
@@ -105,17 +82,6 @@ export const Media: CollectionConfig = {
         formatOptions: {
           format: 'webp',
           options: {
-            quality: 90, // Higher quality for large images
-          },
-        },
-      },
-      {
-        name: 'xlarge',
-        width: 1920,
-        withoutEnlargement: true,
-        formatOptions: {
-          format: 'webp',
-          options: {
             quality: 90,
           },
         },
@@ -126,7 +92,7 @@ export const Media: CollectionConfig = {
         height: 630,
         crop: 'centre',
         formatOptions: {
-          format: 'jpeg', // OG images should be JPEG for compatibility
+          format: 'jpeg',
           options: {
             quality: 90,
           },

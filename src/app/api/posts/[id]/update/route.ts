@@ -128,14 +128,13 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
           }
         }
 
-        // Execute all revalidations
-        for (const path of paths) {
+        const uniquePaths = Array.from(new Set(paths))
+
+        for (const path of uniquePaths) {
           try {
-            revalidatePath(path)
-            revalidatePath(path, 'layout') // Also revalidate layouts
-            // For /posts path, also revalidate all nested pagination pages
-            if (path === '/posts') {
-              revalidatePath(path, 'page') // Revalidates /posts/page/[pageNumber]
+            revalidatePath(path, 'page')
+            if (path === '/posts' || path === '/categories' || path === '/') {
+              revalidatePath(path, 'layout')
             }
           } catch (error) {
             console.error(`Failed to revalidate ${path}:`, error)

@@ -41,21 +41,14 @@ export const revalidateCategory: CollectionAfterChangeHook<Category> = async ({
   paths.push('/')
   payload.logger.info(`[category-update] Revalidating homepage`)
 
-  // 5. Revalidate all common pages that have the header (which shows categories)
-  // Since header is in the layout, we need to revalidate layout for all these paths
-  const commonPaths = [
-    '/',
-    '/posts',
-    '/categories',
-    '/search',
-    '/authors',
-  ]
+  const uniquePaths = Array.from(new Set(paths))
 
-  // Execute all revalidations with layout revalidation (for header updates)
-  for (const path of [...paths, ...commonPaths]) {
+  for (const path of uniquePaths) {
     try {
-      revalidatePath(path)
-      revalidatePath(path, 'layout') // This will revalidate the header since it's in the layout
+      revalidatePath(path, 'page')
+      if (path === '/' || path === '/posts' || path === '/categories') {
+        revalidatePath(path, 'layout')
+      }
     } catch (error) {
       payload.logger.error(
         `Failed to revalidate ${path}: ${error instanceof Error ? error.message : 'Unknown error'}`,
@@ -63,9 +56,8 @@ export const revalidateCategory: CollectionAfterChangeHook<Category> = async ({
     }
   }
 
-  // Also use a tag approach - if the header component uses unstable_cache with this tag,
-  // it will be revalidated. But for now, layout revalidation should work.
   revalidateTag('categories-header')
+
   payload.logger.info(`[category-update] Revalidated category tag for header`)
 
   return doc
@@ -87,20 +79,14 @@ export const revalidateCategoryDelete: CollectionAfterDeleteHook<Category> = asy
     paths.push('/categories')
     paths.push('/')
 
-    // Also revalidate common pages for header updates
-    const commonPaths = [
-      '/',
-      '/posts',
-      '/categories',
-      '/search',
-      '/authors',
-    ]
+    const uniquePaths = Array.from(new Set(paths))
 
-    // Execute all revalidations with layout revalidation (for header updates)
-    for (const path of [...paths, ...commonPaths]) {
+    for (const path of uniquePaths) {
       try {
-        revalidatePath(path)
-        revalidatePath(path, 'layout') // This will revalidate the header since it's in the layout
+        revalidatePath(path, 'page')
+        if (path === '/' || path === '/posts' || path === '/categories') {
+          revalidatePath(path, 'layout')
+        }
       } catch (error) {
         payload.logger.error(
           `Failed to revalidate ${path}: ${error instanceof Error ? error.message : 'Unknown error'}`,
@@ -108,7 +94,6 @@ export const revalidateCategoryDelete: CollectionAfterDeleteHook<Category> = asy
       }
     }
 
-    // Revalidate category tag
     revalidateTag('categories-header')
     payload.logger.info(`[category-delete] Revalidated category tag for header`)
   }

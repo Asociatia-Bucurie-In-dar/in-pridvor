@@ -4,37 +4,53 @@ import { revalidatePath, revalidateTag } from 'next/cache'
 
 import type { Post, Category } from '../../../payload-types'
 
-/**
- * Revalidates all pages that might display a post
- */
+const DAYS_OLD_THRESHOLD = 30
+
+const isRecentPost = (post: Post): boolean => {
+  if (!post.publishedAt) return true
+
+  const publishedDate = new Date(post.publishedAt)
+  const daysSincePublished = (Date.now() - publishedDate.getTime()) / (1000 * 60 * 60 * 24)
+
+  return daysSincePublished <= DAYS_OLD_THRESHOLD
+}
+
 const revalidatePostPages = async (
   post: Post,
   payload: any,
   action: 'publish' | 'unpublish' | 'delete',
 ) => {
   const paths: string[] = []
+  const isRecent = isRecentPost(post)
+  const isDeleteOrUnpublish = action === 'delete' || action === 'unpublish'
 
-  // 1. Revalidate the specific post page
-  if (post.slug) {
-    const postPath = `/posts/${post.slug}`
-    paths.push(postPath)
-    payload.logger.info(`[${action}] Revalidating post: ${postPath}`)
+  if (isDeleteOrUnpublish || isRecent) {
+    if (post.slug) {
+      const postPath = `/posts/${post.slug}`
+      paths.push(postPath)
+      payload.logger.info(`[${action}] Revalidating post: ${postPath}`)
+    }
+  } else {
+    payload.logger.info(
+      `[${action}] Skipping individual post revalidation for old post: /posts/${post.slug} (published ${Math.round((Date.now() - new Date(post.publishedAt!).getTime()) / (1000 * 60 * 60 * 24))} days ago, will use time-based revalidation)`,
+    )
   }
 
-  // 2. Revalidate homepage (may contain ArchiveBlocks with recent posts)
   paths.push('/')
   payload.logger.info(`[${action}] Revalidating homepage`)
 
-  // 3. Revalidate posts index page and all pagination pages
   paths.push('/posts')
   payload.logger.info(`[${action}] Revalidating posts index and pagination`)
 
-  // 4. Revalidate categories index page
   paths.push('/categories')
   payload.logger.info(`[${action}] Revalidating categories index`)
 
-  // 5. Revalidate all category pages this post belongs to
-  if (post.categories && Array.isArray(post.categories) && post.categories.length > 0) {
+  if (
+    (isRecent || isDeleteOrUnpublish) &&
+    post.categories &&
+    Array.isArray(post.categories) &&
+    post.categories.length > 0
+  ) {
     for (const category of post.categories) {
       let categoryData: Category | null = null
 
@@ -63,16 +79,19 @@ const revalidatePostPages = async (
         payload.logger.info(`[${action}] Revalidating category: ${categoryPath}`)
       }
     }
+  } else if (!isRecent && !isDeleteOrUnpublish && post.categories) {
+    payload.logger.info(
+      `[${action}] Skipping category revalidation for old post (category pages show recent posts first)`,
+    )
   }
 
-  // Execute all revalidations
-  for (const path of paths) {
+  const uniquePaths = Array.from(new Set(paths))
+
+  for (const path of uniquePaths) {
     try {
-      revalidatePath(path)
-      revalidatePath(path, 'layout') // Also revalidate layouts
-      // For /posts path, also revalidate all nested pagination pages
-      if (path === '/posts') {
-        revalidatePath(path, 'page') // Revalidates /posts/page/[pageNumber]
+      revalidatePath(path, 'page')
+      if (path === '/posts' || path === '/categories' || path === '/') {
+        revalidatePath(path, 'layout')
       }
     } catch (error) {
       payload.logger.error(
@@ -81,7 +100,6 @@ const revalidatePostPages = async (
     }
   }
 
-  // Revalidate sitemap
   revalidateTag('posts-sitemap')
 }
 
@@ -98,11 +116,21 @@ export const revalidatePost: CollectionAfterChangeHook<Post> = async ({
   if (doc._status === 'published') {
     await revalidatePostPages(doc, payload, 'publish')
 
-    // If slug changed, also revalidate the old slug
     if (previousDoc?.slug && previousDoc.slug !== doc.slug) {
       const oldPath = `/posts/${previousDoc.slug}`
-      payload.logger.info(`[publish] Slug changed, revalidating old path: ${oldPath}`)
-      revalidatePath(oldPath)
+      const isOldPost = previousDoc.publishedAt
+        ? (Date.now() - new Date(previousDoc.publishedAt).getTime()) / (1000 * 60 * 60 * 24) >
+          DAYS_OLD_THRESHOLD
+        : false
+
+      if (!isOldPost) {
+        payload.logger.info(`[publish] Slug changed, revalidating old path: ${oldPath}`)
+        revalidatePath(oldPath, 'page')
+      } else {
+        payload.logger.info(
+          `[publish] Slug changed, but old path is for old post, skipping: ${oldPath}`,
+        )
+      }
     }
 
     // If categories changed, revalidate old categories too
@@ -114,23 +142,30 @@ export const revalidatePost: CollectionAfterChangeHook<Post> = async ({
         (doc.categories || []).map((cat: any) => (typeof cat === 'object' ? cat.id : cat)),
       )
 
-      // Find categories that were removed
+      const isRecent = isRecentPost(doc)
+
       for (const oldCatId of oldCategoryIds) {
         if (!newCategoryIds.has(oldCatId)) {
-          try {
-            const categoryData = await payload.findByID({
-              collection: 'categories',
-              id: oldCatId,
-              depth: 0,
-            })
-            if (categoryData?.slug) {
-              const categoryPath = `/categories/${categoryData.slug}`
-              payload.logger.info(`[publish] Revalidating removed category: ${categoryPath}`)
-              revalidatePath(categoryPath)
+          if (isRecent) {
+            try {
+              const categoryData = await payload.findByID({
+                collection: 'categories',
+                id: oldCatId,
+                depth: 0,
+              })
+              if (categoryData?.slug) {
+                const categoryPath = `/categories/${categoryData.slug}`
+                payload.logger.info(`[publish] Revalidating removed category: ${categoryPath}`)
+                revalidatePath(categoryPath, 'page')
+              }
+            } catch (error) {
+              payload.logger.error(
+                `Failed to revalidate old category ${oldCatId}: ${error instanceof Error ? error.message : 'Unknown error'}`,
+              )
             }
-          } catch (error) {
-            payload.logger.error(
-              `Failed to revalidate old category ${oldCatId}: ${error instanceof Error ? error.message : 'Unknown error'}`,
+          } else {
+            payload.logger.info(
+              `[publish] Skipping category revalidation for removed category (old post)`,
             )
           }
         }
