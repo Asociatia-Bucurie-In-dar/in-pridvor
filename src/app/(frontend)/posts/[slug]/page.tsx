@@ -41,7 +41,6 @@ export async function generateStaticParams() {
 }
 
 export const dynamicParams = true
-export const revalidate = 60
 
 type Args = {
   params: Promise<{

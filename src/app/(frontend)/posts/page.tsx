@@ -11,7 +11,6 @@ import { websiteTitle } from '@/utilities/commonInfo'
 import { getPostsCardSelect } from '@/utilities/getPostsCardSelect'
 
 export const dynamic = 'force-static'
-export const revalidate = 60
 
 export default async function Page() {
   const payload = await getPayload({ config: configPromise })

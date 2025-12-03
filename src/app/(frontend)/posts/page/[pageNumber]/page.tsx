@@ -13,7 +13,6 @@ import { websiteTitle } from '@/utilities/commonInfo'
 import { getPostsCardSelect } from '@/utilities/getPostsCardSelect'
 
 export const dynamic = 'force-static'
-export const revalidate = 60
 
 type Args = {
   params: Promise<{
