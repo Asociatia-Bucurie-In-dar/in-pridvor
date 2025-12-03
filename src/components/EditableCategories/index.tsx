@@ -135,8 +135,8 @@ export const EditableCategories: React.FC<EditableCategoriesProps> = ({
             )
             setSelectedCategoryIds(selected)
           }}
-          className="bg-gray-800 text-white border border-gray-600 rounded px-2 py-1 min-h-[100px] uppercase"
-          size={Math.min(availableCategories.length, 5)}
+          className="bg-gray-800 text-white border border-gray-600 rounded px-2 py-1 min-h-60 uppercase"
+          size={Math.min(availableCategories.length, 12)}
         >
           {availableCategories.map((category) => (
             <option key={category.id} value={category.id}>

@@ -15,6 +15,7 @@ export const Categories: CollectionConfig = {
   },
   admin: {
     useAsTitle: 'title',
+    defaultSort: 'title',
   },
   fields: [
     {

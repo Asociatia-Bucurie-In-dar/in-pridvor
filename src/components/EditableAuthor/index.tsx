@@ -120,8 +120,8 @@ export const EditableAuthor: React.FC<EditableAuthorProps> = ({ post, authors, o
             )
             setSelectedAuthorIds(selected)
           }}
-          className="bg-gray-800 text-white border border-gray-600 rounded px-2 py-1 min-h-[80px]"
-          size={Math.min(users.length, 5)}
+          className="bg-gray-800 text-white border border-gray-600 rounded px-2 py-1 min-h-60"
+          size={Math.min(users.length, 12)}
         >
           {users.map((user) => (
             <option key={user.id} value={user.id}>
@@ -151,4 +151,3 @@ export const EditableAuthor: React.FC<EditableAuthorProps> = ({ post, authors, o
     </div>
   )
 }
-

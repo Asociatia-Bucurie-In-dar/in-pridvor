@@ -186,6 +186,7 @@ export const Posts: CollectionConfig<'posts'> = {
               type: 'relationship',
               admin: {
                 position: 'sidebar',
+                sortOptions: 'title',
               },
               hasMany: true,
               relationTo: 'categories',
@@ -264,6 +265,7 @@ export const Posts: CollectionConfig<'posts'> = {
       type: 'relationship',
       admin: {
         position: 'sidebar',
+        sortOptions: 'name',
       },
       hasMany: true,
       relationTo: 'users',

@@ -61,7 +61,7 @@ export default async function Post({ params: paramsPromise }: Args) {
   const dropCapIndex = post.dropCapParagraphIndex || 1
 
   return (
-      <article className="pt-16 pb-16">
+    <article className="pt-16 pb-16">
       <ArticleStructuredData post={post} />
       <PageClient postId={post.id} />
 

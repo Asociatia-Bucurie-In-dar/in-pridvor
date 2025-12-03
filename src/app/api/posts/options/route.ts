@@ -16,6 +16,7 @@ export async function GET(request: NextRequest) {
       payload.find({
         collection: 'users',
         limit: 1000,
+        sort: 'name',
         select: {
           id: true,
           name: true,
@@ -24,6 +25,7 @@ export async function GET(request: NextRequest) {
       payload.find({
         collection: 'categories',
         limit: 1000,
+        sort: 'title',
         select: {
           id: true,
           title: true,
@@ -44,4 +46,3 @@ export async function GET(request: NextRequest) {
     )
   }
 }
-
