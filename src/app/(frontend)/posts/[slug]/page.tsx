@@ -22,14 +22,21 @@ import { ArticleStructuredData } from '@/components/StructuredData/ArticleStruct
 
 export async function generateStaticParams() {
   const payload = await getPayload({ config: configPromise })
+  const now = new Date().toISOString()
   const posts = await payload.find({
     collection: 'posts',
     draft: false,
-    limit: 1000,
+    limit: 100,
+    sort: '-publishedAt',
     overrideAccess: false,
     pagination: false,
     select: {
       slug: true,
+    },
+    where: {
+      publishedAt: {
+        less_than_equal: now,
+      },
     },
   })
 

@@ -48,10 +48,9 @@ const revalidatePostPages = async (
 
   for (const path of paths) {
     try {
-      revalidatePath(path)
-      revalidatePath(path, 'layout')
-      if (path === '/posts') {
-        revalidatePath(path, 'page')
+      revalidatePath(path, 'page')
+      if (path === '/posts' || path === '/categories' || path === '/') {
+        revalidatePath(path, 'layout')
       }
     } catch (error) {
       payload.logger.error(`Failed to revalidate ${path}`)
@@ -63,11 +62,10 @@ const revalidatePostPages = async (
 
 export const revalidateCacheTask = async (args: any): Promise<any> => {
   const { payload, req, input } = args
-  
+
   try {
-    const postId = typeof input === 'object' && input !== null && 'postId' in input
-      ? input.postId
-      : null
+    const postId =
+      typeof input === 'object' && input !== null && 'postId' in input ? input.postId : null
 
     if (!postId || typeof postId !== 'number') {
       payload.logger.error('❌ Invalid postId in revalidateCache task input')
@@ -91,9 +89,7 @@ export const revalidateCacheTask = async (args: any): Promise<any> => {
 
     if (post._status === 'published' && publishedAt && publishedAt <= now) {
       await revalidatePostPages(post, payload, 'publish')
-      payload.logger.info(
-        `✅ Cache revalidated for post "${post.title}" (ID: ${post.id})`,
-      )
+      payload.logger.info(`✅ Cache revalidated for post "${post.title}" (ID: ${post.id})`)
       return { success: true }
     } else {
       payload.logger.info(
@@ -108,4 +104,3 @@ export const revalidateCacheTask = async (args: any): Promise<any> => {
     return { success: false, error: error instanceof Error ? error.message : 'Unknown error' }
   }
 }
-

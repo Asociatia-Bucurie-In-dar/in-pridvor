@@ -56,10 +56,9 @@ const revalidatePostPages = async (
 
   for (const path of paths) {
     try {
-      revalidatePath(path)
-      revalidatePath(path, 'layout')
-      if (path === '/posts') {
-        revalidatePath(path, 'page')
+      revalidatePath(path, 'page')
+      if (path === '/posts' || path === '/categories' || path === '/') {
+        revalidatePath(path, 'layout')
       }
     } catch (error) {
       payload.logger.error(
@@ -76,7 +75,7 @@ export async function GET(request: Request) {
     const payload = await getPayload({ config: configPromise })
     const now = new Date()
     const nowISO = now.toISOString()
-    
+
     const twentyFourHoursAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000).toISOString()
 
     const scheduledPosts = await payload.find({
@@ -116,9 +115,7 @@ export async function GET(request: Request) {
           overrideAccess: true,
         })
 
-        payload.logger.info(
-          `✅ Auto-published scheduled post: "${post.title}" (ID: ${post.id})`,
-        )
+        payload.logger.info(`✅ Auto-published scheduled post: "${post.title}" (ID: ${post.id})`)
         publishedCount++
       } catch (error) {
         payload.logger.error(
@@ -207,4 +204,3 @@ export async function GET(request: Request) {
     )
   }
 }
-

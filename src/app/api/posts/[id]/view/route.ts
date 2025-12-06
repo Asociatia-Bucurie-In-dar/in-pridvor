@@ -26,6 +26,9 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
         viewCount: currentViewCount + 1,
       },
       overrideAccess: true,
+      context: {
+        disableRevalidate: true,
+      },
     })
 
     return NextResponse.json({ success: true, viewCount: currentViewCount + 1 })
@@ -41,4 +44,3 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     )
   }
 }
-
