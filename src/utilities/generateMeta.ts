@@ -71,15 +71,14 @@ const _resolveImageMeta = (media: Media | null, serverUrl: string) => {
     }
   }
 
-  const _ogSize = media.sizes?.og
   const _largeSize = media.sizes?.large
-  const _selectedUrl = _ogSize?.url || _largeSize?.url || media.url || _fallbackUrl
+  const _selectedUrl = _largeSize?.url || media.url || _fallbackUrl
   const _url = _resolveUrl(_selectedUrl, serverUrl)
   const _alt =
     typeof media.alt === 'string' && media.alt.trim().length > 0 ? media.alt.trim() : undefined
 
-  const _width = _ogSize?.width || _largeSize?.width || media.width || _fallbackWidth
-  const _height = _ogSize?.height || _largeSize?.height || media.height || _fallbackHeight
+  const _width = _largeSize?.width || media.width || _fallbackWidth
+  const _height = _largeSize?.height || media.height || _fallbackHeight
 
   return {
     alt: _alt,
