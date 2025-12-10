@@ -59,27 +59,33 @@ const _selectMedia = (doc?: Partial<Page> | Partial<Post> | null): Media | null 
 
 const _resolveImageMeta = (media: Media | null, serverUrl: string) => {
   const _fallbackUrl = _resolveUrl('/logo-in-pridvor-1.jpg', serverUrl)
+  const _fallbackWidth = 1200
+  const _fallbackHeight = 630
 
   if (!media) {
     return {
       alt: undefined,
-      height: undefined,
+      height: _fallbackHeight,
       url: _fallbackUrl,
-      width: undefined,
+      width: _fallbackWidth,
     }
   }
 
   const _ogSize = media.sizes?.og
-  const _selectedUrl = _ogSize?.url || media.url || _fallbackUrl
+  const _largeSize = media.sizes?.large
+  const _selectedUrl = _ogSize?.url || _largeSize?.url || media.url || _fallbackUrl
   const _url = _resolveUrl(_selectedUrl, serverUrl)
   const _alt =
     typeof media.alt === 'string' && media.alt.trim().length > 0 ? media.alt.trim() : undefined
 
+  const _width = _ogSize?.width || _largeSize?.width || media.width || _fallbackWidth
+  const _height = _ogSize?.height || _largeSize?.height || media.height || _fallbackHeight
+
   return {
     alt: _alt,
-    height: _ogSize?.height || media.height || undefined,
+    height: _height,
     url: _url,
-    width: _ogSize?.width || media.width || undefined,
+    width: _width,
   }
 }
 
