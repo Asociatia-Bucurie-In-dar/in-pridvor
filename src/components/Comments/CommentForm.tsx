@@ -25,7 +25,13 @@ interface CommentFormProps {
 
 const STORAGE_KEY = 'commentUserInfo'
 
-export function CommentForm({ postId, parentId, parentAuthor, onCommentSubmitted, onCancel }: CommentFormProps) {
+export function CommentForm({
+  postId,
+  parentId,
+  parentAuthor,
+  onCommentSubmitted,
+  onCancel,
+}: CommentFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
   const [errorMessage, setErrorMessage] = useState('')
@@ -203,8 +209,8 @@ export function CommentForm({ postId, parentId, parentAuthor, onCommentSubmitted
             {...register('comment', {
               required: 'Comentariul este obligatoriu',
               maxLength: {
-                value: 1000,
-                message: 'Comentariul nu poate depăși 1000 de caractere',
+                value: 3000,
+                message: 'Comentariul nu poate depăși 3000 de caractere',
               },
             })}
             className={errors.comment ? 'border-red-500' : 'border-gray-300 focus:border-gray-400'}

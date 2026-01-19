@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ message: 'Name is too long' }, { status: 400 })
     }
 
-    if (comment.length > 1000) {
+    if (comment.length > 3000) {
       return NextResponse.json({ message: 'Comment is too long' }, { status: 400 })
     }
 
@@ -37,7 +37,11 @@ export async function POST(request: NextRequest) {
     console.log('Post ID (parsed):', postId, 'Type:', typeof postId)
 
     // Parse parent ID if provided
-    const parentId = parent ? (typeof parent === 'string' ? parseInt(parent, 10) : parent) : undefined
+    const parentId = parent
+      ? typeof parent === 'string'
+        ? parseInt(parent, 10)
+        : parent
+      : undefined
 
     // Create the comment data
     const commentData: any = {
