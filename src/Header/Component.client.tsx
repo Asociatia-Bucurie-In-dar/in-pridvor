@@ -137,25 +137,26 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
   }
 
   return (
-    <div className="w-full">
+    <div className="w-full relative">
+      {/* Search Icon - positioned relative to the full-width container */}
+      <motion.div
+        whileHover={{ scale: 1.1 }}
+        transition={{ duration: 0.2 }}
+        className="absolute top-6 right-6 hidden lg:block z-30"
+      >
+        <Link
+          href="/search"
+          className="block p-2 -m-2 text-gray-700 hover:text-yellow-600 cursor-pointer"
+        >
+          <MagnifyingGlassIcon aria-hidden="true" className="size-6" />
+        </Link>
+      </motion.div>
+
       {/* BIG Logo */}
-      <div className="flex justify-center mt-3 bg-white relative">
+      <div className="flex justify-center mt-3 bg-white">
         <Link href="/" className="relative z-10 block cursor-pointer">
           <Logo loading="eager" priority="high" width={525} height={525} />
         </Link>
-
-        <motion.div
-          whileHover={{ scale: 1.1 }}
-          transition={{ duration: 0.2 }}
-          className="absolute top-6 right-6 hidden lg:block z-20"
-        >
-          <Link
-            href={'/search'}
-            className="hover:text-gray-700 hover:text-yellow-600 cursor-pointer"
-          >
-            <MagnifyingGlassIcon aria-hidden="true" className="size-6" />
-          </Link>
-        </motion.div>
       </div>
 
       <header ref={headerRef} className="relative z-20">
@@ -216,38 +217,71 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
                       <PopoverPanel
                         onMouseLeave={() => closeAllPopovers()}
                         transition
-                        className="absolute left-1/2 mt-3 w-screen max-w-sm -translate-x-1/2 overflow-hidden rounded-3xl bg-white shadow-lg outline-1 outline-gray-900/5 transition data-closed:translate-y-1 data-closed:opacity-0 data-enter:duration-200 data-enter:ease-out data-leave:duration-150 data-leave:ease-in"
+                        className="absolute left-1/2 mt-3 w-screen max-w-sm -translate-x-1/2 rounded-3xl bg-white shadow-lg outline-1 outline-gray-900/5 transition data-closed:translate-y-1 data-closed:opacity-0 data-enter:duration-200 data-enter:ease-out data-leave:duration-150 data-leave:ease-in"
                       >
                         <div className="p-4">
-                          {item.sublinks.map((subItem, subIndex) => (
-                            <motion.div
-                              key={subItem.id}
-                              custom={subIndex}
-                              initial="hidden"
-                              animate="visible"
-                              variants={desktopPopoverItemVariants}
-                              className="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm leading-6 hover:bg-gray-50 transition-colors"
-                            >
-                              <div className="flex-auto">
-                                <Link
-                                  href={
-                                    subItem.link.url ||
-                                    (typeof subItem.link.reference?.value === 'object' &&
-                                    'slug' in subItem.link.reference.value
-                                      ? `/categories/${subItem.link.reference.value.slug}`
-                                      : '/')
-                                  }
-                                  className="block font-medium font-playfair text-gray-900 group-hover:text-yellow-600 transition-colors"
-                                  onClick={() => {
-                                    closeAllPopovers()
-                                  }}
+                          {item.sublinks.map((subItem, subIndex) => {
+                            const hasChildren = subItem.children && subItem.children.length > 0
+                            return (
+                              <div
+                                key={subItem.id}
+                                className="group/subitem relative rounded-lg p-4 text-sm leading-6 hover:bg-gray-50 transition-colors"
+                              >
+                                <motion.div
+                                  custom={subIndex}
+                                  initial="hidden"
+                                  animate="visible"
+                                  variants={desktopPopoverItemVariants}
+                                  className="flex items-center justify-between gap-x-4"
                                 >
-                                  {subItem.link?.label || ''}
-                                  <span className="absolute inset-0" />
-                                </Link>
+                                  <Link
+                                    href={
+                                      subItem.link.url ||
+                                      (typeof subItem.link.reference?.value === 'object' &&
+                                      'slug' in subItem.link.reference.value
+                                        ? `/categories/${subItem.link.reference.value.slug}`
+                                        : '/')
+                                    }
+                                    className="block font-medium font-playfair text-gray-900 group-hover/subitem:text-yellow-600 transition-colors"
+                                    onClick={() => {
+                                      closeAllPopovers()
+                                    }}
+                                  >
+                                    {subItem.link?.label || ''}
+                                  </Link>
+                                  {hasChildren && (
+                                    <ChevronRightIcon className="size-4 text-gray-400 group-hover/subitem:text-yellow-600 transition-colors flex-shrink-0" />
+                                  )}
+                                </motion.div>
+                                {hasChildren && (
+                                  <>
+                                    {/* Invisible bridge to connect hover between parent and flyout */}
+                                    <div className="invisible group-hover/subitem:visible absolute left-full top-0 w-4 h-full" />
+                                    <div className="invisible group-hover/subitem:visible opacity-0 group-hover/subitem:opacity-100 absolute left-full top-0 ml-2 w-56 rounded-2xl bg-white shadow-lg ring-1 ring-gray-900/5 p-2 z-50 transition-opacity duration-150">
+                                      {subItem.children!.map((child) => (
+                                        <Link
+                                          key={child.id}
+                                          href={
+                                            child.link.url ||
+                                            (typeof child.link.reference?.value === 'object' &&
+                                            'slug' in child.link.reference.value
+                                              ? `/categories/${child.link.reference.value.slug}`
+                                              : '/')
+                                          }
+                                          className="block rounded-lg px-3 py-2 text-sm font-medium font-playfair text-gray-900 hover:bg-gray-50 hover:text-yellow-600 transition-colors"
+                                          onClick={() => {
+                                            closeAllPopovers()
+                                          }}
+                                        >
+                                          {child.link?.label || ''}
+                                        </Link>
+                                      ))}
+                                    </div>
+                                  </>
+                                )}
                               </div>
-                            </motion.div>
-                          ))}
+                            )
+                          })}
                         </div>
                       </PopoverPanel>
                     </Popover>
@@ -389,22 +423,83 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
                                   className="overflow-hidden"
                                 >
                                   <div className="ml-4 mt-2 space-y-1 border-l-2 border-yellow-400 pl-3">
-                                    {item.sublinks.map((subItem) => (
-                                      <Link
-                                        key={subItem.id}
-                                        href={
-                                          subItem.link.url ||
-                                          (typeof subItem.link.reference?.value === 'object' &&
-                                          'slug' in subItem.link.reference.value
-                                            ? `/categories/${subItem.link.reference.value.slug}`
-                                            : '/')
-                                        }
-                                        className="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-yellow-600 font-playfair transition-colors"
-                                        onClick={() => setMobileMenuOpen(false)}
-                                      >
-                                        {subItem.link?.label || ''}
-                                      </Link>
-                                    ))}
+                                    {item.sublinks.map((subItem) => {
+                                      const subItemId =
+                                        subItem.id || `subitem-${subItem.link?.label}`
+                                      const hasChildren =
+                                        subItem.children && subItem.children.length > 0
+                                      return (
+                                        <div key={subItem.id}>
+                                          <div className="flex items-center justify-between">
+                                            <Link
+                                              href={
+                                                subItem.link.url ||
+                                                (typeof subItem.link.reference?.value ===
+                                                  'object' && 'slug' in subItem.link.reference.value
+                                                  ? `/categories/${subItem.link.reference.value.slug}`
+                                                  : '/')
+                                              }
+                                              className="flex-1 rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-yellow-600 font-playfair transition-colors"
+                                              onClick={() => setMobileMenuOpen(false)}
+                                            >
+                                              {subItem.link?.label || ''}
+                                            </Link>
+                                            {hasChildren && (
+                                              <button
+                                                onClick={() => toggleMobileItem(subItemId)}
+                                                className="p-1 rounded-md hover:bg-gray-100 transition-colors"
+                                                aria-expanded={expandedMobileItems.has(subItemId)}
+                                              >
+                                                <motion.div
+                                                  animate={{
+                                                    rotate: expandedMobileItems.has(subItemId)
+                                                      ? 90
+                                                      : 0,
+                                                  }}
+                                                  transition={{ duration: 0.2 }}
+                                                >
+                                                  <ChevronRightIcon
+                                                    aria-hidden="true"
+                                                    className="size-4 text-yellow-500"
+                                                  />
+                                                </motion.div>
+                                              </button>
+                                            )}
+                                          </div>
+                                          <AnimatePresence>
+                                            {hasChildren && expandedMobileItems.has(subItemId) && (
+                                              <motion.div
+                                                initial="hidden"
+                                                animate="visible"
+                                                exit="exit"
+                                                variants={subItemVariants}
+                                                className="overflow-hidden"
+                                              >
+                                                <div className="ml-4 mt-1 space-y-1 border-l-2 border-yellow-300 pl-3">
+                                                  {subItem.children!.map((child) => (
+                                                    <Link
+                                                      key={child.id}
+                                                      href={
+                                                        child.link.url ||
+                                                        (typeof child.link.reference?.value ===
+                                                          'object' &&
+                                                        'slug' in child.link.reference.value
+                                                          ? `/categories/${child.link.reference.value.slug}`
+                                                          : '/')
+                                                      }
+                                                      className="block rounded-lg px-3 py-1.5 text-sm text-gray-600 hover:bg-gray-50 hover:text-yellow-600 font-playfair transition-colors"
+                                                      onClick={() => setMobileMenuOpen(false)}
+                                                    >
+                                                      {child.link?.label || ''}
+                                                    </Link>
+                                                  ))}
+                                                </div>
+                                              </motion.div>
+                                            )}
+                                          </AnimatePresence>
+                                        </div>
+                                      )
+                                    })}
                                   </div>
                                 </motion.div>
                               )}

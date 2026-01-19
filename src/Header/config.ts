@@ -28,6 +28,22 @@ export const Header: GlobalConfig = {
                 label: 'Sublink',
               },
             }),
+            {
+              name: 'children',
+              type: 'array',
+              fields: [
+                link({
+                  appearances: false,
+                  relationTo: ['pages'],
+                  overrides: {
+                    label: 'Sub-sublink',
+                  },
+                }),
+              ],
+              admin: {
+                initCollapsed: true,
+              },
+            },
           ],
           admin: {
             initCollapsed: true,

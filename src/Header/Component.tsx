@@ -39,23 +39,13 @@ function buildCategoryTree(categories: Category[]) {
       return (a.title || '').localeCompare(b.title || '')
     })
 
-  // Keep child categories sorted by creation date (oldest-first). If createdAt missing, fall back to title.
-  const sortByCreatedAt = (arr: Category[], desc = true) =>
-    arr.sort((a, b) => {
-      const aTime = a.createdAt ? new Date(a.createdAt).getTime() : 0
-      const bTime = b.createdAt ? new Date(b.createdAt).getTime() : 0
-
-      if (aTime !== bTime) {
-        return desc ? bTime - aTime : aTime - bTime
-      }
-
-      return (a.title || '').localeCompare(b.title || '')
-    })
+  // Keep child categories sorted alphabetically by title
+  const sortAlphabetically = (arr: Category[]) =>
+    arr.sort((a, b) => (a.title || '').localeCompare(b.title || '', 'ro'))
 
   const roots = sortRootsByDisplayOrder([...(byParent.get('root') ?? [])])
 
-  const childrenOf = (parentId: number) =>
-    sortByCreatedAt([...(byParent.get(parentId) ?? [])], false)
+  const childrenOf = (parentId: number) => sortAlphabetically([...(byParent.get(parentId) ?? [])])
 
   return { roots, childrenOf }
 }
@@ -71,24 +61,24 @@ function toCategoryNavItems(categories: Category[]) {
     const sublinks: NonNullable<NonNullable<Header['navItems']>[number]['sublinks']> = []
 
     for (const child of firstLevel) {
+      const secondLevel = childrenOf(child.id)
+
+      const children = secondLevel.map((grand) => ({
+        id: `cat-${grand.id}`,
+        link: {
+          url: grand.slug ? `/categories/${grand.slug}` : '/',
+          label: grand.title,
+        },
+      }))
+
       sublinks.push({
         id: `cat-${child.id}`,
         link: {
           url: child.slug ? `/categories/${child.slug}` : '/',
           label: child.title,
         },
+        children: children.length ? children : null,
       })
-
-      const secondLevel = childrenOf(child.id)
-      for (const grand of secondLevel) {
-        sublinks.push({
-          id: `cat-${grand.id}`,
-          link: {
-            url: grand.slug ? `/categories/${grand.slug}` : '/',
-            label: `— ${grand.title}`,
-          },
-        })
-      }
     }
 
     result.push({
