@@ -1,6 +1,7 @@
 import React from 'react'
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
+import { unstable_cache } from 'next/cache'
 import { CommentList } from './CommentList'
 import { CommentFormWrapper } from './CommentFormWrapper'
 
@@ -8,44 +9,47 @@ interface CommentsProps {
   postId: string
 }
 
+const getCachedComments = unstable_cache(
+  async (postId: string) => {
+    const payload = await getPayload({ config: configPromise })
+
+    const commentsData = await payload.find({
+      collection: 'comments',
+      where: {
+        and: [{ post: { equals: postId } }, { status: { equals: 'approved' } }],
+      },
+      sort: '-createdAt',
+      limit: 100,
+      depth: 0,
+      select: {
+        name: true,
+        comment: true,
+        createdAt: true,
+        parent: true,
+      } as any,
+    })
+
+    return commentsData.docs.map((comment) => ({
+      id: String(comment.id),
+      name: comment.name,
+      comment: comment.comment,
+      createdAt:
+        typeof comment.createdAt === 'string'
+          ? comment.createdAt
+          : new Date(comment.createdAt).toISOString(),
+      parent: comment.parent
+        ? typeof comment.parent === 'object' && comment.parent.id
+          ? String(comment.parent.id)
+          : String(comment.parent)
+        : null,
+    }))
+  },
+  ['post-comments'],
+  { tags: ['comments'], revalidate: 300 },
+)
+
 export async function Comments({ postId }: CommentsProps) {
-  const payload = await getPayload({ config: configPromise })
-
-  // Fetch approved comments for this post
-  const commentsData = await payload.find({
-    collection: 'comments',
-    where: {
-      and: [
-        {
-          post: {
-            equals: postId,
-          },
-        },
-        {
-          status: {
-            equals: 'approved',
-          },
-        },
-      ],
-    },
-    sort: '-createdAt',
-    limit: 100,
-  })
-
-  const allComments = commentsData.docs.map((comment) => ({
-    id: String(comment.id),
-    name: comment.name,
-    comment: comment.comment,
-    createdAt:
-      typeof comment.createdAt === 'string'
-        ? comment.createdAt
-        : new Date(comment.createdAt).toISOString(),
-    parent: comment.parent
-      ? typeof comment.parent === 'object' && comment.parent.id
-        ? String(comment.parent.id)
-        : String(comment.parent)
-      : null,
-  }))
+  const allComments = await getCachedComments(postId)
 
   // Organize comments into tree structure
   const buildCommentTree = (comments: typeof allComments) => {

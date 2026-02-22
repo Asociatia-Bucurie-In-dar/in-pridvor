@@ -202,6 +202,9 @@ export interface Page {
     | {
         heading?: string | null;
         subheading?: string | null;
+        /**
+         * Câte comentarii să fie afișate în carusel (4-24)
+         */
         limit?: number | null;
         id?: string | null;
         blockName?: string | null;

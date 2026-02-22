@@ -2,26 +2,37 @@ import Link from 'next/link'
 import React from 'react'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
+import { unstable_cache } from 'next/cache'
 
 import { formatDateTime } from '@/utilities/formatDateTime'
 
-const fetchLatestComments = async (limit: number) => {
-  const payload = await getPayload({ config: configPromise })
+const getCachedLatestComments = unstable_cache(
+  async (limit: number) => {
+    const payload = await getPayload({ config: configPromise })
 
-  const result = await payload.find({
-    collection: 'comments',
-    depth: 1,
-    limit,
-    sort: '-createdAt',
-    where: {
-      status: {
-        equals: 'approved',
+    const result = await payload.find({
+      collection: 'comments',
+      depth: 1,
+      limit,
+      sort: '-createdAt',
+      where: {
+        status: {
+          equals: 'approved',
+        },
       },
-    },
-  })
+      select: {
+        name: true,
+        comment: true,
+        createdAt: true,
+        post: true,
+      } as any,
+    })
 
-  return result.docs || []
-}
+    return result.docs || []
+  },
+  ['latest-comments-block'],
+  { tags: ['comments'], revalidate: 300 },
+)
 
 const truncate = (value: string, length: number) => {
   if (!value) return ''
@@ -38,7 +49,7 @@ type LatestCommentsBlockProps = {
 
 export const LatestCommentsBlock: React.FC<LatestCommentsBlockProps> = async (props) => {
   const limit = props.limit || 5
-  const comments = await fetchLatestComments(limit)
+  const comments = await getCachedLatestComments(limit)
 
   return (
     <section className="rounded-3xl bg-gray-50 p-6 shadow-sm ring-1 ring-gray-100">

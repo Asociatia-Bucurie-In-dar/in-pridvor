@@ -20,7 +20,6 @@ import { SpeedInsights } from '@vercel/speed-insights/next'
 import './globals.css'
 import { getServerSideURL } from '@/utilities/getURL'
 import { OrganizationStructuredData } from '@/components/StructuredData/OrganizationStructuredData'
-import { PublishScheduledTrigger } from '@/components/PublishScheduledTrigger'
 
 const FairPlay = Playfair_Display({
   subsets: ['latin'],
@@ -49,7 +48,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                 preview: isEnabled,
               }}
             />
-            {!isEnabled && <PublishScheduledTrigger />}
             <Header />
             {children}
             <Footer />

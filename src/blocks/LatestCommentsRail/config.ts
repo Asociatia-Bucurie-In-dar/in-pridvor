@@ -3,27 +3,32 @@ import type { Block } from 'payload'
 export const LatestCommentsRail: Block = {
   slug: 'latestCommentsRail',
   labels: {
-    singular: 'Latest Comments Rail',
-    plural: 'Latest Comments Rail',
+    singular: 'Carusel Comentarii',
+    plural: 'Carusele Comentarii',
   },
   fields: [
     {
       name: 'heading',
       type: 'text',
-      label: 'Heading',
+      label: 'Titlu',
+      defaultValue: 'Vocile comunității',
     },
     {
       name: 'subheading',
       type: 'text',
-      label: 'Subheading',
+      label: 'Subtitlu',
+      defaultValue: 'Cele mai recente comentarii de la cititorii noștri',
     },
     {
       name: 'limit',
       type: 'number',
-      label: 'Items Limit',
-      defaultValue: 8,
-      min: 1,
+      label: 'Număr de comentarii',
+      defaultValue: 10,
+      min: 4,
       max: 24,
+      admin: {
+        description: 'Câte comentarii să fie afișate în carusel (4-24)',
+      },
     },
   ],
 }

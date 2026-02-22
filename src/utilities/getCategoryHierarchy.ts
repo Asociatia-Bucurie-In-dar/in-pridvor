@@ -1,27 +1,36 @@
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
+import { unstable_cache } from 'next/cache'
 
-/**
- * Gets all category IDs including the given category and all its descendants
- * This is useful for showing posts from a category and all its subcategories
- */
+const getCachedAllCategories = unstable_cache(
+  async () => {
+    const payload = await getPayload({ config: configPromise })
+    const result = await payload.find({
+      collection: 'categories',
+      limit: 1000,
+      overrideAccess: false,
+      pagination: false,
+      depth: 0,
+      select: { id: true, parent: true } as any,
+    })
+    return result.docs.map((c) => ({
+      id: c.id,
+      parent: typeof c.parent === 'object' ? c.parent?.id : c.parent,
+    }))
+  },
+  ['all-categories-hierarchy'],
+  { tags: ['categories-header'] },
+)
+
 export async function getCategoryHierarchyIds(categoryId: number): Promise<number[]> {
-  const payload = await getPayload({ config: configPromise })
+  const allCategories = await getCachedAllCategories()
 
-  // Get all categories to build the hierarchy
-  const allCategories = await payload.find({
-    collection: 'categories',
-    limit: 1000,
-    overrideAccess: false,
-    pagination: false,
-  })
-
-  const categoryMap = new Map<number, any>()
-  allCategories.docs.forEach((category) => {
+  const categoryMap = new Map<number, { id: number; parent: number | null | undefined }>()
+  for (const category of allCategories) {
     if (category.id) {
       categoryMap.set(category.id, category)
     }
-  })
+  }
 
   // Find all descendants of the given category
   const getAllDescendants = (parentId: number): number[] => {
@@ -29,12 +38,8 @@ export async function getCategoryHierarchyIds(categoryId: number): Promise<numbe
 
     // Find all categories that have this category as parent
     for (const [id, category] of categoryMap) {
-      if (
-        category.parent === parentId ||
-        (typeof category.parent === 'object' && category.parent?.id === parentId)
-      ) {
+      if (category.parent === parentId) {
         descendants.push(id)
-        // Recursively get descendants of this category
         descendants.push(...getAllDescendants(id))
       }
     }
@@ -51,28 +56,9 @@ export async function getCategoryHierarchyIds(categoryId: number): Promise<numbe
  * Gets all category IDs that have the given category as a parent (direct children only)
  */
 export async function getDirectChildCategoryIds(parentId: number): Promise<number[]> {
-  const payload = await getPayload({ config: configPromise })
-
-  const childCategories = await payload.find({
-    collection: 'categories',
-    limit: 1000,
-    overrideAccess: false,
-    pagination: false,
-    where: {
-      or: [
-        {
-          parent: {
-            equals: parentId,
-          },
-        },
-        {
-          'parent.id': {
-            equals: parentId,
-          },
-        },
-      ],
-    },
-  })
-
-  return childCategories.docs.map((category) => category.id).filter(Boolean) as number[]
+  const allCategories = await getCachedAllCategories()
+  return allCategories
+    .filter((c) => c.parent === parentId)
+    .map((c) => c.id)
+    .filter(Boolean) as number[]
 }

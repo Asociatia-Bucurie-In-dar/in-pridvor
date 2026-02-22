@@ -3,6 +3,7 @@ import { getCachedGlobal } from '@/utilities/getGlobals'
 import React from 'react'
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
+import { unstable_cache } from 'next/cache'
 
 import type { Header, Category } from '@/payload-types'
 
@@ -94,20 +95,37 @@ function toCategoryNavItems(categories: Category[]) {
   return result
 }
 
+const getCachedCategories = unstable_cache(
+  async () => {
+    const payload = await getPayload({ config: configPromise })
+    const res = await payload.find({
+      collection: 'categories',
+      limit: 1000,
+      pagination: false,
+      depth: 0,
+      overrideAccess: false,
+      select: {
+        title: true,
+        slug: true,
+        parent: true,
+        displayOrder: true,
+        createdAt: true,
+        invisibleInHeader: true,
+      } as any,
+    })
+    return res.docs as Category[]
+  },
+  ['header-categories'],
+  { tags: ['categories-header'] },
+)
+
 export async function Header() {
   const headerData = (await getCachedGlobal('header', 1)()) as Header
 
-  const payload = await getPayload({ config: configPromise })
-  const categoriesRes = await payload.find({
-    collection: 'categories',
-    limit: 1000,
-    pagination: false,
-    depth: 0,
-    overrideAccess: false,
-  })
+  const allCategories = await getCachedCategories()
 
   const categoryNav = toCategoryNavItems(
-    (categoriesRes.docs as Category[]).filter((category) => !(category as any).invisibleInHeader),
+    allCategories.filter((category) => !(category as any).invisibleInHeader),
   )
   const adminNav = headerData.navItems ?? []
   const mergedNav = [...categoryNav, ...adminNav]
