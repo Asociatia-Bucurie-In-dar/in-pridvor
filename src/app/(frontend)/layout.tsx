@@ -47,6 +47,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             <AdminBar
               adminBarProps={{
                 preview: isEnabled,
+
               }}
             />
             {!isEnabled && <PublishScheduledTrigger />}
