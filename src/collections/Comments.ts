@@ -32,7 +32,7 @@ export const Comments: CollectionConfig = {
       name: 'comment',
       type: 'textarea',
       required: true,
-      maxLength: 1000,
+      maxLength: 3000,
     },
     {
       name: 'post',
