@@ -19,6 +19,7 @@ import { Comments } from '@/components/Comments/Comments'
 import { DropCapHandler } from '@/components/DropCapHandler'
 import { EditPostLink } from '@/components/EditPostLink'
 import { ArticleStructuredData } from '@/components/StructuredData/ArticleStructuredData'
+import { routing } from '@/i18n/routing'
 
 export async function generateStaticParams() {
   const payload = await getPayload({ config: configPromise })
@@ -40,11 +41,13 @@ export async function generateStaticParams() {
     },
   })
 
-  const params = posts.docs.map(({ slug }) => {
+  const slugParams = posts.docs.map(({ slug }) => {
     return { slug }
   })
 
-  return params
+  return routing.locales.flatMap((locale) =>
+    slugParams.map(({ slug }) => ({ locale, slug })),
+  )
 }
 
 export const dynamicParams = true
@@ -52,14 +55,15 @@ export const dynamicParams = true
 type Args = {
   params: Promise<{
     slug?: string
+    locale: string
   }>
 }
 
 export default async function Post({ params: paramsPromise }: Args) {
   const { isEnabled: draft } = await draftMode()
-  const { slug = '' } = await paramsPromise
+  const { slug = '', locale } = await paramsPromise
   const url = '/posts/' + slug
-  const post = await queryPostBySlug({ slug })
+  const post = await queryPostBySlug({ slug, locale })
 
   if (!post) return <PayloadRedirects url={url} />
 
@@ -110,14 +114,14 @@ export default async function Post({ params: paramsPromise }: Args) {
 }
 
 export async function generateMetadata({ params: paramsPromise }: Args): Promise<Metadata> {
-  const { slug = '' } = await paramsPromise
-  const post = await queryPostBySlug({ slug })
+  const { slug = '', locale } = await paramsPromise
+  const post = await queryPostBySlug({ slug, locale })
   const path = slug ? `/posts/${slug}` : '/posts'
 
   return generateMeta({ doc: post, path, ogType: 'article' })
 }
 
-const queryPostBySlug = cache(async ({ slug }: { slug: string }) => {
+const queryPostBySlug = cache(async ({ slug, locale }: { slug: string; locale: string }) => {
   const { isEnabled: draft } = await draftMode()
 
   const payload = await getPayload({ config: configPromise })
@@ -129,6 +133,7 @@ const queryPostBySlug = cache(async ({ slug }: { slug: string }) => {
     depth: 3,
     overrideAccess: draft,
     pagination: false,
+    context: { locale },
     where: {
       slug: {
         equals: slug,

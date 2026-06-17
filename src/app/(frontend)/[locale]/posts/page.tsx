@@ -12,7 +12,14 @@ import { getPostsCardSelect } from '@/utilities/getPostsCardSelect'
 
 export const dynamic = 'force-static'
 
-export default async function Page() {
+type Args = {
+  params: Promise<{
+    locale: string
+  }>
+}
+
+export default async function Page({ params: paramsPromise }: Args) {
+  const { locale } = await paramsPromise
   const payload = await getPayload({ config: configPromise })
   const now = new Date().toISOString()
 
@@ -23,6 +30,7 @@ export default async function Page() {
     sort: '-publishedAt',
     overrideAccess: false,
     select: getPostsCardSelect(),
+    context: { locale },
     where: {
       publishedAt: {
         less_than_equal: now,

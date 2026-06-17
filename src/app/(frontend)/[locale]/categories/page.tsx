@@ -13,7 +13,14 @@ import { getPostsCardSelect } from '@/utilities/getPostsCardSelect'
 export const dynamic = 'force-static'
 // Removed time-based revalidation - now using on-demand revalidation via hooks
 
-export default async function Page() {
+type Args = {
+  params: Promise<{
+    locale: string
+  }>
+}
+
+export default async function Page({ params: paramsPromise }: Args) {
+  const { locale } = await paramsPromise
   const payload = await getPayload({ config: configPromise })
 
   const posts = await payload.find({
@@ -22,6 +29,7 @@ export default async function Page() {
     limit: 12,
     overrideAccess: false,
     select: getPostsCardSelect(),
+    context: { locale },
   })
 
   return (

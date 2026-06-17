@@ -11,17 +11,19 @@ import PageClient from './page.client'
 import { notFound } from 'next/navigation'
 import { websiteTitle } from '@/utilities/commonInfo'
 import { getPostsCardSelect } from '@/utilities/getPostsCardSelect'
+import { routing } from '@/i18n/routing'
 
 export const dynamic = 'force-static'
 
 type Args = {
   params: Promise<{
     pageNumber: string
+    locale: string
   }>
 }
 
 export default async function Page({ params: paramsPromise }: Args) {
-  const { pageNumber } = await paramsPromise
+  const { pageNumber, locale } = await paramsPromise
   const payload = await getPayload({ config: configPromise })
   const now = new Date().toISOString()
 
@@ -37,6 +39,7 @@ export default async function Page({ params: paramsPromise }: Args) {
     sort: '-publishedAt',
     overrideAccess: false,
     select: getPostsCardSelect(),
+    context: { locale },
     where: {
       publishedAt: {
         less_than_equal: now,
@@ -91,5 +94,7 @@ export async function generateStaticParams() {
     pages.push({ pageNumber: String(i) })
   }
 
-  return pages
+  return routing.locales.flatMap((locale) =>
+    pages.map(({ pageNumber }) => ({ locale, pageNumber })),
+  )
 }

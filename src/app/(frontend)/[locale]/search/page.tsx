@@ -12,6 +12,9 @@ import { generateSearchVariants } from '@/utilities/romanianSearch'
 import type { Where } from 'payload'
 
 type Args = {
+  params: Promise<{
+    locale: string
+  }>
   searchParams: Promise<{
     q: string
   }>
@@ -60,7 +63,8 @@ async function buildSearchConditions(payload: Payload, query: string): Promise<W
   }
 }
 
-export default async function Page({ searchParams: searchParamsPromise }: Args) {
+export default async function Page({ params: paramsPromise, searchParams: searchParamsPromise }: Args) {
+  const { locale } = await paramsPromise
   const { q: query } = await searchParamsPromise
   const payload = await getPayload({ config: configPromise })
   const nowISO = new Date().toISOString()
@@ -73,6 +77,7 @@ export default async function Page({ searchParams: searchParamsPromise }: Args) 
     limit: 12,
     sort: '-publishedAt',
     select: getPostsCardSelect(),
+    context: { locale },
     where: {
       and: [
         {

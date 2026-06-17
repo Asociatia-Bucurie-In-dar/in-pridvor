@@ -9,16 +9,18 @@ import { cache } from 'react'
 import { notFound } from 'next/navigation'
 import PageClient from './page.client'
 import { getPostsCardSelect } from '@/utilities/getPostsCardSelect'
+import { routing } from '@/i18n/routing'
 
 type Args = {
   params: Promise<{
     pageNumber: string
     authorId: string
+    locale: string
   }>
 }
 
 export default async function AuthorPage({ params: paramsPromise }: Args) {
-  const { pageNumber, authorId } = await paramsPromise
+  const { pageNumber, authorId, locale } = await paramsPromise
   const payload = await getPayload({ config: configPromise })
 
   const sanitizedPageNumber = Number(pageNumber)
@@ -47,6 +49,7 @@ export default async function AuthorPage({ params: paramsPromise }: Args) {
     sort: '-publishedAt',
     overrideAccess: false,
     select: getPostsCardSelect(),
+    context: { locale },
     where: {
       and: [
         {
@@ -186,5 +189,7 @@ export async function generateStaticParams() {
     }
   }
 
-  return params
+  return routing.locales.flatMap((locale) =>
+    params.map(({ authorId, pageNumber }) => ({ locale, authorId, pageNumber })),
+  )
 }

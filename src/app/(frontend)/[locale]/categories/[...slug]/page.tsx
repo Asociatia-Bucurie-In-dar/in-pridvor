@@ -13,6 +13,7 @@ import { generateMeta } from '@/utilities/generateMeta'
 import { getCategoryHierarchyIds } from '@/utilities/getCategoryHierarchy'
 import { getPostsCardSelect } from '@/utilities/getPostsCardSelect'
 import PageClient from './page.client'
+import { routing } from '@/i18n/routing'
 
 export async function generateStaticParams() {
   const payload = await getPayload({ config: configPromise })
@@ -27,14 +28,16 @@ export async function generateStaticParams() {
     },
   })
 
-  const params = categories.docs
+  const slugParams = categories.docs
     .map(({ slug }) => {
       const segments = slug?.split('/') || []
       return segments.filter((segment) => segment !== 'categories' && segment !== '')
     })
     .filter((segments) => segments.length > 0)
 
-  return params
+  return routing.locales.flatMap((locale) =>
+    slugParams.map((slug) => ({ locale, slug })),
+  )
 }
 
 export const dynamicParams = true
@@ -42,11 +45,12 @@ export const dynamicParams = true
 type Args = {
   params: Promise<{
     slug: string[]
+    locale: string
   }>
 }
 
 export default async function Category({ params: paramsPromise }: Args) {
-  const { slug } = await paramsPromise
+  const { slug, locale } = await paramsPromise
 
   let categorySlug = slug
   let pageNumber = 1
@@ -61,7 +65,7 @@ export default async function Category({ params: paramsPromise }: Args) {
   }
 
   const url = '/' + slug.join('/')
-  const category = await queryCategoryBySlug({ params: categorySlug })
+  const category = await queryCategoryBySlug({ params: categorySlug, locale })
 
   if (!category) return <PayloadRedirects url={url} />
 
@@ -69,7 +73,7 @@ export default async function Category({ params: paramsPromise }: Args) {
   const categoryIds = await getCategoryHierarchyIds(category.id)
 
   // Fetch posts from this category and all its subcategories
-  const posts = await queryPostsByCategoryIds(categoryIds, pageNumber)
+  const posts = await queryPostsByCategoryIds(categoryIds, pageNumber, locale)
 
   const filteredCategorySlug = categorySlug.filter((segment) => segment !== 'categories')
   const categoryBasePath = `/categories/${filteredCategorySlug.join('/')}`
@@ -110,14 +114,14 @@ export default async function Category({ params: paramsPromise }: Args) {
 }
 
 export async function generateMetadata({ params: paramsPromise }: Args): Promise<Metadata> {
-  const { slug } = await paramsPromise
+  const { slug, locale } = await paramsPromise
 
   let categorySlug = slug
   if (slug.length >= 3 && slug[slug.length - 2] === 'page') {
     categorySlug = slug.slice(0, -2)
   }
 
-  const post = await queryCategoryBySlug({ params: categorySlug })
+  const post = await queryCategoryBySlug({ params: categorySlug, locale })
   const filteredCategorySlug = categorySlug.filter((segment) => segment !== 'categories')
   const path =
     filteredCategorySlug.length > 0
@@ -127,74 +131,81 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
   return generateMeta({ doc: post, path })
 }
 
-const queryCategoryBySlug = cache(async ({ params }: { params: string[] }) => {
-  const filteredParams = params.filter((segment) => segment !== 'categories')
+const queryCategoryBySlug = cache(
+  async ({ params, locale }: { params: string[]; locale: string }) => {
+    const filteredParams = params.filter((segment) => segment !== 'categories')
 
-  if (filteredParams.length === 0) {
-    return null
-  }
+    if (filteredParams.length === 0) {
+      return null
+    }
 
-  const fullSlug = filteredParams.join('/')
-  const lastSegment = filteredParams[filteredParams.length - 1]
+    const fullSlug = filteredParams.join('/')
+    const lastSegment = filteredParams[filteredParams.length - 1]
 
-  const payload = await getPayload({ config: configPromise })
+    const payload = await getPayload({ config: configPromise })
 
-  let result = await payload.find({
-    collection: 'categories',
-    limit: 1,
-    overrideAccess: false,
-    pagination: false,
-    where: {
-      slug: {
-        equals: fullSlug,
-      },
-    },
-  })
-
-  if (result.docs.length === 0 && filteredParams.length > 1) {
-    result = await payload.find({
+    let result = await payload.find({
       collection: 'categories',
       limit: 1,
       overrideAccess: false,
       pagination: false,
+      context: { locale },
       where: {
         slug: {
-          equals: lastSegment,
+          equals: fullSlug,
         },
       },
     })
-  }
 
-  return result.docs?.[0] || null
-})
-
-const queryPostsByCategoryIds = cache(async (categoryIds: number[], page: number = 1) => {
-  const payload = await getPayload({ config: configPromise })
-  const now = new Date().toISOString()
-
-  const result = await payload.find({
-    collection: 'posts',
-    depth: 1,
-    limit: 12,
-    sort: '-publishedAt',
-    page,
-    overrideAccess: false,
-    select: getPostsCardSelect(),
-    where: {
-      and: [
-        {
-          publishedAt: {
-            less_than_equal: now,
+    if (result.docs.length === 0 && filteredParams.length > 1) {
+      result = await payload.find({
+        collection: 'categories',
+        limit: 1,
+        overrideAccess: false,
+        pagination: false,
+        context: { locale },
+        where: {
+          slug: {
+            equals: lastSegment,
           },
         },
-        {
-          categories: {
-            in: categoryIds,
-          },
-        },
-      ],
-    },
-  })
+      })
+    }
 
-  return result
-})
+    return result.docs?.[0] || null
+  },
+)
+
+const queryPostsByCategoryIds = cache(
+  async (categoryIds: number[], page: number = 1, locale: string) => {
+    const payload = await getPayload({ config: configPromise })
+    const now = new Date().toISOString()
+
+    const result = await payload.find({
+      collection: 'posts',
+      depth: 1,
+      limit: 12,
+      sort: '-publishedAt',
+      page,
+      overrideAccess: false,
+      select: getPostsCardSelect(),
+      context: { locale },
+      where: {
+        and: [
+          {
+            publishedAt: {
+              less_than_equal: now,
+            },
+          },
+          {
+            categories: {
+              in: categoryIds,
+            },
+          },
+        ],
+      },
+    })
+
+    return result
+  },
+)

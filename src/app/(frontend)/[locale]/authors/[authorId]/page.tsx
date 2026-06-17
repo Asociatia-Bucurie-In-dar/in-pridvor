@@ -10,6 +10,7 @@ import { getPayload } from 'payload'
 import React, { cache } from 'react'
 import PageClient from './page.client'
 import { getPostsCardSelect } from '@/utilities/getPostsCardSelect'
+import { routing } from '@/i18n/routing'
 
 export async function generateStaticParams() {
   const payload = await getPayload({ config: configPromise })
@@ -20,13 +21,15 @@ export async function generateStaticParams() {
     pagination: false,
   })
 
-  const params = users.docs
+  const authorParams = users.docs
     .filter((user) => user.id !== undefined && user.id !== null)
     .map((user) => ({
       authorId: String(user.id),
     }))
 
-  return params
+  return routing.locales.flatMap((locale) =>
+    authorParams.map(({ authorId }) => ({ locale, authorId })),
+  )
 }
 
 export const dynamicParams = true
@@ -34,18 +37,19 @@ export const dynamicParams = true
 type Args = {
   params: Promise<{
     authorId: string
+    locale: string
   }>
 }
 
 export default async function Author({ params: paramsPromise }: Args) {
-  const { authorId } = await paramsPromise
+  const { authorId, locale } = await paramsPromise
   const url = '/authors/' + authorId
   const author = await queryAuthorById({ authorId })
 
   if (!author) return <PayloadRedirects url={url} />
 
   // Fetch posts by this author
-  const posts = await queryPostsByAuthorId(author.id)
+  const posts = await queryPostsByAuthorId(author.id, locale)
 
   return (
     <div className="pb-16">
@@ -115,7 +119,7 @@ const queryAuthorById = cache(async ({ authorId }: { authorId: string }) => {
   }
 })
 
-const queryPostsByAuthorId = cache(async (authorId: number | string) => {
+const queryPostsByAuthorId = cache(async (authorId: number | string, locale: string) => {
   const payload = await getPayload({ config: configPromise })
   const now = new Date().toISOString()
 
@@ -134,6 +138,7 @@ const queryPostsByAuthorId = cache(async (authorId: number | string) => {
     sort: '-publishedAt',
     overrideAccess: false,
     select: getPostsCardSelect(),
+    context: { locale },
     where: {
       and: [
         {

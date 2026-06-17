@@ -22,6 +22,11 @@ import { getServerSideURL } from '@/utilities/getURL'
 import { OrganizationStructuredData } from '@/components/StructuredData/OrganizationStructuredData'
 import { PublishScheduledTrigger } from '@/components/PublishScheduledTrigger'
 
+import { NextIntlClientProvider } from 'next-intl'
+import { getMessages, setRequestLocale } from 'next-intl/server'
+import { routing } from '@/i18n/routing'
+import { notFound } from 'next/navigation'
+
 const FairPlay = Playfair_Display({
   subsets: ['latin'],
   variable: '--font-playfair',
@@ -35,29 +40,47 @@ const InterVar = Inter({
   weight: ['400', '500', '600', '700'],
 })
 
-export default async function RootLayout({ children }: { children: React.ReactNode }) {
+export function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale }))
+}
+
+export default async function RootLayout(props: {
+  children: React.ReactNode
+  params: Promise<{ locale: string }>
+}) {
+  const params = await props.params
+  const { locale } = params
+
+  if (!routing.locales.includes(locale as any)) {
+    notFound()
+  }
+
+  setRequestLocale(locale)
+
+  const messages = await getMessages()
   const { isEnabled } = await draftMode()
 
   return (
-    <html className={cn(FairPlay.variable, InterVar.variable)} lang="en" suppressHydrationWarning>
+    <html className={cn(FairPlay.variable, InterVar.variable)} lang={locale} suppressHydrationWarning>
       <body suppressHydrationWarning>
-        <OrganizationStructuredData />
-        <Providers>
-          <AdminProvider>
-            <AdminBar
-              adminBarProps={{
-                preview: isEnabled,
-
-              }}
-            />
-            {!isEnabled && <PublishScheduledTrigger />}
-            <Header />
-            {children}
-            <Footer />
-          </AdminProvider>
-        </Providers>
-        <Analytics />
-        <SpeedInsights />
+        <NextIntlClientProvider messages={messages}>
+          <OrganizationStructuredData />
+          <Providers>
+            <AdminProvider>
+              <AdminBar
+                adminBarProps={{
+                  preview: isEnabled,
+                }}
+              />
+              {!isEnabled && <PublishScheduledTrigger />}
+              <Header />
+              {props.children}
+              <Footer />
+            </AdminProvider>
+          </Providers>
+          <Analytics />
+          <SpeedInsights />
+        </NextIntlClientProvider>
       </body>
     </html>
   )

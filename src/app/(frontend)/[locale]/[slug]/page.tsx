@@ -11,8 +11,9 @@ import { RenderHero } from '@/heros/RenderHero'
 import { generateMeta } from '@/utilities/generateMeta'
 import PageClient from './page.client'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
+import { routing } from '@/i18n/routing'
 
-const queryPageBySlug = cache(async ({ slug }: { slug: string }) => {
+const queryPageBySlug = cache(async ({ slug, locale }: { slug: string; locale: string }) => {
   const { isEnabled: draft } = await draftMode()
 
   const payload = await getPayload({ config: configPromise })
@@ -24,6 +25,7 @@ const queryPageBySlug = cache(async ({ slug }: { slug: string }) => {
     depth: 3,
     pagination: false,
     overrideAccess: draft,
+    context: { locale },
     where: {
       slug: {
         equals: slug,
@@ -47,15 +49,18 @@ export async function generateStaticParams() {
     },
   })
 
-  const params = pages.docs
-    ?.filter((doc) => {
-      return doc.slug !== 'home'
-    })
-    .map(({ slug }) => {
-      return { slug }
-    })
+  const slugParams =
+    pages.docs
+      ?.filter((doc) => {
+        return doc.slug !== 'home'
+      })
+      .map(({ slug }) => {
+        return { slug }
+      }) || []
 
-  return params
+  return routing.locales.flatMap((locale) =>
+    slugParams.map(({ slug }) => ({ locale, slug })),
+  )
 }
 
 export const dynamicParams = true
@@ -63,16 +68,18 @@ export const dynamicParams = true
 type Args = {
   params: Promise<{
     slug?: string
+    locale: string
   }>
 }
 
 export default async function Page({ params: paramsPromise }: Args) {
   const { isEnabled: draft } = await draftMode()
-  const { slug = 'home' } = await paramsPromise
+  const { slug = 'home', locale } = await paramsPromise
   const url = '/' + slug
 
   const page = (await queryPageBySlug({
     slug,
+    locale,
   })) as RequiredDataFromCollectionSlug<'pages'> | null
 
   if (!page) {
@@ -95,9 +102,10 @@ export default async function Page({ params: paramsPromise }: Args) {
 }
 
 export async function generateMetadata({ params: paramsPromise }: Args): Promise<Metadata> {
-  const { slug = 'home' } = await paramsPromise
+  const { slug = 'home', locale } = await paramsPromise
   const page = await queryPageBySlug({
     slug,
+    locale,
   })
 
   const path = slug === 'home' ? '/' : `/${slug}`
