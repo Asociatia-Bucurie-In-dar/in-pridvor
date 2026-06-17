@@ -76,6 +76,7 @@ export interface Config {
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
+    'payload-kv': PayloadKv;
     'payload-jobs': PayloadJob;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -92,6 +93,7 @@ export interface Config {
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
+    'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-jobs': PayloadJobsSelect<false> | PayloadJobsSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -100,6 +102,7 @@ export interface Config {
   db: {
     defaultIDType: number;
   };
+  fallbackLocale: null;
   globals: {
     header: Header;
     footer: Footer;
@@ -109,9 +112,10 @@ export interface Config {
     footer: FooterSelect<false> | FooterSelect<true>;
   };
   locale: null;
-  user: User & {
-    collection: 'users';
+  widgets: {
+    collections: CollectionsWidget;
   };
+  user: User;
   jobs: {
     tasks: {
       revalidateCache: TaskRevalidateCache;
@@ -221,6 +225,36 @@ export interface Page {
   publishedAt?: string | null;
   slug?: string | null;
   slugLock?: boolean | null;
+  /**
+   * Optional. Any field left empty falls back to the Romanian source.
+   */
+  en?: {
+    /**
+     * Leave empty to fall back to Romanian
+     */
+    title?: string | null;
+    hero?: {
+      richText?: {
+        root: {
+          type: string;
+          children: {
+            type: any;
+            version: number;
+            [k: string]: unknown;
+          }[];
+          direction: ('ltr' | 'rtl') | null;
+          format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+          indent: number;
+          version: number;
+        };
+        [k: string]: unknown;
+      } | null;
+    };
+    meta?: {
+      title?: string | null;
+      description?: string | null;
+    };
+  };
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -246,6 +280,15 @@ export interface Category {
    * Controls order of top-level categories in the header. Lower numbers appear first. Leave empty for default ordering.
    */
   displayOrder?: number | null;
+  /**
+   * Optional. Any field left empty falls back to the Romanian source.
+   */
+  en?: {
+    /**
+     * Leave empty to fall back to Romanian
+     */
+    title?: string | null;
+  };
   breadcrumbs?:
     | {
         doc?: (number | null) | Category;
@@ -408,6 +451,33 @@ export interface Post {
     | null;
   slug?: string | null;
   slugLock?: boolean | null;
+  /**
+   * Optional. Any field left empty falls back to the Romanian source.
+   */
+  en?: {
+    /**
+     * Leave empty to fall back to Romanian
+     */
+    title?: string | null;
+    content?: {
+      root: {
+        type: string;
+        children: {
+          type: any;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    } | null;
+    meta?: {
+      title?: string | null;
+    };
+  };
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -436,6 +506,7 @@ export interface User {
       }[]
     | null;
   password?: string | null;
+  collection: 'users';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -903,6 +974,23 @@ export interface FormSubmission {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-kv".
+ */
+export interface PayloadKv {
+  id: number;
+  key: string;
+  data:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-jobs".
  */
 export interface PayloadJob {
@@ -1035,10 +1123,6 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'form-submissions';
         value: number | FormSubmission;
-      } | null)
-    | ({
-        relationTo: 'payload-jobs';
-        value: number | PayloadJob;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -1141,6 +1225,22 @@ export interface PagesSelect<T extends boolean = true> {
   publishedAt?: T;
   slug?: T;
   slugLock?: T;
+  en?:
+    | T
+    | {
+        title?: T;
+        hero?:
+          | T
+          | {
+              richText?: T;
+            };
+        meta?:
+          | T
+          | {
+              title?: T;
+              description?: T;
+            };
+      };
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
@@ -1300,6 +1400,17 @@ export interface PostsSelect<T extends boolean = true> {
       };
   slug?: T;
   slugLock?: T;
+  en?:
+    | T
+    | {
+        title?: T;
+        content?: T;
+        meta?:
+          | T
+          | {
+              title?: T;
+            };
+      };
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
@@ -1378,6 +1489,11 @@ export interface CategoriesSelect<T extends boolean = true> {
   slugLock?: T;
   invisibleInHeader?: T;
   displayOrder?: T;
+  en?:
+    | T
+    | {
+        title?: T;
+      };
   breadcrumbs?:
     | T
     | {
@@ -1590,6 +1706,14 @@ export interface FormSubmissionsSelect<T extends boolean = true> {
       };
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-kv_select".
+ */
+export interface PayloadKvSelect<T extends boolean = true> {
+  key?: T;
+  data?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1810,6 +1934,16 @@ export interface FooterSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "collections_widget".
+ */
+export interface CollectionsWidget {
+  data?: {
+    [k: string]: unknown;
+  };
+  width: 'full';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
