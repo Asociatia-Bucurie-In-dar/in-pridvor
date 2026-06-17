@@ -1,6 +1,9 @@
 import { withPayload } from '@payloadcms/next/withPayload'
+import createNextIntlPlugin from 'next-intl/plugin'
 
 import redirects from './redirects.js'
+
+const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts')
 
 const normalizeURL = (urlString) => {
   if (!urlString) return null
@@ -77,4 +80,4 @@ const nextConfig = {
   redirects,
 }
 
-export default withPayload(nextConfig)
+export default withNextIntl(withPayload(nextConfig))
