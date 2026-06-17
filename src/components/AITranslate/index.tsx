@@ -52,7 +52,7 @@ export const AITranslate: React.FC = () => {
       </Button>
       <p style={{ fontSize: '12px', marginTop: '8px', color: '#666' }}>
         Translates current Romanian version to English. 
-        <strong> Note:</strong> Uses Gemini 1.5 Flash. Limited to 2 requests per minute.
+        <strong> Note:</strong> Uses Gemini 2.5 Flash. Limited to 2 requests per minute.
       </p>
     </div>
   )
