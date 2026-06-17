@@ -4,6 +4,9 @@ import { anyone } from '../../access/anyone'
 import { authenticated } from '../../access/authenticated'
 import { slugField } from '@/fields/slug'
 import { revalidateCategory, revalidateCategoryDelete } from './hooks/revalidateCategory'
+import { enGroup } from '@/fields/enGroup'
+import { withEnglishFallback } from '../../utilities/ai/localizationHook'
+import { createTranslationHandler } from '../../utilities/ai/translationHandler'
 
 export const Categories: CollectionConfig = {
   slug: 'categories',
@@ -54,8 +57,31 @@ export const Categories: CollectionConfig = {
       },
       defaultValue: 0,
     },
+    {
+      name: 'aiTranslate',
+      type: 'ui',
+      admin: {
+        position: 'sidebar',
+        components: { Field: '@/components/AITranslate#AITranslate' },
+      },
+    },
+    enGroup([
+      {
+        name: 'title',
+        type: 'text',
+        admin: { description: 'Leave empty to fall back to Romanian' },
+      },
+    ]),
+  ],
+  endpoints: [
+    {
+      path: '/:id/translate',
+      method: 'post',
+      handler: createTranslationHandler('categories', { title: 'text' }),
+    },
   ],
   hooks: {
+    afterRead: [withEnglishFallback(['title'])],
     afterChange: [revalidateCategory],
     afterDelete: [revalidateCategoryDelete],
   },
