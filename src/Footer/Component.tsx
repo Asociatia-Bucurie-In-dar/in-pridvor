@@ -1,22 +1,24 @@
-import Link from 'next/link'
+import { Link } from '@/i18n/routing'
 import Image from 'next/image'
 import React from 'react'
 import { SiFacebook, SiWhatsapp, SiYoutube } from 'react-icons/si'
+import { getTranslations } from 'next-intl/server'
 
 export async function Footer() {
   const currentYear = new Date().getFullYear()
+  const t = await getTranslations('Common')
 
   const footerLinks = [
     {
-      name: 'Acasă',
+      name: t('home'),
       href: '/',
     },
     {
-      name: 'Toate articolele',
+      name: t('posts'),
       href: '/posts',
     },
     {
-      name: 'Noi',
+      name: t('about'),
       href: '/noi',
     },
   ]
@@ -57,7 +59,7 @@ export async function Footer() {
               {navigation.map((item) => {
                 const IconComponent = item.icon
                 return (
-                  <Link
+                  <a
                     key={item.name}
                     href={item.href}
                     className="text-gray-600 hover:text-gray-900 transition-colors"
@@ -66,7 +68,7 @@ export async function Footer() {
                     rel="noopener noreferrer"
                   >
                     <IconComponent className="w-6 h-6" aria-hidden="true" />
-                  </Link>
+                  </a>
                 )
               })}
             </div>

@@ -1,6 +1,6 @@
 import { Button, type ButtonProps } from '@/components/ui/button'
 import { cn } from '@/utilities/ui'
-import Link from 'next/link'
+import { Link } from '@/i18n/routing'
 import React from 'react'
 
 import type { Category, Page, Post } from '@/payload-types'
