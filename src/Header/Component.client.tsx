@@ -26,12 +26,14 @@ import type { Header } from '@/payload-types'
 import { Logo } from '@/components/Logo/Logo'
 import { DonateModal } from '@/components/DonateModal'
 import { LocaleSwitcher } from '@/components/LocaleSwitcher'
+import { useTranslations } from 'next-intl'
 
 interface HeaderClientProps {
   data: Header
 }
 
 export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
+  const t = useTranslations('Common')
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [donateModalOpen, setDonateModalOpen] = useState(false)
   const [isSticky, setIsSticky] = useState(false)
@@ -301,7 +303,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
                 className="flex items-center text-sm shadow-sm text-gray-800 bg-yellow-400 hover:shadow-md focus:outline-hidden focus:ring-4 focus:ring-yellow-300 font-medium rounded-full px-5 py-2.5 text-center"
               >
                 <HeartIcon aria-hidden="true" className="size-5 mr-1" />
-                Donează
+                {t('donate')}
               </motion.button>
               <div className="lg:hidden mr-5"></div>
             </div>
@@ -360,7 +362,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     <MagnifyingGlassIcon aria-hidden="true" className="size-5 text-yellow-600" />
-                    Caută
+                    {t('search')}
                   </Link>
                 </motion.div>
 
@@ -541,7 +543,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
                     className="flex w-full items-center justify-center text-sm shadow-sm text-black bg-yellow-400 hover:shadow-md focus:outline-hidden focus:ring-4 focus:ring-yellow-300 font-medium rounded-full px-5 py-3 text-center transition-all"
                   >
                     <HeartIcon aria-hidden="true" className="size-5 mr-2" />
-                    Donează
+                    {t('donate')}
                   </button>
                 </motion.div>
               </div>
