@@ -20,7 +20,9 @@
     "postPlural": "Posts",
     "postSingular": "Post",
     "searchPlaceholder": "Search",
-    "publishDate": "Publish Date"
+    "publishDate": "Publish Date",
+    "allAuthors": "All Authors",
+    "readArticle": "Read the article"
   },
   "Comments": {
     "title": "Comments",
@@ -48,7 +50,13 @@
     "oneComment": "Comment",
     "multipleComments": "Comments",
     "reply": "Reply",
-    "cancelReply": "Cancel reply"
+    "cancelReply": "Cancel reply",
+    "railSubheading": "The latest conversations from the community",
+    "railScroll": "Scroll for more",
+    "railEmpty": "No published comments yet.",
+    "railHeading": "From your comments",
+    "unknownArticle": "Unknown article",
+    "anonymousReader": "Anonymous reader"
   },
   "Donate": {
     "title": "Support În Pridvor and people in need.",
@@ -69,6 +77,13 @@
     "loading": "Loading...",
     "donateWithCard": "Donate with Card",
     "securePayments": "Secure payments via Netopia Payments",
-    "projectBy": "Project initiated by"
+    "projectBy": "Project initiated by",
+    "successMetaTitle": "Thank you for your donation!",
+    "successHeading": "Thank you!",
+    "successMessage": "Your donation supports În Pridvor and people in need. Thank you!",
+    "backHome": "Back to home",
+    "cancelledHeading": "Donation cancelled",
+    "cancelledMessage": "No payment was made. If you encountered any issues, please contact us.",
+    "tryAgain": "Try again"
   }
 }

@@ -56,11 +56,11 @@ export const LatestCommentsRailBlock: React.FC<LatestCommentsRailBlockProps> = a
     const postTitle =
       post && typeof post === 'object' && post !== null && 'title' in post && post.title
         ? String(post.title)
-        : 'Articol necunoscut'
+        : t('unknownArticle')
 
     return {
       id: String(comment.id),
-      name: comment.name || 'Cititor anonim',
+      name: comment.name || t('anonymousReader'),
       createdAt: comment.createdAt ? String(comment.createdAt) : null,
       body: truncate(comment.comment || '', 220),
       href: postSlug ? `/posts/${postSlug}` : '#',
@@ -70,7 +70,7 @@ export const LatestCommentsRailBlock: React.FC<LatestCommentsRailBlockProps> = a
 
   return (
     <LatestCommentsRailClient
-      heading={props.heading || 'Din comentariile voastre'}
+      heading={props.heading || t('railHeading')}
       subheading={props.subheading || t('railSubheading')}
       items={items}
     />

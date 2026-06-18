@@ -20,7 +20,9 @@
     "postPlural": "Articole",
     "postSingular": "Articol",
     "searchPlaceholder": "Căutare",
-    "publishDate": "Data Publicării"
+    "publishDate": "Data Publicării",
+    "allAuthors": "Toți Autorii",
+    "readArticle": "Citește articolul"
   },
   "Comments": {
     "title": "Comentarii",
@@ -48,7 +50,13 @@
     "oneComment": "Comentariu",
     "multipleComments": "Comentarii",
     "reply": "Răspunde",
-    "cancelReply": "Anulează răspunsul"
+    "cancelReply": "Anulează răspunsul",
+    "railSubheading": "Conversațiile cele mai recente din comunitate",
+    "railScroll": "Scrollează pentru mai multe",
+    "railEmpty": "Nu există comentarii publicate încă.",
+    "railHeading": "Din comentariile voastre",
+    "unknownArticle": "Articol necunoscut",
+    "anonymousReader": "Cititor anonim"
   },
   "Donate": {
     "title": "Susține În Pridvor și oameni în nevoie.",
@@ -69,6 +77,13 @@
     "loading": "Se încarcă…",
     "donateWithCard": "Donează cu Cardul",
     "securePayments": "Plăți securizate prin Netopia Payments",
-    "projectBy": "Proiect inițiat de"
+    "projectBy": "Proiect inițiat de",
+    "successMetaTitle": "Mulțumim pentru donație!",
+    "successHeading": "Mulțumim!",
+    "successMessage": "Donația ta susține În Pridvor și oameni în nevoie. Îți mulțumim!",
+    "backHome": "Înapoi la pagina principală",
+    "cancelledHeading": "Donație anulată",
+    "cancelledMessage": "Nu s-a efectuat nicio plată. Dacă ai întâmpinat probleme, te rugăm să ne contactezi.",
+    "tryAgain": "Încearcă din nou"
   }
 }
