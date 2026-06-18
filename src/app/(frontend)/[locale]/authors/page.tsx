@@ -8,6 +8,7 @@ import { getPayload } from 'payload'
 import PageClient from './page.client'
 import { websiteTitle } from '@/utilities/commonInfo'
 import { getPostsCardSelect } from '@/utilities/getPostsCardSelect'
+import { getTranslations } from 'next-intl/server'
 
 export const dynamic = 'force-static'
 // Removed time-based revalidation - now using on-demand revalidation via hooks
@@ -20,6 +21,7 @@ type Args = {
 
 export default async function Page({ params: paramsPromise }: Args) {
   const { locale } = await paramsPromise
+  const t = await getTranslations('Common')
   const payload = await getPayload({ config: configPromise })
 
   const posts = await payload.find({
@@ -36,7 +38,7 @@ export default async function Page({ params: paramsPromise }: Args) {
       <PageClient />
       <div className="container mb-16">
         <div className="prose max-w-none">
-          <h1>Toți Autorii - {websiteTitle}</h1>
+          <h1>{t('allAuthors')} - {websiteTitle}</h1>
         </div>
       </div>
 

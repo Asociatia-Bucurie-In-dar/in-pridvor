@@ -9,6 +9,7 @@ import { Media } from '@/components/Media'
 import Link from 'next/link'
 import { formatDateTime } from '@/utilities/formatDateTime'
 import { extractTextFromLexical } from '@/utilities/extractTextFromLexical'
+import { useTranslations } from 'next-intl'
 
 // Import Swiper styles
 import 'swiper/css'
@@ -28,6 +29,7 @@ export const HeroCarouselClient: React.FC<HeroCarouselClientProps> = ({
   showNavigation = true,
   showPagination = true,
 }) => {
+  const t = useTranslations('Common')
   const [activeIndex, setActiveIndex] = React.useState<number>(0)
   const [swiperInstance, setSwiperInstance] = React.useState<any>(null)
 
@@ -211,7 +213,7 @@ export const HeroCarouselClient: React.FC<HeroCarouselClientProps> = ({
                         className="inline-flex items-center text-white font-medium group"
                       >
                         <span className="border-b-2 border-white pb-1 transition-all group-hover:border-white/60">
-                          Citește articolul
+                          {t('readArticle')}
                         </span>
                         <svg
                           className="ml-2 w-5 h-5 transform group-hover:translate-x-2 transition-transform"
