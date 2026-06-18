@@ -5,6 +5,7 @@ import { Dialog, DialogPanel, DialogTitle, Transition, TransitionChild } from '@
 import { XMarkIcon, CheckIcon, ClipboardIcon } from '@heroicons/react/24/outline'
 import { HeartIcon, BuildingLibraryIcon, CreditCardIcon } from '@heroicons/react/24/solid'
 import { motion } from 'framer-motion'
+import { useTranslations } from 'next-intl'
 
 interface DonateModalProps {
   isOpen: boolean
@@ -14,6 +15,7 @@ interface DonateModalProps {
 type PaymentMethod = 'iban' | 'netopia'
 
 export const DonateModal: React.FC<DonateModalProps> = ({ isOpen, onClose }) => {
+  const t = useTranslations('Donate')
   const isCardEnabled = process.env.NEXT_PUBLIC_ENABLE_CARD_DONATIONS === 'true'
   const [activeMethod, setActiveMethod] = useState<PaymentMethod>('iban')
   const [copiedField, setCopiedField] = useState<string | null>(null)
@@ -49,12 +51,12 @@ export const DonateModal: React.FC<DonateModalProps> = ({ isOpen, onClose }) => 
       {
         iban: 'RO31BTRLRONCRT0610749705',
         currency: 'RON',
-        label: 'Lei (RON)',
+        label: t('ronLabel'),
       },
       {
         iban: 'RO35BTRLEURCRT0610749703',
         currency: 'EUR',
-        label: 'Euro (EUR)',
+        label: t('eurLabel'),
       },
     ],
   }
@@ -76,7 +78,7 @@ export const DonateModal: React.FC<DonateModalProps> = ({ isOpen, onClose }) => 
     }
 
     if (donationAmount < 10) {
-      alert('Suma minimă este 10 RON')
+      alert(t('minAmount'))
       return
     }
 
@@ -88,7 +90,7 @@ export const DonateModal: React.FC<DonateModalProps> = ({ isOpen, onClose }) => 
       window.location.assign(redirectUrl)
     } catch (error) {
       console.error('Checkout error:', error)
-      alert('A apărut o eroare. Te rugăm să încerci din nou.')
+      alert(t('checkoutError'))
       setIsLoading(false)
     }
   }
@@ -132,7 +134,7 @@ export const DonateModal: React.FC<DonateModalProps> = ({ isOpen, onClose }) => 
                         as="h3"
                         className="text-xl font-bold text-gray-900 font-playfair"
                       >
-                        Susține În Pridvor și oameni în nevoie.
+                        {t('title')}
                       </DialogTitle>
                     </div>
                   </div>
@@ -170,7 +172,7 @@ export const DonateModal: React.FC<DonateModalProps> = ({ isOpen, onClose }) => 
                       }`}
                     >
                       <BuildingLibraryIcon className="h-5 w-5" />
-                      Transfer Bancar
+                      {t('bankTransfer')}
                     </button>
                     <button
                       onClick={() => setActiveMethod('netopia')}
@@ -181,7 +183,7 @@ export const DonateModal: React.FC<DonateModalProps> = ({ isOpen, onClose }) => 
                       }`}
                     >
                       <CreditCardIcon className="h-5 w-5" />
-                      Card Bancar
+                      {t('creditCard')}
                     </button>
                   </motion.div>
                 )}
@@ -195,7 +197,7 @@ export const DonateModal: React.FC<DonateModalProps> = ({ isOpen, onClose }) => 
                   >
                     <div className="space-y-4">
                       <p className="text-sm text-gray-600">
-                        Poți face o donație prin transfer bancar către contul nostru:
+                        {t('ibanInstructions')}
                       </p>
 
                       {/* Bank Details */}
@@ -203,7 +205,7 @@ export const DonateModal: React.FC<DonateModalProps> = ({ isOpen, onClose }) => 
                         {/* Account Name */}
                         <div className="border border-gray-200 rounded-lg p-3 bg-gray-50">
                           <label className="block text-xs font-medium text-gray-500 mb-1">
-                            Beneficiar
+                            {t('beneficiary')}
                           </label>
                           <div className="flex items-center justify-between gap-2">
                             <p className="text-sm font-semibold text-gray-900">
@@ -212,7 +214,7 @@ export const DonateModal: React.FC<DonateModalProps> = ({ isOpen, onClose }) => 
                             <button
                               onClick={() => copyToClipboard(bankDetails.accountName, 'name')}
                               className="p-1.5 rounded-md hover:bg-gray-200 transition-colors"
-                              title="Copiază"
+                              title={t('copy')}
                             >
                               {copiedField === 'name' ? (
                                 <CheckIcon className="h-4 w-4 text-green-600" />
@@ -250,7 +252,7 @@ export const DonateModal: React.FC<DonateModalProps> = ({ isOpen, onClose }) => 
                                     )
                                   }
                                   className="p-1.5 rounded-md hover:bg-yellow-200 transition-colors"
-                                  title="Copiază IBAN"
+                                  title={t('copyIban')}
                                 >
                                   {copiedField === `iban-${account.currency.toLowerCase()}` ? (
                                     <CheckIcon className="h-4 w-4 text-green-600" />
@@ -275,7 +277,7 @@ export const DonateModal: React.FC<DonateModalProps> = ({ isOpen, onClose }) => 
                             <button
                               onClick={() => copyToClipboard(bankDetails.swift, 'swift')}
                               className="p-1.5 rounded-md hover:bg-gray-200 transition-colors"
-                              title="Copiază SWIFT"
+                              title={t('copySwift')}
                             >
                               {copiedField === 'swift' ? (
                                 <CheckIcon className="h-4 w-4 text-green-600" />
@@ -298,13 +300,13 @@ export const DonateModal: React.FC<DonateModalProps> = ({ isOpen, onClose }) => 
                   >
                     <div className="space-y-4">
                       <p className="text-sm text-gray-600">
-                        Donează rapid și sigur cu cardul tău bancar prin Netopia Payments.
+                        {t('cardInstructions')}
                       </p>
 
                       {/* Suggested Amounts */}
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-3">
-                          Alege suma
+                          {t('chooseAmount')}
                         </label>
                         <div className="grid grid-cols-3 gap-2">
                           {[50, 100, 200].map((amount) => (
@@ -329,7 +331,7 @@ export const DonateModal: React.FC<DonateModalProps> = ({ isOpen, onClose }) => 
                       {/* Custom Amount */}
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Sau introdu o altă sumă
+                          {t('customAmount')}
                         </label>
                         <div className="relative">
                           <input
@@ -364,7 +366,7 @@ export const DonateModal: React.FC<DonateModalProps> = ({ isOpen, onClose }) => 
                         }`}
                       >
                         <CreditCardIcon className="h-5 w-5" />
-                        {isLoading ? 'Se încarcă…' : 'Donează cu Cardul'}
+                        {isLoading ? t('loading') : t('donateWithCard')}
                       </motion.button>
 
                       <div className="flex items-center justify-center gap-2 text-xs text-gray-500">
@@ -375,7 +377,7 @@ export const DonateModal: React.FC<DonateModalProps> = ({ isOpen, onClose }) => 
                             clipRule="evenodd"
                           />
                         </svg>
-                        Plăți securizate prin Netopia Payments
+                        {t('securePayments')}
                       </div>
                     </div>
                   </motion.div>
@@ -384,7 +386,7 @@ export const DonateModal: React.FC<DonateModalProps> = ({ isOpen, onClose }) => 
                 {/* Footer */}
                 <div className="mt-6 pt-6 border-t border-gray-200">
                   <p className="text-xs text-center text-gray-500">
-                    Proiect inițiat de{' '}
+                    {t('projectBy')}{' '}
                     <a
                       href="https://www.bucurieindar.ro"
                       target="_blank"

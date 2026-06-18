@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
+import { useTranslations } from 'next-intl'
 import { formatDateTime } from '@/utilities/formatDateTime'
 import { CommentForm } from './CommentForm'
 
@@ -35,6 +36,7 @@ interface CommentItemProps {
 }
 
 function CommentItem({ comment, depth = 0, postId }: CommentItemProps) {
+  const t = useTranslations('Comments')
   const [showReplyForm, setShowReplyForm] = useState(false)
   const maxDepth = 5
   const indentLevel = Math.min(depth, maxDepth)
@@ -78,7 +80,7 @@ function CommentItem({ comment, depth = 0, postId }: CommentItemProps) {
           onClick={() => setShowReplyForm(!showReplyForm)}
           className="text-sm text-gray-600 hover:text-gray-900 font-medium underline"
         >
-          {showReplyForm ? 'Anulează răspunsul' : 'Răspunde'}
+          {showReplyForm ? t('cancelReply') : t('reply')}
         </button>
       </div>
       {showReplyForm && (
@@ -104,13 +106,14 @@ function CommentItem({ comment, depth = 0, postId }: CommentItemProps) {
 }
 
 export function CommentList({ comments, postId }: CommentListProps) {
+  const t = useTranslations('Comments')
   const totalComments = countAllComments(comments)
 
   if (!comments || comments.length === 0) {
     return (
       <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8 mb-8 transition-all duration-200">
         <p className="text-gray-500 text-center">
-          Niciun comentariu încă. Fii primul care comentează!
+          {t('noComments')}
         </p>
       </div>
     )
@@ -120,7 +123,7 @@ export function CommentList({ comments, postId }: CommentListProps) {
     <div className="mb-8">
       <div className="flex items-center gap-3 mb-6">
         <h3 className="text-xl font-semibold font-playfair text-gray-900">
-          {totalComments} {totalComments === 1 ? 'Comentariu' : 'Comentarii'}
+          {totalComments} {totalComments === 1 ? t('oneComment') : t('multipleComments')}
         </h3>
         <div className="flex-1 h-px bg-gray-200"></div>
       </div>
