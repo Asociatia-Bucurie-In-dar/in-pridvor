@@ -9,7 +9,12 @@ export const routing = defineRouting({
   defaultLocale: 'ro',
 
   // Remove the prefix for the default locale (ro)
-  localePrefix: 'as-needed'
+  localePrefix: 'as-needed',
+
+  // Romanian is the source of truth and the default: serve it at `/` without
+  // auto-redirecting based on the browser's Accept-Language header. Visitors
+  // opt into English via the LocaleSwitcher.
+  localeDetection: false,
 });
 
 // Lightweight wrappers around Next.js navigation APIs
