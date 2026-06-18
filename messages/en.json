@@ -19,7 +19,8 @@
     "of": "of",
     "postPlural": "Posts",
     "postSingular": "Post",
-    "searchPlaceholder": "Search"
+    "searchPlaceholder": "Search",
+    "publishDate": "Publish Date"
   },
   "Comments": {
     "title": "Comments",

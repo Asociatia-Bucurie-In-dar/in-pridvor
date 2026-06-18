@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react'
 import type { Post } from '@/payload-types'
 import { AuthorLinks } from '@/components/AuthorLinks'
+import { useTranslations } from 'next-intl'
 
 interface User {
   id: number
@@ -16,6 +17,7 @@ interface EditableAuthorProps {
 }
 
 export const EditableAuthor: React.FC<EditableAuthorProps> = ({ post, authors, onUpdate }) => {
+  const t = useTranslations('Common')
   const [isEditing, setIsEditing] = useState(false)
   const getInitialAuthorIds = (): number[] => {
     if (!post.authors) return []
@@ -84,7 +86,7 @@ export const EditableAuthor: React.FC<EditableAuthorProps> = ({ post, authors, o
     return (
       <div className="flex flex-col gap-1">
         <div className="flex items-center gap-2">
-          <p className="text-sm">Autor</p>
+          <p className="text-sm">{t('author')}</p>
           <button
             onClick={(e) => {
               e.stopPropagation()

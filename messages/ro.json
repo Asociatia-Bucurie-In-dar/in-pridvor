@@ -19,7 +19,8 @@
     "of": "din",
     "postPlural": "Articole",
     "postSingular": "Articol",
-    "searchPlaceholder": "Căutare"
+    "searchPlaceholder": "Căutare",
+    "publishDate": "Data Publicării"
   },
   "Comments": {
     "title": "Comentarii",

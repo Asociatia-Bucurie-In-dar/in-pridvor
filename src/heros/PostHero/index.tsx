@@ -7,11 +7,11 @@ import { Media } from '@/components/Media'
 import { formatAuthors } from '@/utilities/formatAuthors'
 import { AuthorLinks } from '@/components/AuthorLinks'
 import { CategoryLinks } from '@/components/CategoryLinks'
+import { getTranslations } from 'next-intl/server'
 
-export const PostHero: React.FC<{
-  post: Post
-}> = ({ post }) => {
+export const PostHero = async ({ post }: { post: Post }) => {
   const { categories, heroImage, populatedAuthors, publishedAt, title } = post
+  const t = await getTranslations('Common')
 
   const hasAuthors =
     populatedAuthors && populatedAuthors.length > 0 && formatAuthors(populatedAuthors) !== ''
@@ -32,7 +32,7 @@ export const PostHero: React.FC<{
             {hasAuthors && populatedAuthors && (
               <div className="flex flex-col gap-4">
                 <div className="flex flex-col gap-1">
-                  <p className="text-sm">Autor</p>
+                  <p className="text-sm">{t('author')}</p>
 
                   <p>
                     <AuthorLinks authors={populatedAuthors} />
@@ -42,7 +42,7 @@ export const PostHero: React.FC<{
             )}
             {publishedAt && (
               <div className="flex flex-col gap-1">
-                <p className="text-sm">Data Publicării</p>
+                <p className="text-sm">{t('publishDate')}</p>
 
                 <time dateTime={publishedAt}>{formatDateTime(publishedAt)}</time>
               </div>
