@@ -11,7 +11,15 @@
     "and": "și",
     "prev": "Anterioara",
     "next": "Următoarea",
-    "about": "Noi"
+    "about": "Noi",
+    "allRightsReserved": "Toate drepturile rezervate.",
+    "author": "Autor",
+    "section": "Rubrica",
+    "noResults": "Căutarea nu a produs niciun rezultat.",
+    "of": "din",
+    "postPlural": "Articole",
+    "postSingular": "Articol",
+    "searchPlaceholder": "Căutare"
   },
   "Comments": {
     "title": "Comentarii",

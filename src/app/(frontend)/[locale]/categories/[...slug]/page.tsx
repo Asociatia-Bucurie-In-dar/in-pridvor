@@ -8,6 +8,7 @@ import { TitleBar } from '@/components/TitleBar'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import React, { cache } from 'react'
+import { getTranslations } from 'next-intl/server'
 
 import { generateMeta } from '@/utilities/generateMeta'
 import { getCategoryHierarchyIds } from '@/utilities/getCategoryHierarchy'
@@ -77,6 +78,7 @@ export default async function Category({ params: paramsPromise }: Args) {
 
   const filteredCategorySlug = categorySlug.filter((segment) => segment !== 'categories')
   const categoryBasePath = `/categories/${filteredCategorySlug.join('/')}`
+  const t = await getTranslations('Common')
 
   return (
     <div className="pb-16">
@@ -86,7 +88,7 @@ export default async function Category({ params: paramsPromise }: Args) {
       <PayloadRedirects disableNotFound url={url} />
 
       <div className="flex flex-col items-center gap-4">
-        <TitleBar title={category.title} prefix="Rubrica" />
+        <TitleBar title={category.title} prefix={t('section')} />
 
         <div className="container mb-8">
           <PageRange

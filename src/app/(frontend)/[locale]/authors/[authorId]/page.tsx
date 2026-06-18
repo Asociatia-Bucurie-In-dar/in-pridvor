@@ -10,6 +10,7 @@ import { getPayload } from 'payload'
 import React, { cache } from 'react'
 import PageClient from './page.client'
 import { getPostsCardSelect } from '@/utilities/getPostsCardSelect'
+import { getTranslations } from 'next-intl/server'
 import { routing } from '@/i18n/routing'
 
 export async function generateStaticParams() {
@@ -50,6 +51,7 @@ export default async function Author({ params: paramsPromise }: Args) {
 
   // Fetch posts by this author
   const posts = await queryPostsByAuthorId(author.id, locale)
+  const t = await getTranslations('Common')
 
   return (
     <div className="pb-16">
@@ -59,7 +61,7 @@ export default async function Author({ params: paramsPromise }: Args) {
       <PayloadRedirects disableNotFound url={url} />
 
       <div className="flex flex-col items-center gap-4">
-        <TitleBar prefix="Autor" title={author.name || ''} />
+        <TitleBar prefix={t('author')} title={author.name || ''} />
 
         <div className="container mb-8">
           <PageRange

@@ -75,7 +75,7 @@ export async function Footer() {
           </div>
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <p className="text-sm text-gray-600">
-              &copy; {currentYear} Asociația Bucurie în Dar. Toate drepturile rezervate.
+              &copy; {currentYear} Asociația Bucurie în Dar. {t('allRightsReserved')}
             </p>
             <div className="flex items-center gap-4">
               {footerLinks.map((item) => (

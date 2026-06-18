@@ -10,6 +10,7 @@ import { CardPostData } from '@/components/Card'
 import { getPostsCardSelect } from '@/utilities/getPostsCardSelect'
 import { generateSearchVariants } from '@/utilities/romanianSearch'
 import type { Where } from 'payload'
+import { getTranslations } from 'next-intl/server'
 
 type Args = {
   params: Promise<{
@@ -68,6 +69,7 @@ export default async function Page({ params: paramsPromise, searchParams: search
   const { q: query } = await searchParamsPromise
   const payload = await getPayload({ config: configPromise })
   const nowISO = new Date().toISOString()
+  const t = await getTranslations('Common')
 
   const searchCondition = await buildSearchConditions(payload, query)
 
@@ -95,7 +97,7 @@ export default async function Page({ params: paramsPromise, searchParams: search
       <PageClient />
       <div className="container mb-16">
         <div className="prose max-w-none text-center">
-          <h1 className="mb-8 lg:mb-16">Căutare</h1>
+          <h1 className="mb-8 lg:mb-16">{t('searchPlaceholder')}</h1>
 
           <div className="max-w-200 mx-auto">
             <Search />
@@ -106,14 +108,16 @@ export default async function Page({ params: paramsPromise, searchParams: search
       {posts.totalDocs > 0 ? (
         <CollectionArchive posts={posts.docs as CardPostData[]} />
       ) : (
-        <div className="container">Niciun rezultat găsit.</div>
+        <div className="container">{t('noResults')}</div>
       )}
     </div>
   )
 }
 
-export function generateMetadata(): Metadata {
+export async function generateMetadata({ params: paramsPromise }: Args): Promise<Metadata> {
+  await paramsPromise
+  const t = await getTranslations('Common')
   return {
-    title: `Căutare articole din revistă`,
+    title: t('searchPlaceholder'),
   }
 }
