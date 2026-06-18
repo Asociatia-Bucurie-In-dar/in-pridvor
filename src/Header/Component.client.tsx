@@ -25,6 +25,7 @@ import type { Header } from '@/payload-types'
 
 import { Logo } from '@/components/Logo/Logo'
 import { DonateModal } from '@/components/DonateModal'
+import { LocaleSwitcher } from '@/components/LocaleSwitcher'
 
 interface HeaderClientProps {
   data: Header
@@ -138,19 +139,18 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
 
   return (
     <div className="w-full relative">
-      {/* Search Icon - positioned relative to the full-width container */}
-      <motion.div
-        whileHover={{ scale: 1.1 }}
-        transition={{ duration: 0.2 }}
-        className="absolute top-6 right-6 hidden lg:block z-30"
-      >
-        <Link
-          href="/search"
-          className="block p-2 -m-2 text-gray-700 hover:text-yellow-600 cursor-pointer"
-        >
-          <MagnifyingGlassIcon aria-hidden="true" className="size-6" />
-        </Link>
-      </motion.div>
+      {/* Search Icon + Language toggle - positioned relative to the full-width container */}
+      <div className="absolute top-6 right-6 hidden lg:flex items-center gap-4 z-30">
+        <motion.div whileHover={{ scale: 1.1 }} transition={{ duration: 0.2 }}>
+          <Link
+            href="/search"
+            className="block p-2 -m-2 text-gray-700 hover:text-yellow-600 cursor-pointer"
+          >
+            <MagnifyingGlassIcon aria-hidden="true" className="size-6" />
+          </Link>
+        </motion.div>
+        <LocaleSwitcher />
+      </div>
 
       {/* BIG Logo */}
       <div className="flex justify-center mt-3 bg-white">
@@ -362,6 +362,20 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
                     <MagnifyingGlassIcon aria-hidden="true" className="size-5 text-yellow-600" />
                     Caută
                   </Link>
+                </motion.div>
+
+                {/* Language toggle (mobile) */}
+                <motion.div
+                  initial="hidden"
+                  animate="visible"
+                  custom={0.5}
+                  variants={menuItemVariants}
+                  className="py-4 px-3 flex items-center justify-between"
+                >
+                  <span className="text-sm font-semibold text-gray-900 font-playfair">
+                    Limbă / Language
+                  </span>
+                  <LocaleSwitcher />
                 </motion.div>
 
                 {/* Navigation Items */}
