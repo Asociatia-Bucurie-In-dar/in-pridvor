@@ -31,18 +31,16 @@ const FIELD_CONFIG: Record<TranslatableCollection, Record<string, 'text' | 'lexi
   categories: { title: 'text' },
 }
 
-// How many Gemini calls to make per invocation before stopping and chaining the
-// next run, and the throttle between calls. Defaults are tuned for a paid-tier
-// Gemini key and must keep a whole batch well under the serverless maxDuration
-// (docs are only committed after all their fields translate, so a batch must
-// finish, not get killed mid-doc). Override via env if your limits differ:
-//   free tier:  TRANSLATE_DELAY_MS=4000  TRANSLATE_BATCH_FIELDS=10
-// The wall-clock TIME_BUDGET_MS guard (below) is the real safety net — these are
-// just upper bounds. BATCH_FIELDS is high so the time budget is what stops a
-// batch on a paid key; DELAY_MS is small since paid limits are per-minute, not
-// per-day. If you raise the Vercel maxDuration, also raise TRANSLATE_TIME_BUDGET_MS.
-const BATCH_FIELDS = Number(process.env.TRANSLATE_BATCH_FIELDS ?? 300)
-const DELAY_MS = Number(process.env.TRANSLATE_DELAY_MS ?? 250)
+// This endpoint is driven by a cron (see vercel.json), which re-invokes it on a
+// schedule — so there is no in-process self-chaining. Each invocation drains as
+// many documents as it can within TIME_BUDGET_MS, processing them concurrently
+// (CONCURRENCY at a time) since a paid Gemini key allows many requests/minute.
+// Tunable via env:
+//   TRANSLATE_CONCURRENCY      docs translated in parallel (default 8)
+//   TRANSLATE_TIME_BUDGET_MS   wall-clock budget per invocation (default 250s;
+//                              keep < your Vercel maxDuration of 300s on Pro)
+const CONCURRENCY = Number(process.env.TRANSLATE_CONCURRENCY ?? 8)
+const DELAY_MS = Number(process.env.TRANSLATE_DELAY_MS ?? 0)
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms))
 const get = (obj: any, path: string) =>
@@ -92,137 +90,129 @@ export async function GET(request: Request) {
     model: process.env.GEMINI_MODEL || 'gemini-flash-latest',
     keyLen: rawKey.length,
     keyTail: rawKey.slice(-4),
+    concurrency: CONCURRENCY,
     delayMs: DELAY_MS,
-    batchFields: BATCH_FIELDS,
-    timeBudgetMs: Number(process.env.TRANSLATE_TIME_BUDGET_MS ?? 45_000),
+    timeBudgetMs: Number(process.env.TRANSLATE_TIME_BUDGET_MS ?? 250_000),
   }
   console.log('[translate-backfill] diag:', JSON.stringify(diag))
 
   const payload = await getPayload({ config: configPromise })
 
-  // Stop the batch when EITHER the call budget OR a wall-clock budget is hit,
-  // so the function always returns + chains before Vercel kills it mid-doc.
-  // 45s leaves headroom under a 60s (Hobby) maxDuration; Pro (300s) just does
-  // more docs per call-budget anyway.
+  // Leave headroom under the Vercel maxDuration so the function returns cleanly
+  // (the cron re-invokes us next tick to continue any remaining work).
   const startedAt = Date.now()
-  const TIME_BUDGET_MS = Number(process.env.TRANSLATE_TIME_BUDGET_MS ?? 45_000)
-  const budgetSpent = () => apiCalls >= BATCH_FIELDS || Date.now() - startedAt >= TIME_BUDGET_MS
+  const TIME_BUDGET_MS = Number(process.env.TRANSLATE_TIME_BUDGET_MS ?? 250_000)
+  const timeLeft = () => TIME_BUDGET_MS - (Date.now() - startedAt)
 
   let apiCalls = 0
   let docsTranslated = 0
-  let remaining = 0
   let failed = 0
-  let transientFails = 0 // quota/overload failures — signal to stop, not skip
+  let transientFails = 0
   const log: string[] = []
 
-  try {
-    for (const collection of COLLECTIONS) {
-      const fields = FIELD_CONFIG[collection]
+  // Translate one document fully and persist its en group. Returns 'done' on
+  // success, or throws (caller records the failure). Never persists a partial
+  // en — a doc is translated entirely or not at all, so idempotency (keyed on
+  // en.title) can't mark a half-done doc as complete.
+  const translateDoc = async (
+    collection: TranslatableCollection,
+    doc: any,
+  ): Promise<void> => {
+    const fields = FIELD_CONFIG[collection]
+    const enData: Record<string, any> = {}
+    let translatedAny = false
 
-      // Pull untranslated docs (en.title empty/missing). Fetch a generous page;
-      // we only *process* until the per-invocation budget is spent, then count
-      // the rest as "remaining" so the chained run picks them up.
+    for (const [path, type] of Object.entries(fields)) {
+      const value = get(doc, path)
+      if (value == null || (typeof value === 'string' && value.trim() === '')) continue
+      if (DELAY_MS > 0) await sleep(DELAY_MS)
+      apiCalls++
+      const translated = await translateWithRetry(value, type)
+      const keys = path.split('.')
+      const leaf = keys.pop() as string
+      let cursor = enData
+      for (const k of keys) {
+        cursor[k] = cursor[k] ?? {}
+        cursor = cursor[k]
+      }
+      cursor[leaf] = translated
+      translatedAny = true
+    }
+
+    if (!translatedAny) return
+    await payload.update({
+      collection: collection as any,
+      id: doc.id,
+      data: { en: enData },
+      overrideAccess: true,
+      context: { disableRevalidate: true }, // next/cache hooks can't run here
+    })
+    docsTranslated++
+    log.push(`${collection}#${doc.id} -> "${enData.title ?? '(partial)'}"`)
+  }
+
+  try {
+    // Build the work queue: every untranslated doc across all collections.
+    const queue: Array<{ collection: TranslatableCollection; doc: any }> = []
+    for (const collection of COLLECTIONS) {
       const result = await payload.find({
         collection: collection as any,
-        where: {
-          or: [{ 'en.title': { exists: false } }, { 'en.title': { equals: '' } }],
-        },
-        limit: 100,
+        where: { or: [{ 'en.title': { exists: false } }, { 'en.title': { equals: '' } }] },
+        limit: 0, // all
+        pagination: false,
         depth: 0,
         overrideAccess: true,
       })
-
       for (const doc of result.docs as any[]) {
-        // Defensive: double-check it still needs translating.
         if (doc.en?.title != null && String(doc.en.title).trim() !== '') continue
+        queue.push({ collection, doc })
+      }
+    }
 
-        if (budgetSpent()) {
-          remaining++ // budget spent — leave for the next chained invocation
-          continue
+    const totalToDo = queue.length
+    let stoppedForTime = false
+
+    // Concurrency-bounded worker pool: CONCURRENCY workers pull from the queue
+    // until it's empty or the time budget runs low. A paid Gemini key handles
+    // the parallelism comfortably, so one invocation drains a large batch.
+    let cursor = 0
+    const worker = async () => {
+      while (cursor < queue.length) {
+        if (timeLeft() < 20_000) {
+          stoppedForTime = true
+          return
         }
-
-        // Isolate per-document failures: a doc that still errors after retries
-        // is skipped and reported, never aborting the whole batch.
+        const item = queue[cursor++]
+        if (!item) return
         try {
-          const enData: Record<string, any> = {}
-          let translatedAny = false
-
-          // Translate ALL of this doc's fields once started — never break mid-doc,
-          // or we'd persist a partial en (e.g. en.title only) and idempotency would
-          // mark the doc done, leaving content/meta untranslated forever. The
-          // budget is only checked at the doc boundary above.
-          for (const [path, type] of Object.entries(fields)) {
-            const value = get(doc, path)
-            if (value == null || (typeof value === 'string' && value.trim() === '')) continue
-
-            if (apiCalls > 0) await sleep(DELAY_MS) // throttle between Gemini calls
-            apiCalls++
-            const translated = await translateWithRetry(value, type)
-
-            const keys = path.split('.')
-            const leaf = keys.pop() as string
-            let cursor = enData
-            for (const k of keys) {
-              cursor[k] = cursor[k] ?? {}
-              cursor = cursor[k]
-            }
-            cursor[leaf] = translated
-            translatedAny = true
-          }
-
-          if (translatedAny) {
-            await payload.update({
-              collection: collection as any,
-              id: doc.id,
-              data: { en: enData },
-              overrideAccess: true,
-              context: { disableRevalidate: true }, // next/cache hooks can't run here
-            })
-            docsTranslated++
-            log.push(`${collection}#${doc.id} -> "${enData.title ?? '(partial)'}"`)
-          }
+          await translateDoc(item.collection, item.doc)
         } catch (docErr) {
           failed++
-          remaining++ // let a later run retry this doc
           const msg = docErr instanceof Error ? docErr.message : String(docErr)
           if (/\b(429|500|502|503|504)\b/.test(msg) || /quota|overloaded|rate|unavailable/i.test(msg)) {
             transientFails++
           }
-          log.push(`[FAIL] ${collection}#${doc.id}: ${msg}`)
+          log.push(`[FAIL] ${item.collection}#${item.doc.id}: ${msg}`)
         }
       }
     }
 
-    // Chain another invocation only if this run actually translated something.
-    // Requiring forward progress (docsTranslated > 0) makes tight loops
-    // impossible: a batch that translates zero — whether from a down/quota-
-    // limited API or a stubborn document stuck at the front of the queue —
-    // stops and reports `stalled`, to be re-triggered manually. With the keyed-
-    // map lexical translation, hard per-doc failures should be rare.
-    const madeProgress = docsTranslated > 0
-    let chained = false
-    if (remaining > 0 && madeProgress) {
-      const url = new URL(request.url)
-      const selfUrl = `${url.origin}${url.pathname}`
-      void fetch(selfUrl, {
-        headers: { authorization: `Bearer ${process.env.CRON_SECRET}` },
-      }).catch(() => {
-        /* fire-and-forget; if it fails, the endpoint can be re-hit manually */
-      })
-      chained = true
-    }
+    await Promise.all(Array.from({ length: Math.max(1, CONCURRENCY) }, () => worker()))
+
+    const remaining = totalToDo - docsTranslated // not-yet-done this run (incl. failures)
 
     return Response.json({
       success: failed === 0,
       diag,
+      totalToDo,
       docsTranslated,
       failed,
       transientFails,
       apiCalls,
-      moreRemaining: remaining > 0,
-      chainedNextRun: chained,
-      stalled: remaining > 0 && !madeProgress, // re-trigger manually when upstream recovers
-      log,
+      remaining,
+      stoppedForTime, // true = hit time budget; cron's next tick continues
+      done: remaining === 0,
+      log: log.slice(0, 50),
     })
   } catch (error) {
     return Response.json(
@@ -232,7 +222,7 @@ export async function GET(request: Request) {
         docsTranslated,
         apiCalls,
         error: error instanceof Error ? error.message : 'Unknown error',
-        log,
+        log: log.slice(0, 50),
       },
       { status: 500 },
     )
