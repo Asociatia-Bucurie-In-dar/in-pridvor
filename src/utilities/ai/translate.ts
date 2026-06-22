@@ -3,6 +3,12 @@ import { GoogleGenerativeAI } from '@google/generative-ai'
 const apiKey = process.env.GOOGLE_AI_STUDIO_KEY || ''
 const genAI = new GoogleGenerativeAI(apiKey)
 
+// Model is configurable so it can be switched without a code change — the
+// free tier enforces a per-day-per-model request quota, so when one model is
+// exhausted you can point at another that still has headroom. Override with
+// GEMINI_MODEL in the environment. (Paid billing removes the daily cap entirely.)
+const MODEL_ID = process.env.GEMINI_MODEL || 'gemini-flash-latest'
+
 /**
  * Robustly extract a JSON object from a model response that may be wrapped in
  * markdown fences or surrounded by stray prose. Returns the parsed value, or
@@ -67,7 +73,7 @@ export const translateToEnglish = async (content: any, type: 'text' | 'lexical' 
     const strings = textNodes.map((n) => n.text)
 
     const model = genAI.getGenerativeModel({
-      model: 'gemini-2.5-flash',
+      model: MODEL_ID,
       generationConfig: { responseMimeType: 'application/json' },
     })
 
@@ -118,7 +124,7 @@ export const translateToEnglish = async (content: any, type: 'text' | 'lexical' 
     })
     return cloned
   } else {
-    const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' })
+    const model = genAI.getGenerativeModel({ model: MODEL_ID })
     const prompt = `
       Translate the following Romanian text to English.
       Maintain a professional and editorial tone suitable for a cultural publishing platform.
@@ -144,7 +150,7 @@ export const translateFields = async (fields: Record<string, { content: any; typ
   }
 
   const model = genAI.getGenerativeModel({
-    model: 'gemini-2.5-flash',
+    model: MODEL_ID,
     generationConfig: { responseMimeType: 'application/json' },
   })
 
