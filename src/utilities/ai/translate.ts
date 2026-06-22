@@ -27,6 +27,24 @@ const parseJsonFromModel = (raw: string): any => {
 }
 
 /**
+ * Walk a Lexical rich-text tree and collect every `text` string (in document
+ * order). Returns the references so we can write translations back in place.
+ */
+const collectLexicalTextNodes = (root: any): any[] => {
+  const nodes: any[] = []
+  const visit = (node: any) => {
+    if (!node || typeof node !== 'object') return
+    if (typeof node.text === 'string' && node.text.trim() !== '') nodes.push(node)
+    if (Array.isArray(node.children)) node.children.forEach(visit)
+    // Lexical nests block content under `root.children`; also handle arrays.
+    if (Array.isArray(node)) node.forEach(visit)
+  }
+  if (Array.isArray(root?.root?.children)) root.root.children.forEach(visit)
+  else visit(root)
+  return nodes
+}
+
+/**
  * Translates content from Romanian to English using Gemini 2.5 Flash.
  * Handles both plain text and Lexical JSON structures.
  */
@@ -35,51 +53,77 @@ export const translateToEnglish = async (content: any, type: 'text' | 'lexical' 
     throw new Error('GOOGLE_AI_STUDIO_KEY is not defined in environment variables.')
   }
 
-  // Use gemini-2.5-flash for faster and cost-effective translation
-  const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' })
-
   if (type === 'lexical') {
+    // Translate the Lexical tree by extracting only its text strings,
+    // translating them as a batch, and writing them back into a deep clone of
+    // the original structure. This guarantees the Lexical structure is
+    // preserved exactly (only `text` values change) and avoids asking the model
+    // to round-trip a large JSON blob — the failure mode that produced
+    // unescaped-quote / invalid-JSON errors. JSON mode keeps the array valid.
+    const cloned = JSON.parse(JSON.stringify(content))
+    const textNodes = collectLexicalTextNodes(cloned)
+    if (textNodes.length === 0) return cloned
+
+    const strings = textNodes.map((n) => n.text)
+
+    const model = genAI.getGenerativeModel({
+      model: 'gemini-2.5-flash',
+      generationConfig: { responseMimeType: 'application/json' },
+    })
+
     const prompt = `
-      You are an expert translator specializing in Romanian to English translation for a high-quality editorial platform.
-      Your task is to translate the following Lexical JSON content from Romanian to English.
-      
-      CRITICAL INSTRUCTIONS:
-      1. ONLY translate the values of the "text" keys.
-      2. DO NOT translate any other keys (e.g., "type", "format", "version", "style", "mode", "direction").
-      3. PRESERVE the exact JSON structure.
-      4. Maintain the tone and nuance of the original Romanian text.
-      5. Return ONLY the translated JSON object, with no markdown formatting or extra text.
-      
-      JSON to translate:
-      ${JSON.stringify(content)}
+      You are an expert Romanian-to-English translator for a high-quality editorial platform.
+      You will receive a JSON array of Romanian strings. Translate EACH string to English,
+      preserving tone and nuance. Whitespace-only or punctuation-only strings must be
+      returned unchanged.
+
+      Return ONLY a JSON array of the translated strings, in the SAME ORDER and with the
+      SAME LENGTH as the input array. Do not add, remove, merge, or reorder elements.
+
+      Input array:
+      ${JSON.stringify(strings)}
     `
 
-    // LLM JSON output occasionally comes back malformed. Try once, and if the
-    // result can't be parsed, regenerate once more before giving up — a fresh
-    // generation usually produces valid JSON.
+    let translatedStrings: string[] | null = null
     let lastErr: unknown
     for (let attempt = 0; attempt < 2; attempt++) {
       const result = await model.generateContent(prompt)
       const response = await result.response
       try {
-        return parseJsonFromModel(response.text())
+        const parsed = parseJsonFromModel(response.text())
+        if (Array.isArray(parsed) && parsed.length === strings.length) {
+          translatedStrings = parsed.map((s) => String(s))
+          break
+        }
+        lastErr = new Error(
+          `Translated array length ${Array.isArray(parsed) ? parsed.length : 'n/a'} != source ${strings.length}`,
+        )
       } catch (e) {
         lastErr = e
         console.error(
           `Failed to parse Gemini lexical response (attempt ${attempt + 1}):`,
-          response.text().slice(0, 500),
+          response.text().slice(0, 300),
         )
       }
     }
-    throw lastErr instanceof Error
-      ? lastErr
-      : new Error('AI translation returned an invalid JSON structure.')
+
+    if (!translatedStrings) {
+      throw lastErr instanceof Error
+        ? lastErr
+        : new Error('AI translation returned an invalid JSON structure.')
+    }
+
+    textNodes.forEach((node, i) => {
+      node.text = translatedStrings![i]
+    })
+    return cloned
   } else {
+    const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' })
     const prompt = `
-      Translate the following Romanian text to English. 
+      Translate the following Romanian text to English.
       Maintain a professional and editorial tone suitable for a cultural publishing platform.
       Return only the translated text.
-      
+
       Text to translate:
       "${content}"
     `
@@ -99,7 +143,10 @@ export const translateFields = async (fields: Record<string, { content: any; typ
     throw new Error('GOOGLE_AI_STUDIO_KEY is not defined in environment variables.')
   }
 
-  const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' })
+  const model = genAI.getGenerativeModel({
+    model: 'gemini-2.5-flash',
+    generationConfig: { responseMimeType: 'application/json' },
+  })
 
   const prompt = `
     You are an expert translator specializing in Romanian to English translation for a high-quality editorial platform.
