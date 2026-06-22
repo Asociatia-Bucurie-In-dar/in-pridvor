@@ -4,6 +4,29 @@ const apiKey = process.env.GOOGLE_AI_STUDIO_KEY || ''
 const genAI = new GoogleGenerativeAI(apiKey)
 
 /**
+ * Robustly extract a JSON object from a model response that may be wrapped in
+ * markdown fences or surrounded by stray prose. Returns the parsed value, or
+ * throws if no valid JSON object can be recovered.
+ */
+const parseJsonFromModel = (raw: string): any => {
+  let text = raw.trim()
+  // Strip ```json ... ``` or ``` ... ``` fences anywhere in the string.
+  const fence = text.match(/```(?:json)?\s*([\s\S]*?)\s*```/i)
+  if (fence && fence[1]) text = fence[1].trim()
+  try {
+    return JSON.parse(text)
+  } catch {
+    // Fallback: grab the outermost {...} and try again.
+    const first = text.indexOf('{')
+    const last = text.lastIndexOf('}')
+    if (first !== -1 && last > first) {
+      return JSON.parse(text.slice(first, last + 1))
+    }
+    throw new Error('AI translation returned an invalid JSON structure.')
+  }
+}
+
+/**
  * Translates content from Romanian to English using Gemini 2.5 Flash.
  * Handles both plain text and Lexical JSON structures.
  */
@@ -31,16 +54,26 @@ export const translateToEnglish = async (content: any, type: 'text' | 'lexical' 
       ${JSON.stringify(content)}
     `
 
-    const result = await model.generateContent(prompt)
-    const response = await result.response
-    const text = response.text().trim().replace(/^```json/, '').replace(/```$/, '').trim()
-    
-    try {
-      return JSON.parse(text)
-    } catch (e) {
-      console.error('Failed to parse Gemini response as JSON:', text)
-      throw new Error('AI translation returned an invalid JSON structure.')
+    // LLM JSON output occasionally comes back malformed. Try once, and if the
+    // result can't be parsed, regenerate once more before giving up — a fresh
+    // generation usually produces valid JSON.
+    let lastErr: unknown
+    for (let attempt = 0; attempt < 2; attempt++) {
+      const result = await model.generateContent(prompt)
+      const response = await result.response
+      try {
+        return parseJsonFromModel(response.text())
+      } catch (e) {
+        lastErr = e
+        console.error(
+          `Failed to parse Gemini lexical response (attempt ${attempt + 1}):`,
+          response.text().slice(0, 500),
+        )
+      }
     }
+    throw lastErr instanceof Error
+      ? lastErr
+      : new Error('AI translation returned an invalid JSON structure.')
   } else {
     const prompt = `
       Translate the following Romanian text to English. 
@@ -85,18 +118,11 @@ export const translateFields = async (fields: Record<string, { content: any; typ
 
   const result = await model.generateContent(prompt)
   const response = await result.response
-  const text = response.text().trim().replace(/^```json/, '').replace(/```$/, '').trim()
-  
-  try {
-    const translated = JSON.parse(text)
-    // Extract only the content from the translated fields
-    const result: Record<string, any> = {}
-    for (const key in translated) {
-      result[key] = translated[key].content
-    }
-    return result
-  } catch (e) {
-    console.error('Failed to parse Gemini response as JSON:', text)
-    throw new Error('AI translation returned an invalid JSON structure.')
+  const translated = parseJsonFromModel(response.text())
+  // Extract only the content from the translated fields
+  const out: Record<string, any> = {}
+  for (const key in translated) {
+    out[key] = translated[key].content
   }
+  return out
 }
