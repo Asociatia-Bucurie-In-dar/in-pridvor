@@ -41,6 +41,27 @@ const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms))
 const get = (obj: any, path: string) =>
   path.split('.').reduce<any>((acc, k) => (acc == null ? acc : acc[k]), obj)
 
+// Gemini sometimes returns transient 503 (overloaded) / 429 (rate) errors.
+// Retry those a few times with exponential backoff before giving up.
+const isTransient = (err: unknown) => {
+  const msg = err instanceof Error ? err.message : String(err)
+  return /\b(429|500|502|503|504)\b/.test(msg) || /overloaded|high demand|unavailable|rate/i.test(msg)
+}
+
+const translateWithRetry = async (value: any, type: 'text' | 'lexical', maxAttempts = 4) => {
+  let attempt = 0
+  // eslint-disable-next-line no-constant-condition
+  while (true) {
+    try {
+      return await translateToEnglish(value, type)
+    } catch (err) {
+      attempt++
+      if (attempt >= maxAttempts || !isTransient(err)) throw err
+      await sleep(5_000 * attempt) // 5s, 10s, 15s backoff
+    }
+  }
+}
+
 const isAuthorized = (request: Request) => {
   const secret = process.env.CRON_SECRET
   if (!secret) return false // fail closed if no secret configured
@@ -60,6 +81,7 @@ export async function GET(request: Request) {
   let apiCalls = 0
   let docsTranslated = 0
   let remaining = 0
+  let failed = 0
   const log: string[] = []
 
   try {
@@ -88,49 +110,61 @@ export async function GET(request: Request) {
           continue
         }
 
-        const enData: Record<string, any> = {}
-        let translatedAny = false
+        // Isolate per-document failures: a doc that still errors after retries
+        // is skipped and reported, never aborting the whole batch.
+        try {
+          const enData: Record<string, any> = {}
+          let translatedAny = false
 
-        for (const [path, type] of Object.entries(fields)) {
-          if (apiCalls >= BATCH_FIELDS) break
-          const value = get(doc, path)
-          if (value == null || (typeof value === 'string' && value.trim() === '')) continue
+          for (const [path, type] of Object.entries(fields)) {
+            if (apiCalls >= BATCH_FIELDS) break
+            const value = get(doc, path)
+            if (value == null || (typeof value === 'string' && value.trim() === '')) continue
 
-          if (apiCalls > 0) await sleep(DELAY_MS) // throttle between Gemini calls
-          apiCalls++
-          const translated = await translateToEnglish(value, type)
+            if (apiCalls > 0) await sleep(DELAY_MS) // throttle between Gemini calls
+            apiCalls++
+            const translated = await translateWithRetry(value, type)
 
-          const keys = path.split('.')
-          const leaf = keys.pop() as string
-          let cursor = enData
-          for (const k of keys) {
-            cursor[k] = cursor[k] ?? {}
-            cursor = cursor[k]
+            const keys = path.split('.')
+            const leaf = keys.pop() as string
+            let cursor = enData
+            for (const k of keys) {
+              cursor[k] = cursor[k] ?? {}
+              cursor = cursor[k]
+            }
+            cursor[leaf] = translated
+            translatedAny = true
           }
-          cursor[leaf] = translated
-          translatedAny = true
-        }
 
-        if (translatedAny) {
-          await payload.update({
-            collection: collection as any,
-            id: doc.id,
-            data: { en: enData },
-            overrideAccess: true,
-            context: { disableRevalidate: true }, // next/cache hooks can't run here
-          })
-          docsTranslated++
-          log.push(`${collection}#${doc.id} -> "${enData.title ?? '(partial)'}"`)
+          if (translatedAny) {
+            await payload.update({
+              collection: collection as any,
+              id: doc.id,
+              data: { en: enData },
+              overrideAccess: true,
+              context: { disableRevalidate: true }, // next/cache hooks can't run here
+            })
+            docsTranslated++
+            log.push(`${collection}#${doc.id} -> "${enData.title ?? '(partial)'}"`)
+          }
+        } catch (docErr) {
+          failed++
+          remaining++ // let a later run retry this doc
+          log.push(
+            `[FAIL] ${collection}#${doc.id}: ${docErr instanceof Error ? docErr.message : String(docErr)}`,
+          )
         }
       }
     }
 
-    // If more work remains, chain another invocation (fire-and-forget) so the
-    // backlog drains without re-triggering manually.
+    // Chain another invocation only if this run made real progress. If the
+    // batch translated nothing and only produced failures (e.g. Gemini is
+    // down), do NOT chain — that would be a tight loop hammering a dead API.
+    // The caller can re-trigger manually once the upstream recovers.
+    const madeProgress = docsTranslated > 0
     let chained = false
-    if (remaining > 0) {
+    if (remaining > 0 && madeProgress) {
       const url = new URL(request.url)
-      // strip any query; same origin + path
       const selfUrl = `${url.origin}${url.pathname}`
       void fetch(selfUrl, {
         headers: { authorization: `Bearer ${process.env.CRON_SECRET}` },
@@ -141,11 +175,13 @@ export async function GET(request: Request) {
     }
 
     return Response.json({
-      success: true,
+      success: failed === 0,
       docsTranslated,
+      failed,
       apiCalls,
       moreRemaining: remaining > 0,
       chainedNextRun: chained,
+      stalled: remaining > 0 && !madeProgress, // re-trigger manually when upstream recovers
       log,
     })
   } catch (error) {
