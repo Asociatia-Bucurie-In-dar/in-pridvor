@@ -83,6 +83,21 @@ export async function GET(request: Request) {
     return Response.json({ error: 'GOOGLE_AI_STUDIO_KEY is not set' }, { status: 500 })
   }
 
+  // Diagnostics: confirm which model + key + timing the running deployment is
+  // actually using (env vars only take effect on deployments built after they
+  // were saved). Surfaced both in logs and the response so it's observable
+  // without dashboard access. The key is masked — only length + last 4 chars.
+  const rawKey = process.env.GOOGLE_AI_STUDIO_KEY || ''
+  const diag = {
+    model: process.env.GEMINI_MODEL || 'gemini-flash-latest',
+    keyLen: rawKey.length,
+    keyTail: rawKey.slice(-4),
+    delayMs: DELAY_MS,
+    batchFields: BATCH_FIELDS,
+    timeBudgetMs: Number(process.env.TRANSLATE_TIME_BUDGET_MS ?? 45_000),
+  }
+  console.log('[translate-backfill] diag:', JSON.stringify(diag))
+
   const payload = await getPayload({ config: configPromise })
 
   // Stop the batch when EITHER the call budget OR a wall-clock budget is hit,
@@ -194,6 +209,7 @@ export async function GET(request: Request) {
 
     return Response.json({
       success: failed === 0,
+      diag,
       docsTranslated,
       failed,
       apiCalls,
@@ -206,6 +222,7 @@ export async function GET(request: Request) {
     return Response.json(
       {
         success: false,
+        diag,
         docsTranslated,
         apiCalls,
         error: error instanceof Error ? error.message : 'Unknown error',
