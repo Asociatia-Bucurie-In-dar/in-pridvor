@@ -37,8 +37,12 @@ const FIELD_CONFIG: Record<TranslatableCollection, Record<string, 'text' | 'lexi
 // (docs are only committed after all their fields translate, so a batch must
 // finish, not get killed mid-doc). Override via env if your limits differ:
 //   free tier:  TRANSLATE_DELAY_MS=4000  TRANSLATE_BATCH_FIELDS=10
-const BATCH_FIELDS = Number(process.env.TRANSLATE_BATCH_FIELDS ?? 40)
-const DELAY_MS = Number(process.env.TRANSLATE_DELAY_MS ?? 750)
+// The wall-clock TIME_BUDGET_MS guard (below) is the real safety net — these are
+// just upper bounds. BATCH_FIELDS is high so the time budget is what stops a
+// batch on a paid key; DELAY_MS is small since paid limits are per-minute, not
+// per-day. If you raise the Vercel maxDuration, also raise TRANSLATE_TIME_BUDGET_MS.
+const BATCH_FIELDS = Number(process.env.TRANSLATE_BATCH_FIELDS ?? 300)
+const DELAY_MS = Number(process.env.TRANSLATE_DELAY_MS ?? 250)
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms))
 const get = (obj: any, path: string) =>
