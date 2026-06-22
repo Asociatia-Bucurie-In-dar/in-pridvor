@@ -61,75 +61,93 @@ export const translateToEnglish = async (content: any, type: 'text' | 'lexical' 
 
   if (type === 'lexical') {
     // Translate the Lexical tree by extracting only its text strings,
-    // translating them as a batch, and writing them back into a deep clone of
-    // the original structure. This guarantees the Lexical structure is
-    // preserved exactly (only `text` values change) and avoids asking the model
-    // to round-trip a large JSON blob — the failure mode that produced
-    // unescaped-quote / invalid-JSON errors. JSON mode keeps the array valid.
+    // translating them, and writing them back into a deep clone of the original
+    // structure. This preserves the Lexical structure exactly (only `text`
+    // values change) and avoids round-tripping a large JSON blob.
     const cloned = JSON.parse(JSON.stringify(content))
     const textNodes = collectLexicalTextNodes(cloned)
     if (textNodes.length === 0) return cloned
 
-    // Send a KEYED object ({"0": "...", "1": "..."}) rather than a positional
-    // array, and reinsert by key. This removes the fragile "array length must
-    // match" contract — the model merging/dropping an element no longer
-    // corrupts the whole document. Any key the model omits simply keeps its
-    // original Romanian text (graceful per-string fallback).
+    // Translate in CHARACTER-BOUNDED CHUNKS. A single request that asks for an
+    // entire long article back as one JSON object can exceed Gemini's output
+    // token limit and get truncated → invalid JSON. Chunking keeps every
+    // response small enough to come back whole. Each chunk is a keyed object
+    // ({"0": "..."}) translated and reinserted by key (missing keys keep the
+    // original Romanian text — graceful per-string fallback).
     const model = genAI.getGenerativeModel({
       model: MODEL_ID,
-      generationConfig: { responseMimeType: 'application/json' },
+      generationConfig: { responseMimeType: 'application/json', maxOutputTokens: 8192 },
     })
 
-    const sourceMap: Record<string, string> = {}
+    const CHUNK_CHARS = 4000 // source chars per request (output stays well under cap)
+    const chunks: number[][] = [] // arrays of textNode indices
+    let current: number[] = []
+    let currentChars = 0
     textNodes.forEach((n, i) => {
-      sourceMap[String(i)] = n.text
-    })
-
-    const prompt = `
-      You are an expert Romanian-to-English translator for a high-quality editorial platform.
-      You will receive a JSON object whose values are Romanian strings. Translate EACH value
-      to English, preserving tone and nuance. Whitespace-only or punctuation-only values must
-      be returned unchanged.
-
-      Return ONLY a JSON object with the EXACT SAME KEYS, where each value is the English
-      translation of the corresponding input value. Do not add, remove, or rename keys.
-
-      Input object:
-      ${JSON.stringify(sourceMap)}
-    `
-
-    let translatedMap: Record<string, any> | null = null
-    let lastErr: unknown
-    for (let attempt = 0; attempt < 2; attempt++) {
-      const result = await model.generateContent(prompt)
-      const response = await result.response
-      try {
-        const parsed = parseJsonFromModel(response.text())
-        if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
-          translatedMap = parsed
-          break
-        }
-        lastErr = new Error('Translated value is not a JSON object')
-      } catch (e) {
-        lastErr = e
-        console.error(
-          `Failed to parse Gemini lexical response (attempt ${attempt + 1}):`,
-          response.text().slice(0, 300),
-        )
+      const len = (n.text as string).length
+      if (current.length > 0 && currentChars + len > CHUNK_CHARS) {
+        chunks.push(current)
+        current = []
+        currentChars = 0
       }
-    }
-
-    if (!translatedMap) {
-      throw lastErr instanceof Error
-        ? lastErr
-        : new Error('AI translation returned an invalid JSON structure.')
-    }
-
-    // Reinsert by key; fall back to the original text for any missing/empty key.
-    textNodes.forEach((node, i) => {
-      const t = translatedMap![String(i)]
-      if (typeof t === 'string' && t.length > 0) node.text = t
+      current.push(i)
+      currentChars += len
     })
+    if (current.length > 0) chunks.push(current)
+
+    const translateChunk = async (indices: number[]): Promise<void> => {
+      const sourceMap: Record<string, string> = {}
+      indices.forEach((idx) => {
+        sourceMap[String(idx)] = textNodes[idx]!.text
+      })
+      const prompt = `
+        You are an expert Romanian-to-English translator for a high-quality editorial platform.
+        You will receive a JSON object whose values are Romanian strings. Translate EACH value
+        to English, preserving tone and nuance. Whitespace-only or punctuation-only values must
+        be returned unchanged.
+
+        Return ONLY a JSON object with the EXACT SAME KEYS, where each value is the English
+        translation of the corresponding input value. Do not add, remove, or rename keys.
+
+        Input object:
+        ${JSON.stringify(sourceMap)}
+      `
+      let translatedMap: Record<string, any> | null = null
+      let lastErr: unknown
+      for (let attempt = 0; attempt < 2; attempt++) {
+        const result = await model.generateContent(prompt)
+        const response = await result.response
+        try {
+          const parsed = parseJsonFromModel(response.text())
+          if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
+            translatedMap = parsed
+            break
+          }
+          lastErr = new Error('Translated value is not a JSON object')
+        } catch (e) {
+          lastErr = e
+          console.error(
+            `Failed to parse Gemini lexical chunk (attempt ${attempt + 1}):`,
+            response.text().slice(0, 300),
+          )
+        }
+      }
+      if (!translatedMap) {
+        throw lastErr instanceof Error
+          ? lastErr
+          : new Error('AI translation returned an invalid JSON structure.')
+      }
+      indices.forEach((idx) => {
+        const t = translatedMap![String(idx)]
+        if (typeof t === 'string' && t.length > 0) textNodes[idx]!.text = t
+      })
+    }
+
+    // Sequential per chunk keeps order/latency simple; documents themselves are
+    // already translated in parallel by the backfill worker pool.
+    for (const indices of chunks) {
+      await translateChunk(indices)
+    }
     return cloned
   } else {
     const model = genAI.getGenerativeModel({ model: MODEL_ID })
