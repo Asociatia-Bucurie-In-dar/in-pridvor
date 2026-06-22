@@ -11,7 +11,10 @@ import { getPostsCardSelect } from '@/utilities/getPostsCardSelect'
 import { getTranslations } from 'next-intl/server'
 
 export const dynamic = 'force-static'
-// Removed time-based revalidation - now using on-demand revalidation via hooks
+// Re-added time-based revalidation: on-demand hook revalidation doesn't fire for
+// content written with disableRevalidate (the en_* translation backfill), so ISR
+// is needed for translations to surface.
+export const revalidate = 300
 
 type Args = {
   params: Promise<{

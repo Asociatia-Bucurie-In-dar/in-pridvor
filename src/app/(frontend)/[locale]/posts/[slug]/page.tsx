@@ -52,6 +52,14 @@ export async function generateStaticParams() {
 
 export const dynamicParams = true
 
+// ISR: regenerate each post page on this interval. Without it, statically
+// generated pages are cached indefinitely, so content written WITHOUT an
+// on-demand revalidate — e.g. the bulk en_* translation backfill (which runs
+// with disableRevalidate), or the revalidate hook's deliberately-skipped "old
+// post" path — would never surface. 5 minutes keeps English translations and
+// late edits appearing without per-write revalidation.
+export const revalidate = 300
+
 type Args = {
   params: Promise<{
     slug?: string

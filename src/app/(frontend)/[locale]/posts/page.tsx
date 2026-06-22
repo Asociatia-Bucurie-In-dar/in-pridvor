@@ -11,6 +11,8 @@ import { websiteTitle } from '@/utilities/commonInfo'
 import { getPostsCardSelect } from '@/utilities/getPostsCardSelect'
 
 export const dynamic = 'force-static'
+// ISR so newly-translated en_* post titles/cards surface without a rebuild.
+export const revalidate = 300
 
 type Args = {
   params: Promise<{

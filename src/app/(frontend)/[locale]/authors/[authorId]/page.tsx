@@ -34,6 +34,8 @@ export async function generateStaticParams() {
 }
 
 export const dynamicParams = true
+// ISR so newly-translated en_* post content surfaces without a manual rebuild.
+export const revalidate = 300
 
 type Args = {
   params: Promise<{

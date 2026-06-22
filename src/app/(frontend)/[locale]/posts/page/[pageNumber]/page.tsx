@@ -14,6 +14,8 @@ import { getPostsCardSelect } from '@/utilities/getPostsCardSelect'
 import { routing } from '@/i18n/routing'
 
 export const dynamic = 'force-static'
+// ISR so newly-translated en_* post cards surface without a rebuild.
+export const revalidate = 300
 
 type Args = {
   params: Promise<{
