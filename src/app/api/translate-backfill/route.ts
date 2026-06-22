@@ -32,10 +32,13 @@ const FIELD_CONFIG: Record<TranslatableCollection, Record<string, 'text' | 'lexi
 }
 
 // How many Gemini calls to make per invocation before stopping and chaining the
-// next run. Keeps each invocation under the serverless time limit even with the
-// free-tier throttle. Tune via env if you have a faster key.
-const BATCH_FIELDS = Number(process.env.TRANSLATE_BATCH_FIELDS ?? 6)
-const DELAY_MS = Number(process.env.TRANSLATE_DELAY_MS ?? 31_000)
+// next run, and the throttle between calls. Defaults are tuned for a paid-tier
+// Gemini key and must keep a whole batch well under the serverless maxDuration
+// (docs are only committed after all their fields translate, so a batch must
+// finish, not get killed mid-doc). Override via env if your limits differ:
+//   free tier:  TRANSLATE_DELAY_MS=4000  TRANSLATE_BATCH_FIELDS=10
+const BATCH_FIELDS = Number(process.env.TRANSLATE_BATCH_FIELDS ?? 40)
+const DELAY_MS = Number(process.env.TRANSLATE_DELAY_MS ?? 750)
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms))
 const get = (obj: any, path: string) =>
@@ -78,6 +81,14 @@ export async function GET(request: Request) {
 
   const payload = await getPayload({ config: configPromise })
 
+  // Stop the batch when EITHER the call budget OR a wall-clock budget is hit,
+  // so the function always returns + chains before Vercel kills it mid-doc.
+  // 45s leaves headroom under a 60s (Hobby) maxDuration; Pro (300s) just does
+  // more docs per call-budget anyway.
+  const startedAt = Date.now()
+  const TIME_BUDGET_MS = Number(process.env.TRANSLATE_TIME_BUDGET_MS ?? 45_000)
+  const budgetSpent = () => apiCalls >= BATCH_FIELDS || Date.now() - startedAt >= TIME_BUDGET_MS
+
   let apiCalls = 0
   let docsTranslated = 0
   let remaining = 0
@@ -105,7 +116,7 @@ export async function GET(request: Request) {
         // Defensive: double-check it still needs translating.
         if (doc.en?.title != null && String(doc.en.title).trim() !== '') continue
 
-        if (apiCalls >= BATCH_FIELDS) {
+        if (budgetSpent()) {
           remaining++ // budget spent — leave for the next chained invocation
           continue
         }
@@ -116,8 +127,11 @@ export async function GET(request: Request) {
           const enData: Record<string, any> = {}
           let translatedAny = false
 
+          // Translate ALL of this doc's fields once started — never break mid-doc,
+          // or we'd persist a partial en (e.g. en.title only) and idempotency would
+          // mark the doc done, leaving content/meta untranslated forever. The
+          // budget is only checked at the doc boundary above.
           for (const [path, type] of Object.entries(fields)) {
-            if (apiCalls >= BATCH_FIELDS) break
             const value = get(doc, path)
             if (value == null || (typeof value === 'string' && value.trim() === '')) continue
 
