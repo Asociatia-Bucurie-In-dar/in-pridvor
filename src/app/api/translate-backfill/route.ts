@@ -112,6 +112,7 @@ export async function GET(request: Request) {
   let docsTranslated = 0
   let remaining = 0
   let failed = 0
+  let transientFails = 0 // quota/overload failures — signal to stop, not skip
   const log: string[] = []
 
   try {
@@ -183,17 +184,21 @@ export async function GET(request: Request) {
         } catch (docErr) {
           failed++
           remaining++ // let a later run retry this doc
-          log.push(
-            `[FAIL] ${collection}#${doc.id}: ${docErr instanceof Error ? docErr.message : String(docErr)}`,
-          )
+          const msg = docErr instanceof Error ? docErr.message : String(docErr)
+          if (/\b(429|500|502|503|504)\b/.test(msg) || /quota|overloaded|rate|unavailable/i.test(msg)) {
+            transientFails++
+          }
+          log.push(`[FAIL] ${collection}#${doc.id}: ${msg}`)
         }
       }
     }
 
-    // Chain another invocation only if this run made real progress. If the
-    // batch translated nothing and only produced failures (e.g. Gemini is
-    // down), do NOT chain — that would be a tight loop hammering a dead API.
-    // The caller can re-trigger manually once the upstream recovers.
+    // Chain another invocation only if this run actually translated something.
+    // Requiring forward progress (docsTranslated > 0) makes tight loops
+    // impossible: a batch that translates zero — whether from a down/quota-
+    // limited API or a stubborn document stuck at the front of the queue —
+    // stops and reports `stalled`, to be re-triggered manually. With the keyed-
+    // map lexical translation, hard per-doc failures should be rare.
     const madeProgress = docsTranslated > 0
     let chained = false
     if (remaining > 0 && madeProgress) {
@@ -212,6 +217,7 @@ export async function GET(request: Request) {
       diag,
       docsTranslated,
       failed,
+      transientFails,
       apiCalls,
       moreRemaining: remaining > 0,
       chainedNextRun: chained,

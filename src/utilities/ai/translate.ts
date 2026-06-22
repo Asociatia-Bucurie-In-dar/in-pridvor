@@ -70,40 +70,46 @@ export const translateToEnglish = async (content: any, type: 'text' | 'lexical' 
     const textNodes = collectLexicalTextNodes(cloned)
     if (textNodes.length === 0) return cloned
 
-    const strings = textNodes.map((n) => n.text)
-
+    // Send a KEYED object ({"0": "...", "1": "..."}) rather than a positional
+    // array, and reinsert by key. This removes the fragile "array length must
+    // match" contract — the model merging/dropping an element no longer
+    // corrupts the whole document. Any key the model omits simply keeps its
+    // original Romanian text (graceful per-string fallback).
     const model = genAI.getGenerativeModel({
       model: MODEL_ID,
       generationConfig: { responseMimeType: 'application/json' },
     })
 
+    const sourceMap: Record<string, string> = {}
+    textNodes.forEach((n, i) => {
+      sourceMap[String(i)] = n.text
+    })
+
     const prompt = `
       You are an expert Romanian-to-English translator for a high-quality editorial platform.
-      You will receive a JSON array of Romanian strings. Translate EACH string to English,
-      preserving tone and nuance. Whitespace-only or punctuation-only strings must be
-      returned unchanged.
+      You will receive a JSON object whose values are Romanian strings. Translate EACH value
+      to English, preserving tone and nuance. Whitespace-only or punctuation-only values must
+      be returned unchanged.
 
-      Return ONLY a JSON array of the translated strings, in the SAME ORDER and with the
-      SAME LENGTH as the input array. Do not add, remove, merge, or reorder elements.
+      Return ONLY a JSON object with the EXACT SAME KEYS, where each value is the English
+      translation of the corresponding input value. Do not add, remove, or rename keys.
 
-      Input array:
-      ${JSON.stringify(strings)}
+      Input object:
+      ${JSON.stringify(sourceMap)}
     `
 
-    let translatedStrings: string[] | null = null
+    let translatedMap: Record<string, any> | null = null
     let lastErr: unknown
     for (let attempt = 0; attempt < 2; attempt++) {
       const result = await model.generateContent(prompt)
       const response = await result.response
       try {
         const parsed = parseJsonFromModel(response.text())
-        if (Array.isArray(parsed) && parsed.length === strings.length) {
-          translatedStrings = parsed.map((s) => String(s))
+        if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
+          translatedMap = parsed
           break
         }
-        lastErr = new Error(
-          `Translated array length ${Array.isArray(parsed) ? parsed.length : 'n/a'} != source ${strings.length}`,
-        )
+        lastErr = new Error('Translated value is not a JSON object')
       } catch (e) {
         lastErr = e
         console.error(
@@ -113,14 +119,16 @@ export const translateToEnglish = async (content: any, type: 'text' | 'lexical' 
       }
     }
 
-    if (!translatedStrings) {
+    if (!translatedMap) {
       throw lastErr instanceof Error
         ? lastErr
         : new Error('AI translation returned an invalid JSON structure.')
     }
 
+    // Reinsert by key; fall back to the original text for any missing/empty key.
     textNodes.forEach((node, i) => {
-      node.text = translatedStrings![i]
+      const t = translatedMap![String(i)]
+      if (typeof t === 'string' && t.length > 0) node.text = t
     })
     return cloned
   } else {
