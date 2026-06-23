@@ -9,7 +9,7 @@ import { getPayload } from 'payload'
 import { getLocale } from 'next-intl/server'
 import React from 'react'
 import RichText from '@/components/RichText'
-import Link from 'next/link'
+import { Link } from '@/i18n/routing'
 
 import { getCategoryHierarchyIds } from '@/utilities/getCategoryHierarchy'
 import { CategoryHeader } from '../ArchiveBlock/CategoryHeader'
