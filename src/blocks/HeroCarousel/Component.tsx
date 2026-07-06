@@ -2,6 +2,7 @@ import type { Post, HeroCarouselBlock as HeroCarouselBlockProps } from '@/payloa
 
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
+import { getLocale } from 'next-intl/server'
 import React from 'react'
 import { HeroCarouselClient } from './Component.client'
 import { getCategoryHierarchyIds } from '@/utilities/getCategoryHierarchy'
@@ -27,6 +28,7 @@ export const HeroCarouselBlock: React.FC<
   const nowISO = now.toISOString()
 
   let posts: Post[] = []
+  const locale = await getLocale()
 
   if (populateBy === 'collection') {
     const payload = await getPayload({ config: configPromise })
@@ -45,6 +47,7 @@ export const HeroCarouselBlock: React.FC<
       limit,
       sort: '-publishedAt',
       overrideAccess: false,
+      context: { locale }, // triggers the en fallback hook
       select: {
         title: true,
         slug: true,
@@ -58,6 +61,7 @@ export const HeroCarouselBlock: React.FC<
         publishedAt: true,
         updatedAt: true,
         createdAt: true,
+        en: true, // needed so the fallback hook can overlay English
       },
       where: {
         and: whereConditions,

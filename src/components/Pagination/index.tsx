@@ -9,7 +9,8 @@ import {
   PaginationPrevious,
 } from '@/components/ui/pagination'
 import { cn } from '@/utilities/ui'
-import { useRouter } from 'next/navigation'
+import { useRouter } from '@/i18n/routing'
+import { useTranslations } from 'next-intl'
 import React from 'react'
 
 export const Pagination: React.FC<{
@@ -19,6 +20,7 @@ export const Pagination: React.FC<{
   basePath?: string
 }> = (props) => {
   const router = useRouter()
+  const t = useTranslations('Common')
 
   const { className, page, totalPages, basePath = '/posts' } = props
   const hasNextPage = page < totalPages
@@ -33,6 +35,7 @@ export const Pagination: React.FC<{
         <PaginationContent>
           <PaginationItem>
             <PaginationPrevious
+              label={t('prev')}
               disabled={!hasPrevPage}
               onClick={() => {
                 router.push(`${basePath}/page/${page - 1}`)
@@ -89,6 +92,7 @@ export const Pagination: React.FC<{
 
           <PaginationItem>
             <PaginationNext
+              label={t('next')}
               disabled={!hasNextPage}
               onClick={() => {
                 router.push(`${basePath}/page/${page + 1}`)

@@ -2,6 +2,7 @@ import type { Post, ArchiveBlock as ArchiveBlockProps, Category } from '@/payloa
 
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
+import { getLocale } from 'next-intl/server'
 import React from 'react'
 import RichText from '@/components/RichText'
 
@@ -32,6 +33,8 @@ export const ArchiveBlock: React.FC<
   const nowISO = now.toISOString()
 
   let posts: Post[] = []
+
+  const locale = await getLocale()
 
   if (populateBy === 'collection') {
     const payload = await getPayload({ config: configPromise })
@@ -76,6 +79,7 @@ export const ArchiveBlock: React.FC<
       limit,
       sort: '-publishedAt',
       overrideAccess: false,
+      context: { locale }, // triggers the en fallback hook
       select: {
         title: true,
         slug: true,
@@ -89,6 +93,7 @@ export const ArchiveBlock: React.FC<
         publishedAt: true,
         updatedAt: true,
         createdAt: true,
+        en: true, // needed so the fallback hook can overlay English on cards
       },
       where: {
         and: whereConditions,

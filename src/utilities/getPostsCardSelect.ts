@@ -12,5 +12,9 @@ export const getPostsCardSelect = (): PostsSelect<true> => {
     authors: true,
     populatedAuthors: true,
     publishedAt: true,
+    // The English shadow group must be selected so the withEnglishFallback
+    // afterRead hook has en.* values to overlay on card lists; otherwise an
+    // `en` request silently shows Romanian titles/meta.
+    en: true,
   } as const satisfies PostsSelect<true>
 }

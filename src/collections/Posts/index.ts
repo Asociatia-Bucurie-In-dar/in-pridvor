@@ -26,6 +26,9 @@ import { MetaImageField, MetaTitleField, PreviewField } from '@payloadcms/plugin
 import { slugField } from '@/fields/slug'
 import { preventStaleTitle } from '@/hooks/preventStaleTitle'
 import { fillMetaFromHero, syncHeroImageToMeta } from './hooks/syncHeroImageToMeta'
+import { enGroup } from '@/fields/enGroup'
+import { withEnglishFallback } from '../../utilities/ai/localizationHook'
+import { createTranslationHandler } from '../../utilities/ai/translationHandler'
 
 export const Posts: CollectionConfig<'posts'> = {
   slug: 'posts',
@@ -296,13 +299,57 @@ export const Posts: CollectionConfig<'posts'> = {
       ],
     },
     ...slugField(),
+    {
+      name: 'aiTranslate',
+      type: 'ui',
+      admin: {
+        position: 'sidebar',
+        components: { Field: '@/components/AITranslate#AITranslate' },
+      },
+    },
+    enGroup([
+      {
+        name: 'title',
+        type: 'text',
+        admin: { description: 'Leave empty to fall back to Romanian' },
+      },
+      {
+        name: 'content',
+        type: 'richText',
+        editor: lexicalEditor({
+          features: ({ rootFeatures }) => [
+            ...rootFeatures,
+            HeadingFeature({ enabledHeadingSizes: ['h1', 'h2', 'h3', 'h4'] }),
+            FixedToolbarFeature(),
+            InlineToolbarFeature(),
+          ],
+        }),
+        label: 'Content (EN)',
+      },
+      {
+        name: 'meta',
+        type: 'group',
+        fields: [{ name: 'title', type: 'text', label: 'SEO Meta Title (EN)' }],
+      },
+    ]),
+  ],
+  endpoints: [
+    {
+      path: '/:id/translate',
+      method: 'post',
+      handler: createTranslationHandler('posts', {
+        title: 'text',
+        content: 'lexical',
+        'meta.title': 'text',
+      }),
+    },
   ],
   hooks: {
     beforeChange: [preventStaleTitle, syncHeroImageToMeta],
     beforeDelete: [cleanupPostRelations],
     beforeRead: [autoPublishScheduled],
     afterChange: [revalidatePost, scheduleCacheRevalidation],
-    afterRead: [fillMetaFromHero, populateAuthors],
+    afterRead: [fillMetaFromHero, populateAuthors, withEnglishFallback(['title', 'content', 'meta.title'])],
     afterDelete: [revalidateDelete],
   },
   versions: {

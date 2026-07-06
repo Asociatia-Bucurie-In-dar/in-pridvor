@@ -12,39 +12,30 @@ const ROMANIAN_CHAR_MAP: Record<string, string[]> = {
   ţ: ['t', 'ț', 'ţ'],
 }
 
+/**
+ * Produce a SMALL, bounded set of spellings for a query rather than the full
+ * 3^n diacritic permutation. The old permutation approach exploded to thousands
+ * of variants for multi-word queries (e.g. "manastirea putna" -> 4374), and
+ * once each variant became a `where.or` condition it overflowed Payload's
+ * recursive query builder (`buildQueryFromSourceParams`) — the reported
+ * "Maximum call stack size exceeded" crash.
+ *
+ * We return only legitimate forms:
+ *  - the original query (as typed — matches stored diacritics)
+ *  - lowercased
+ *  - diacritic-free / normalized (matches ASCII typing against ASCII titles)
+ *
+ * `like` is case-insensitive substring matching, so this small set covers the
+ * common cases without any combinatorial blowup. (Fully diacritic-insensitive
+ * matching of ASCII input against diacritic-bearing stored titles would require
+ * normalizing the column at the DB layer; see normalizeRomanian.)
+ */
 export function generateSearchVariants(query: string): string[] {
   if (!query || query.length === 0) return []
 
-  const lowerQuery = query.toLowerCase()
-  const variants = new Set<string>()
-  variants.add(query)
+  const variants = new Set<string>([query, query.toLowerCase(), normalizeRomanian(query)])
 
-  function generateCombinations(current: string, index: number): void {
-    if (index >= lowerQuery.length) {
-      variants.add(current)
-      return
-    }
-
-    const char = lowerQuery[index]
-    if (!char) {
-      generateCombinations(current, index + 1)
-      return
-    }
-
-    const replacements = ROMANIAN_CHAR_MAP[char]
-
-    if (replacements) {
-      for (const replacement of replacements) {
-        generateCombinations(current + replacement, index + 1)
-      }
-    } else {
-      generateCombinations(current + char, index + 1)
-    }
-  }
-
-  generateCombinations('', 0)
-
-  return Array.from(variants)
+  return Array.from(variants).filter((v) => v.length > 0)
 }
 
 export function normalizeRomanian(text: string): string {

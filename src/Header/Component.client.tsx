@@ -1,6 +1,6 @@
 'use client'
 
-import Link from 'next/link'
+import { Link } from '@/i18n/routing'
 import { useEffect, useState, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
@@ -25,12 +25,15 @@ import type { Header } from '@/payload-types'
 
 import { Logo } from '@/components/Logo/Logo'
 import { DonateModal } from '@/components/DonateModal'
+import { LocaleSwitcher } from '@/components/LocaleSwitcher'
+import { useTranslations } from 'next-intl'
 
 interface HeaderClientProps {
   data: Header
 }
 
 export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
+  const t = useTranslations('Common')
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [donateModalOpen, setDonateModalOpen] = useState(false)
   const [isSticky, setIsSticky] = useState(false)
@@ -138,19 +141,18 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
 
   return (
     <div className="w-full relative">
-      {/* Search Icon - positioned relative to the full-width container */}
-      <motion.div
-        whileHover={{ scale: 1.1 }}
-        transition={{ duration: 0.2 }}
-        className="absolute top-6 right-6 hidden lg:block z-30"
-      >
-        <Link
-          href="/search"
-          className="block p-2 -m-2 text-gray-700 hover:text-yellow-600 cursor-pointer"
-        >
-          <MagnifyingGlassIcon aria-hidden="true" className="size-6" />
-        </Link>
-      </motion.div>
+      {/* Search Icon + Language toggle - positioned relative to the full-width container */}
+      <div className="absolute top-6 right-6 hidden lg:flex items-center gap-4 z-30">
+        <motion.div whileHover={{ scale: 1.1 }} transition={{ duration: 0.2 }}>
+          <Link
+            href="/search"
+            className="block p-2 -m-2 text-gray-700 hover:text-yellow-600 cursor-pointer"
+          >
+            <MagnifyingGlassIcon aria-hidden="true" className="size-6" />
+          </Link>
+        </motion.div>
+        <LocaleSwitcher />
+      </div>
 
       {/* BIG Logo */}
       <div className="flex justify-center mt-3 bg-white">
@@ -301,7 +303,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
                 className="flex items-center text-sm shadow-sm text-gray-800 bg-yellow-400 hover:shadow-md focus:outline-hidden focus:ring-4 focus:ring-yellow-300 font-medium rounded-full px-5 py-2.5 text-center"
               >
                 <HeartIcon aria-hidden="true" className="size-5 mr-1" />
-                Donează
+                {t('donate')}
               </motion.button>
               <div className="lg:hidden mr-5"></div>
             </div>
@@ -360,8 +362,22 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     <MagnifyingGlassIcon aria-hidden="true" className="size-5 text-yellow-600" />
-                    Caută
+                    {t('search')}
                   </Link>
+                </motion.div>
+
+                {/* Language toggle (mobile) */}
+                <motion.div
+                  initial="hidden"
+                  animate="visible"
+                  custom={0.5}
+                  variants={menuItemVariants}
+                  className="py-4 px-3 flex items-center justify-between"
+                >
+                  <span className="text-sm font-semibold text-gray-900 font-playfair">
+                    Limbă / Language
+                  </span>
+                  <LocaleSwitcher />
                 </motion.div>
 
                 {/* Navigation Items */}
@@ -527,7 +543,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
                     className="flex w-full items-center justify-center text-sm shadow-sm text-black bg-yellow-400 hover:shadow-md focus:outline-hidden focus:ring-4 focus:ring-yellow-300 font-medium rounded-full px-5 py-3 text-center transition-all"
                   >
                     <HeartIcon aria-hidden="true" className="size-5 mr-2" />
-                    Donează
+                    {t('donate')}
                   </button>
                 </motion.div>
               </div>

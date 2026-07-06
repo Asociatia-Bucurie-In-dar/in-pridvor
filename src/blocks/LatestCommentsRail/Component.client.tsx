@@ -1,7 +1,8 @@
 'use client'
 
-import Link from 'next/link'
+import { Link } from '@/i18n/routing'
 import { useEffect, useMemo, useRef } from 'react'
+import { useTranslations } from 'next-intl'
 
 import { formatDateTime } from '@/utilities/formatDateTime'
 
@@ -21,6 +22,7 @@ type LatestCommentsRailClientProps = {
 }
 
 export const LatestCommentsRailClient: React.FC<LatestCommentsRailClientProps> = (props) => {
+  const t = useTranslations('Comments')
   const containerRef = useRef<HTMLDivElement | null>(null)
   const isPausedRef = useRef(false)
   const frameRef = useRef<number | null>(null)
@@ -103,7 +105,7 @@ export const LatestCommentsRailClient: React.FC<LatestCommentsRailClientProps> =
           </div>
           {props.items.length > 3 && (
             <span className="hidden text-xs font-medium uppercase tracking-wide text-gray-400 md:inline">
-              Scrollează pentru mai multe
+              {t('railScroll')}
             </span>
           )}
         </header>
@@ -120,7 +122,7 @@ export const LatestCommentsRailClient: React.FC<LatestCommentsRailClientProps> =
           >
             {!hasItems && (
               <div className="flex min-w-full items-center justify-center rounded-2xl border border-gray-200 bg-gray-50 px-6 py-16 text-sm text-gray-500">
-                Nu există comentarii publicate încă.
+                {t('railEmpty')}
               </div>
             )}
             {displayedItems.map((item, index) => (

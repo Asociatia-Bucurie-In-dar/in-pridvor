@@ -6,9 +6,10 @@ import type {
 
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
+import { getLocale } from 'next-intl/server'
 import React from 'react'
 import RichText from '@/components/RichText'
-import Link from 'next/link'
+import { Link } from '@/i18n/routing'
 
 import { getCategoryHierarchyIds } from '@/utilities/getCategoryHierarchy'
 import { CategoryHeader } from '../ArchiveBlock/CategoryHeader'
@@ -39,6 +40,7 @@ export const FeaturedArchiveBlock: React.FC<
   const now = new Date()
   const nowISO = now.toISOString()
   let posts: Post[] = []
+  const locale = await getLocale()
 
   if (populateBy === 'collection') {
     const payload = await getPayload({ config: configPromise })
@@ -80,6 +82,7 @@ export const FeaturedArchiveBlock: React.FC<
       limit: 5,
       sort: '-publishedAt',
       overrideAccess: false,
+      context: { locale }, // triggers the en fallback hook
       select: {
         title: true,
         slug: true,
@@ -93,6 +96,7 @@ export const FeaturedArchiveBlock: React.FC<
         publishedAt: true,
         updatedAt: true,
         createdAt: true,
+        en: true, // needed so the fallback hook can overlay English
       },
       where: {
         and: whereConditions,

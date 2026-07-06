@@ -13,6 +13,7 @@ import { formatAuthors } from '@/utilities/formatAuthors'
 import { AuthorLinks } from '@/components/AuthorLinks'
 import { CategoryLinks } from '@/components/CategoryLinks'
 import { cn } from '@/utilities/ui'
+import { useTranslations } from 'next-intl'
 
 const headerOverlap = '10.5rem'
 interface PostHeroEditableProps {
@@ -27,6 +28,7 @@ export const PostHeroEditable: React.FC<PostHeroEditableProps> = ({
   dropCapIndex,
 }) => {
   const { isAdmin } = useAdmin()
+  const t = useTranslations('Common')
   const {
     categories,
     heroImage,
@@ -140,7 +142,7 @@ export const PostHeroEditable: React.FC<PostHeroEditableProps> = ({
                     />
                   ) : (
                     <>
-                      <p className="text-white/60">Autor</p>
+                      <p className="text-white/60">{t('author')}</p>
                       <p className="text-base">
                         <AuthorLinks authors={populatedAuthors} />
                       </p>
@@ -156,7 +158,7 @@ export const PostHeroEditable: React.FC<PostHeroEditableProps> = ({
 
               {publishedAt && (
                 <div className="flex flex-col gap-1">
-                  <p className="text-white/60">Data Publicării</p>
+                  <p className="text-white/60">{t('publishDate')}</p>
                   <time className="text-base" dateTime={publishedAt}>
                     {formatDateTime(publishedAt)}
                   </time>

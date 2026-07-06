@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
+import { useTranslations } from 'next-intl'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
@@ -32,6 +33,7 @@ export function CommentForm({
   onCommentSubmitted,
   onCancel,
 }: CommentFormProps) {
+  const t = useTranslations('Comments')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
   const [errorMessage, setErrorMessage] = useState('')
@@ -126,7 +128,7 @@ export function CommentForm({
       console.error('Error submitting comment:', error)
       setSubmitStatus('error')
       setErrorMessage(
-        error instanceof Error ? error.message : 'An error occurred while submitting your comment',
+        error instanceof Error ? error.message : t('errorGeneral'),
       )
     } finally {
       setIsSubmitting(false)
@@ -138,7 +140,7 @@ export function CommentForm({
       {parentAuthor ? (
         <div className="mb-4">
           <h3 className="text-xl font-semibold mb-2 font-playfair text-gray-900">
-            Răspunde la {parentAuthor}
+            {t('replyTo')} {parentAuthor}
           </h3>
           {onCancel && (
             <button
@@ -146,13 +148,13 @@ export function CommentForm({
               onClick={onCancel}
               className="text-sm text-gray-500 hover:text-gray-700 underline"
             >
-              Anulează
+              {t('cancel')}
             </button>
           )}
         </div>
       ) : (
         <h3 className="text-2xl font-semibold mb-6 font-playfair text-gray-900">
-          Lasă un comentariu
+          {t('leaveComment')}
         </h3>
       )}
 
@@ -160,40 +162,40 @@ export function CommentForm({
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           <div>
             <Label htmlFor="name" className="text-gray-700 font-medium mb-2 block">
-              Nume *
+              {t('name')}
             </Label>
             <Input
               id="name"
               type="text"
               {...register('name', {
-                required: 'Numele este obligatoriu',
+                required: t('errorNameRequired'),
                 maxLength: {
                   value: 100,
-                  message: 'Numele nu poate depăși 100 de caractere',
+                  message: t('errorNameLength'),
                 },
               })}
               className={errors.name ? 'border-red-500' : 'border-gray-300 focus:border-gray-400'}
-              placeholder="Numele tău"
+              placeholder={t('namePlaceholder')}
             />
             {errors.name && <p className="text-red-500 text-sm mt-1.5">{errors.name.message}</p>}
           </div>
 
           <div>
             <Label htmlFor="email" className="text-gray-700 font-medium mb-2 block">
-              Email *
+              {t('email')}
             </Label>
             <Input
               id="email"
               type="email"
               {...register('email', {
-                required: 'Emailul este obligatoriu',
+                required: t('errorEmailRequired'),
                 pattern: {
                   value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                  message: 'Adresa de email nu este validă',
+                  message: t('errorEmailInvalid'),
                 },
               })}
               className={errors.email ? 'border-red-500' : 'border-gray-300 focus:border-gray-400'}
-              placeholder="email@exemplu.ro"
+              placeholder={t('emailPlaceholder')}
             />
             {errors.email && <p className="text-red-500 text-sm mt-1.5">{errors.email.message}</p>}
           </div>
@@ -201,20 +203,20 @@ export function CommentForm({
 
         <div>
           <Label htmlFor="comment" className="text-gray-700 font-medium mb-2 block">
-            Comentariu *
+            {t('comment')}
           </Label>
           <Textarea
             id="comment"
             rows={5}
             {...register('comment', {
-              required: 'Comentariul este obligatoriu',
+              required: t('errorCommentRequired'),
               maxLength: {
                 value: 3000,
-                message: 'Comentariul nu poate depăși 3000 de caractere',
+                message: t('errorCommentLength'),
               },
             })}
             className={errors.comment ? 'border-red-500' : 'border-gray-300 focus:border-gray-400'}
-            placeholder="Scrie comentariul tău aici..."
+            placeholder={t('commentPlaceholder')}
           />
           {errors.comment && (
             <p className="text-red-500 text-sm mt-1.5">{errors.comment.message}</p>
@@ -228,14 +230,14 @@ export function CommentForm({
             onCheckedChange={(checked) => setValue('rememberMe', checked as boolean)}
           />
           <Label htmlFor="rememberMe" className="text-sm font-normal cursor-pointer text-gray-600">
-            Salvează numele și emailul meu pentru următorul comentariu
+            {t('rememberMe')}
           </Label>
         </div>
 
         {submitStatus === 'success' && (
           <div className="p-4 bg-green-50 border border-green-200 rounded-xl">
             <p className="text-green-800 font-medium">
-              ✓ Comentariul tău a fost trimis cu succes! Va fi afișat după aprobare.
+              {t('success')}
             </p>
           </div>
         )}
@@ -252,7 +254,7 @@ export function CommentForm({
             disabled={isSubmitting}
             className="w-full md:w-auto bg-gray-900 hover:bg-gray-800 text-white px-8 py-2.5 rounded-lg font-medium transition-colors duration-200"
           >
-            {isSubmitting ? 'Se trimite...' : 'Trimite comentariu'}
+            {isSubmitting ? t('submitting') : t('submit')}
           </Button>
         </div>
       </form>

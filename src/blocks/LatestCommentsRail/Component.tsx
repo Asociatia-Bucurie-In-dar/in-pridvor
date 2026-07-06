@@ -2,6 +2,7 @@ import React from 'react'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import { unstable_noStore as noStore } from 'next/cache'
+import { getTranslations } from 'next-intl/server'
 
 import { LatestCommentsRailClient } from './Component.client'
 
@@ -39,6 +40,7 @@ type LatestCommentsRailBlockProps = {
 }
 
 export const LatestCommentsRailBlock: React.FC<LatestCommentsRailBlockProps> = async (props) => {
+  const t = await getTranslations('Comments')
   const limit =
     typeof props.limit === 'number' && Number.isFinite(props.limit) && props.limit > 0
       ? Math.min(props.limit, 24)
@@ -54,11 +56,11 @@ export const LatestCommentsRailBlock: React.FC<LatestCommentsRailBlockProps> = a
     const postTitle =
       post && typeof post === 'object' && post !== null && 'title' in post && post.title
         ? String(post.title)
-        : 'Articol necunoscut'
+        : t('unknownArticle')
 
     return {
       id: String(comment.id),
-      name: comment.name || 'Cititor anonim',
+      name: comment.name || t('anonymousReader'),
       createdAt: comment.createdAt ? String(comment.createdAt) : null,
       body: truncate(comment.comment || '', 220),
       href: postSlug ? `/posts/${postSlug}` : '#',
@@ -68,8 +70,8 @@ export const LatestCommentsRailBlock: React.FC<LatestCommentsRailBlockProps> = a
 
   return (
     <LatestCommentsRailClient
-      heading={props.heading || 'Din comentariile voastre'}
-      subheading={props.subheading || 'Conversațiile cele mai recente din comunitate'}
+      heading={props.heading || t('railHeading')}
+      subheading={props.subheading || t('railSubheading')}
       items={items}
     />
   )

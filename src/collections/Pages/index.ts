@@ -27,6 +27,16 @@ import {
   PreviewField,
 } from '@payloadcms/plugin-seo/fields'
 
+import {
+  lexicalEditor,
+  HeadingFeature,
+  FixedToolbarFeature,
+  InlineToolbarFeature,
+} from '@payloadcms/richtext-lexical'
+import { enGroup } from '@/fields/enGroup'
+import { withEnglishFallback } from '../../utilities/ai/localizationHook'
+import { createTranslationHandler } from '../../utilities/ai/translationHandler'
+
 export const Pages: CollectionConfig<'pages'> = {
   slug: 'pages',
   access: {
@@ -137,11 +147,66 @@ export const Pages: CollectionConfig<'pages'> = {
       },
     },
     ...slugField(),
+    {
+      name: 'aiTranslate',
+      type: 'ui',
+      admin: {
+        position: 'sidebar',
+        components: { Field: '@/components/AITranslate#AITranslate' },
+      },
+    },
+    enGroup([
+      {
+        name: 'title',
+        type: 'text',
+        admin: { description: 'Leave empty to fall back to Romanian' },
+      },
+      {
+        name: 'hero',
+        type: 'group',
+        fields: [
+          {
+            name: 'richText',
+            type: 'richText',
+            editor: lexicalEditor({
+              features: ({ rootFeatures }) => [
+                ...rootFeatures,
+                HeadingFeature({ enabledHeadingSizes: ['h1', 'h2', 'h3', 'h4'] }),
+                FixedToolbarFeature(),
+                InlineToolbarFeature(),
+              ],
+            }),
+            label: 'Hero Rich Text (EN)',
+          },
+        ],
+      },
+      {
+        name: 'meta',
+        type: 'group',
+        fields: [
+          { name: 'title', type: 'text', label: 'SEO Meta Title (EN)' },
+          { name: 'description', type: 'textarea', label: 'SEO Meta Description (EN)' },
+        ],
+      },
+    ]),
+  ],
+  endpoints: [
+    {
+      path: '/:id/translate',
+      method: 'post',
+      handler: createTranslationHandler('pages', {
+        title: 'text',
+        'hero.richText': 'lexical',
+        'meta.title': 'text',
+        'meta.description': 'text',
+      }),
+    },
   ],
   hooks: {
     beforeValidate: [ensureUniqueLayoutBlockIDs],
     afterChange: [revalidatePage],
     beforeChange: [preventStaleTitle, populatePublishedAt],
+    afterRead: [withEnglishFallback(['title', 'hero.richText', 'meta.title', 'meta.description'])],
     afterDelete: [revalidateDelete],
   },
   versions: {
