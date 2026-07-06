@@ -114,6 +114,13 @@ export async function GET(request: Request) {
   // success, or throws (caller records the failure). Never persists a partial
   // en — a doc is translated entirely or not at all, so idempotency (keyed on
   // en.title) can't mark a half-done doc as complete.
+  // A field-level translation that Gemini permanently refuses (safety filter)
+  // should not stall the whole doc forever. Detect that specific block.
+  const isContentBlocked = (err: unknown) => {
+    const msg = err instanceof Error ? err.message : String(err)
+    return /PROHIBITED_CONTENT|SAFETY|blocked/i.test(msg)
+  }
+
   const translateDoc = async (
     collection: TranslatableCollection,
     doc: any,
@@ -121,13 +128,27 @@ export async function GET(request: Request) {
     const fields = FIELD_CONFIG[collection]
     const enData: Record<string, any> = {}
     let translatedAny = false
+    let usedSourceFallback = false
 
     for (const [path, type] of Object.entries(fields)) {
       const value = get(doc, path)
       if (value == null || (typeof value === 'string' && value.trim() === '')) continue
       if (DELAY_MS > 0) await sleep(DELAY_MS)
       apiCalls++
-      const translated = await translateWithRetry(value, type)
+      let translated: any
+      try {
+        translated = await translateWithRetry(value, type)
+      } catch (err) {
+        // Content permanently blocked by the model's safety filter: fall back to
+        // the Romanian source for this field so the doc still gets an en value
+        // and stops being re-picked every run. Transient/other errors re-throw.
+        if (isContentBlocked(err)) {
+          translated = value
+          usedSourceFallback = true
+        } else {
+          throw err
+        }
+      }
       const keys = path.split('.')
       const leaf = keys.pop() as string
       let cursor = enData
@@ -140,15 +161,22 @@ export async function GET(request: Request) {
     }
 
     if (!translatedAny) return
-    await payload.update({
+
+    // Write ONLY the additive en_* columns. Use the low-level db adapter rather
+    // than payload.update so the write bypasses collection validation — some
+    // legacy docs violate unrelated required fields (e.g. a post with no
+    // Authors), which would otherwise reject this en-only update forever.
+    // en_* columns can't themselves be invalid, so skipping validation is safe.
+    await payload.db.updateOne({
       collection: collection as any,
-      id: doc.id,
+      where: { id: { equals: doc.id } },
       data: { en: enData },
-      overrideAccess: true,
-      context: { disableRevalidate: true }, // next/cache hooks can't run here
+      returning: false,
     })
     docsTranslated++
-    log.push(`${collection}#${doc.id} -> "${enData.title ?? '(partial)'}"`)
+    log.push(
+      `${collection}#${doc.id} -> "${enData.title ?? '(partial)'}"${usedSourceFallback ? ' [source-fallback: content blocked]' : ''}`,
+    )
   }
 
   try {
