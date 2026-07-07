@@ -25,6 +25,13 @@ export const dynamic = 'force-dynamic'
 const COLLECTIONS = ['posts', 'pages', 'categories'] as const
 type TranslatableCollection = (typeof COLLECTIONS)[number]
 
+// Collections with drafts enabled (they carry a `_status` column). Only their
+// PUBLISHED documents are user-facing on the site, so those are the only ones
+// worth translating — draft-only docs (often titleless, abandoned) would
+// otherwise sit in the queue forever and keep `done` at false. Categories have
+// no drafts, so they are never status-filtered.
+const DRAFT_COLLECTIONS = new Set<TranslatableCollection>(['posts', 'pages'])
+
 const FIELD_CONFIG: Record<TranslatableCollection, Record<string, 'text' | 'lexical'>> = {
   posts: { title: 'text', content: 'lexical', 'meta.title': 'text' },
   pages: { title: 'text', 'hero.richText': 'lexical', 'meta.title': 'text', 'meta.description': 'text' },
@@ -183,9 +190,16 @@ export async function GET(request: Request) {
     // Build the work queue: every untranslated doc across all collections.
     const queue: Array<{ collection: TranslatableCollection; doc: any }> = []
     for (const collection of COLLECTIONS) {
+      const untranslated = {
+        or: [{ 'en.title': { exists: false } }, { 'en.title': { equals: '' } }],
+      }
+      // Restrict draft-enabled collections to published docs (see DRAFT_COLLECTIONS).
+      const where = DRAFT_COLLECTIONS.has(collection)
+        ? { and: [{ _status: { equals: 'published' } }, untranslated] }
+        : untranslated
       const result = await payload.find({
         collection: collection as any,
-        where: { or: [{ 'en.title': { exists: false } }, { 'en.title': { equals: '' } }] },
+        where: where as any,
         limit: 0, // all
         pagination: false,
         depth: 0,
