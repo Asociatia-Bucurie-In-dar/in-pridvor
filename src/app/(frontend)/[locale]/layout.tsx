@@ -20,7 +20,6 @@ import { SpeedInsights } from '@vercel/speed-insights/next'
 import './globals.css'
 import { getServerSideURL } from '@/utilities/getURL'
 import { OrganizationStructuredData } from '@/components/StructuredData/OrganizationStructuredData'
-import { PublishScheduledTrigger } from '@/components/PublishScheduledTrigger'
 
 import { NextIntlClientProvider } from 'next-intl'
 import { getMessages, setRequestLocale } from 'next-intl/server'
@@ -72,7 +71,6 @@ export default async function RootLayout(props: {
                   preview: isEnabled,
                 }}
               />
-              {!isEnabled && <PublishScheduledTrigger />}
               <Header />
               {props.children}
               <Footer />
