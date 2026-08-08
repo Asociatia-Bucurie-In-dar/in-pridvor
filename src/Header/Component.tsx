@@ -3,6 +3,7 @@ import { getCachedGlobal } from '@/utilities/getGlobals'
 import React from 'react'
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
+import { unstable_cache } from 'next/cache'
 import { getLocale } from 'next-intl/server'
 
 import type { Header, Category } from '@/payload-types'
@@ -95,24 +96,36 @@ function toCategoryNavItems(categories: Category[]) {
   return result
 }
 
+const getCachedCategories = (locale: string) =>
+  unstable_cache(
+    async () => {
+      const payload = await getPayload({ config: configPromise })
+
+      const categoriesRes = await payload.find({
+        collection: 'categories',
+        limit: 1000,
+        pagination: false,
+        depth: 0,
+        overrideAccess: false,
+        context: { locale },
+      })
+
+      return categoriesRes.docs as Category[]
+    },
+    ['header-categories', locale],
+    {
+      revalidate: 300,
+      tags: [`header_categories_${locale}`],
+    },
+  )
+
 export async function Header() {
   const locale = await getLocale()
   const headerData = (await getCachedGlobal('header', 1, locale)()) as Header
-
-  const payload = await getPayload({ config: configPromise })
-  const categoriesRes = await payload.find({
-    collection: 'categories',
-    limit: 1000,
-    pagination: false,
-    depth: 0,
-    overrideAccess: false,
-    // English category titles come from the en shadow group via the
-    // withEnglishFallback afterRead hook, which keys off request-context locale.
-    context: { locale },
-  })
+  const categories = await getCachedCategories(locale)()
 
   const categoryNav = toCategoryNavItems(
-    (categoriesRes.docs as Category[]).filter((category) => !(category as any).invisibleInHeader),
+    categories.filter((category) => !(category as any).invisibleInHeader),
   )
   const adminNav = headerData.navItems ?? []
   const mergedNav = [...categoryNav, ...adminNav]

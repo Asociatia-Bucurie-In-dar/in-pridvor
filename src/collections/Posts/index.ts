@@ -16,7 +16,6 @@ import { Code } from '../../blocks/Code/config'
 import { MediaBlock } from '../../blocks/MediaBlock/config'
 import { VideoEmbed } from '../../blocks/VideoEmbed/config'
 import { generatePreviewPath } from '../../utilities/generatePreviewPath'
-import { autoPublishScheduled } from './hooks/autoPublishScheduled'
 import { cleanupPostRelations } from './hooks/cleanupPostRelations'
 import { populateAuthors } from './hooks/populateAuthors'
 import { revalidateDelete, revalidatePost } from './hooks/revalidatePost'
@@ -347,7 +346,6 @@ export const Posts: CollectionConfig<'posts'> = {
   hooks: {
     beforeChange: [preventStaleTitle, syncHeroImageToMeta],
     beforeDelete: [cleanupPostRelations],
-    beforeRead: [autoPublishScheduled],
     afterChange: [revalidatePost, scheduleCacheRevalidation],
     afterRead: [fillMetaFromHero, populateAuthors, withEnglishFallback(['title', 'content', 'meta.title'])],
     afterDelete: [revalidateDelete],
@@ -357,6 +355,7 @@ export const Posts: CollectionConfig<'posts'> = {
       autosave: {
         interval: 100, // We set this interval for optimal live preview
       },
+      schedulePublish: true,
     },
     maxPerDoc: 50,
   },

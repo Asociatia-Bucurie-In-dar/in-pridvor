@@ -2,25 +2,37 @@ import { Link } from '@/i18n/routing'
 import React from 'react'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
+import { unstable_cache } from 'next/cache'
 
 import { formatDateTime } from '@/utilities/formatDateTime'
 
 const fetchLatestComments = async (limit: number) => {
-  const payload = await getPayload({ config: configPromise })
+  const getCachedLatestComments = unstable_cache(
+    async () => {
+      const payload = await getPayload({ config: configPromise })
 
-  const result = await payload.find({
-    collection: 'comments',
-    depth: 1,
-    limit,
-    sort: '-createdAt',
-    where: {
-      status: {
-        equals: 'approved',
-      },
+      const result = await payload.find({
+        collection: 'comments',
+        depth: 1,
+        limit,
+        sort: '-createdAt',
+        where: {
+          status: {
+            equals: 'approved',
+          },
+        },
+      })
+
+      return result.docs || []
     },
-  })
+    ['latest-comments', String(limit)],
+    {
+      revalidate: 300,
+      tags: [`latest_comments_${limit}`],
+    },
+  )
 
-  return result.docs || []
+  return getCachedLatestComments()
 }
 
 const truncate = (value: string, length: number) => {
