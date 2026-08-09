@@ -20,6 +20,7 @@ import { DropCapHandler } from '@/components/DropCapHandler'
 import { EditPostLink } from '@/components/EditPostLink'
 import { ArticleStructuredData } from '@/components/StructuredData/ArticleStructuredData'
 import { routing } from '@/i18n/routing'
+import { appendCommentCounts } from '@/utilities/appendCommentCounts'
 
 export async function generateStaticParams() {
   const payload = await getPayload({ config: configPromise })
@@ -45,9 +46,7 @@ export async function generateStaticParams() {
     return { slug }
   })
 
-  return routing.locales.flatMap((locale) =>
-    slugParams.map(({ slug }) => ({ locale, slug })),
-  )
+  return routing.locales.flatMap((locale) => slugParams.map(({ slug }) => ({ locale, slug })))
 }
 
 export const dynamicParams = true
@@ -149,5 +148,21 @@ const queryPostBySlug = cache(async ({ slug, locale }: { slug: string; locale: s
     },
   })
 
-  return result.docs?.[0] || null
+  const post = result.docs?.[0] || null
+
+  if (!post) return null
+
+  const relatedPosts =
+    post.relatedPosts?.filter((relatedPost) => typeof relatedPost === 'object') || []
+
+  if (relatedPosts.length === 0) {
+    return post
+  }
+
+  const relatedPostsWithCounts = await appendCommentCounts(payload, relatedPosts)
+
+  return {
+    ...post,
+    relatedPosts: relatedPostsWithCounts,
+  }
 })

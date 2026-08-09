@@ -12,6 +12,7 @@ import { notFound } from 'next/navigation'
 import { websiteTitle } from '@/utilities/commonInfo'
 import { getPostsCardSelect } from '@/utilities/getPostsCardSelect'
 import { routing } from '@/i18n/routing'
+import { appendCommentCounts } from '@/utilities/appendCommentCounts'
 
 export const dynamic = 'force-static'
 // ISR so newly-translated en_* post cards surface without a rebuild.
@@ -48,6 +49,7 @@ export default async function Page({ params: paramsPromise }: Args) {
       },
     },
   })
+  const postsWithCounts = await appendCommentCounts(payload, posts.docs)
 
   return (
     <div className="pb-24">
@@ -63,7 +65,7 @@ export default async function Page({ params: paramsPromise }: Args) {
         />
       </div>
 
-      <CollectionArchive posts={posts.docs} />
+      <CollectionArchive posts={postsWithCounts} />
 
       <div className="container">
         {posts?.page && posts?.totalPages > 1 && (

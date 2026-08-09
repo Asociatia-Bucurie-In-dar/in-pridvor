@@ -10,6 +10,7 @@ import { CollectionArchive } from '@/components/CollectionArchive'
 import { getCategoryHierarchyIds } from '@/utilities/getCategoryHierarchy'
 import { CategoryHeader } from './CategoryHeader'
 import { cn } from '@/utilities/ui'
+import { appendCommentCounts } from '@/utilities/appendCommentCounts'
 
 export const ArchiveBlock: React.FC<
   ArchiveBlockProps & {
@@ -35,10 +36,9 @@ export const ArchiveBlock: React.FC<
   let posts: Post[] = []
 
   const locale = await getLocale()
+  const payload = await getPayload({ config: configPromise })
 
   if (populateBy === 'collection') {
-    const payload = await getPayload({ config: configPromise })
-
     let allCategoryIds: number[] = []
 
     if (categories && categories.length > 0) {
@@ -100,17 +100,20 @@ export const ArchiveBlock: React.FC<
       },
     })
 
-    posts = fetchedPosts.docs
+    posts = await appendCommentCounts(payload, fetchedPosts.docs)
   } else {
     if (selectedDocs?.length) {
       const filteredSelectedPosts = selectedDocs.map((post) => {
         if (typeof post.value === 'object') return post.value
       }) as Post[]
 
-      posts = filteredSelectedPosts.filter((post) => {
-        if (!post?.publishedAt) return true
-        return new Date(post.publishedAt) <= now
-      })
+      posts = await appendCommentCounts(
+        payload,
+        filteredSelectedPosts.filter((post) => {
+          if (!post?.publishedAt) return true
+          return new Date(post.publishedAt) <= now
+        }),
+      )
     }
   }
 

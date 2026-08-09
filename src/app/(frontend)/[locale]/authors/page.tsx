@@ -9,6 +9,7 @@ import PageClient from './page.client'
 import { websiteTitle } from '@/utilities/commonInfo'
 import { getPostsCardSelect } from '@/utilities/getPostsCardSelect'
 import { getTranslations } from 'next-intl/server'
+import { appendCommentCounts } from '@/utilities/appendCommentCounts'
 
 export const dynamic = 'force-static'
 // Re-added time-based revalidation: on-demand hook revalidation doesn't fire for
@@ -35,13 +36,16 @@ export default async function Page({ params: paramsPromise }: Args) {
     select: getPostsCardSelect(),
     context: { locale },
   })
+  const postsWithCounts = await appendCommentCounts(payload, posts.docs)
 
   return (
     <div className="pt-24 pb-24">
       <PageClient />
       <div className="container mb-16">
         <div className="prose max-w-none">
-          <h1>{t('allAuthors')} - {websiteTitle}</h1>
+          <h1>
+            {t('allAuthors')} - {websiteTitle}
+          </h1>
         </div>
       </div>
 
@@ -54,7 +58,7 @@ export default async function Page({ params: paramsPromise }: Args) {
         />
       </div>
 
-      <CollectionArchive posts={posts.docs} />
+      <CollectionArchive posts={postsWithCounts} />
 
       <div className="container">
         {posts.totalPages > 1 && posts.page && (

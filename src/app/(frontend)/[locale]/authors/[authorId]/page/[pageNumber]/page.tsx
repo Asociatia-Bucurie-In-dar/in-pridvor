@@ -10,6 +10,7 @@ import { notFound } from 'next/navigation'
 import PageClient from './page.client'
 import { getPostsCardSelect } from '@/utilities/getPostsCardSelect'
 import { routing } from '@/i18n/routing'
+import { appendCommentCounts } from '@/utilities/appendCommentCounts'
 
 // ISR so newly-translated en_* post cards surface without a rebuild.
 export const revalidate = 300
@@ -68,6 +69,7 @@ export default async function AuthorPage({ params: paramsPromise }: Args) {
       ],
     },
   })
+  const postsWithCounts = await appendCommentCounts(payload, posts.docs)
 
   return (
     <div className="pt-16 pb-16">
@@ -89,7 +91,7 @@ export default async function AuthorPage({ params: paramsPromise }: Args) {
           />
         </div>
 
-        <CollectionArchive posts={posts.docs} />
+        <CollectionArchive posts={postsWithCounts} />
 
         <div className="container">
           {posts.totalPages > 1 && posts.page && (

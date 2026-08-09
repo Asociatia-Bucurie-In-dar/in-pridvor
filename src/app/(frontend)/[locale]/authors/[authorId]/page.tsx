@@ -12,6 +12,7 @@ import PageClient from './page.client'
 import { getPostsCardSelect } from '@/utilities/getPostsCardSelect'
 import { getTranslations } from 'next-intl/server'
 import { routing } from '@/i18n/routing'
+import { appendCommentCounts } from '@/utilities/appendCommentCounts'
 
 export async function generateStaticParams() {
   const payload = await getPayload({ config: configPromise })
@@ -159,5 +160,7 @@ const queryPostsByAuthorId = cache(async (authorId: number | string, locale: str
     },
   })
 
-  return result
+  const resultWithCounts = await appendCommentCounts(payload, result.docs)
+
+  return { ...result, docs: resultWithCounts }
 })

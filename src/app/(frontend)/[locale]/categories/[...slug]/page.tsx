@@ -15,6 +15,7 @@ import { getCategoryHierarchyIds } from '@/utilities/getCategoryHierarchy'
 import { getPostsCardSelect } from '@/utilities/getPostsCardSelect'
 import PageClient from './page.client'
 import { routing } from '@/i18n/routing'
+import { appendCommentCounts } from '@/utilities/appendCommentCounts'
 
 export async function generateStaticParams() {
   const payload = await getPayload({ config: configPromise })
@@ -36,9 +37,7 @@ export async function generateStaticParams() {
     })
     .filter((segments) => segments.length > 0)
 
-  return routing.locales.flatMap((locale) =>
-    slugParams.map((slug) => ({ locale, slug })),
-  )
+  return routing.locales.flatMap((locale) => slugParams.map((slug) => ({ locale, slug })))
 }
 
 export const dynamicParams = true
@@ -210,6 +209,8 @@ const queryPostsByCategoryIds = cache(
       },
     })
 
-    return result
+    const resultWithCounts = await appendCommentCounts(payload, result.docs)
+
+    return { ...result, docs: resultWithCounts }
   },
 )

@@ -11,6 +11,7 @@ import { getPostsCardSelect } from '@/utilities/getPostsCardSelect'
 import { generateSearchVariants } from '@/utilities/romanianSearch'
 import type { Where } from 'payload'
 import { getTranslations } from 'next-intl/server'
+import { appendCommentCounts } from '@/utilities/appendCommentCounts'
 
 type Args = {
   params: Promise<{
@@ -64,7 +65,10 @@ async function buildSearchConditions(payload: Payload, query: string): Promise<W
   }
 }
 
-export default async function Page({ params: paramsPromise, searchParams: searchParamsPromise }: Args) {
+export default async function Page({
+  params: paramsPromise,
+  searchParams: searchParamsPromise,
+}: Args) {
   const { locale } = await paramsPromise
   const { q: query } = await searchParamsPromise
   const payload = await getPayload({ config: configPromise })
@@ -91,6 +95,7 @@ export default async function Page({ params: paramsPromise, searchParams: search
       ],
     },
   })
+  const postsWithCounts = await appendCommentCounts(payload, posts.docs)
 
   return (
     <div className="pt-24 pb-24">
@@ -106,7 +111,7 @@ export default async function Page({ params: paramsPromise, searchParams: search
       </div>
 
       {posts.totalDocs > 0 ? (
-        <CollectionArchive posts={posts.docs as CardPostData[]} />
+        <CollectionArchive posts={postsWithCounts as CardPostData[]} />
       ) : (
         <div className="container">{t('noResults')}</div>
       )}

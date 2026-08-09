@@ -9,6 +9,7 @@ import { getPayload } from 'payload'
 import PageClient from './page.client'
 import { websiteTitle } from '@/utilities/commonInfo'
 import { getPostsCardSelect } from '@/utilities/getPostsCardSelect'
+import { appendCommentCounts } from '@/utilities/appendCommentCounts'
 
 export const dynamic = 'force-static'
 // ISR so newly-translated en_* post titles/cards surface without a rebuild.
@@ -39,6 +40,7 @@ export default async function Page({ params: paramsPromise }: Args) {
       },
     },
   })
+  const postsWithCounts = await appendCommentCounts(payload, posts.docs)
 
   return (
     <div className="pb-24">
@@ -54,7 +56,7 @@ export default async function Page({ params: paramsPromise }: Args) {
         />
       </div>
 
-      <CollectionArchive posts={posts.docs} />
+      <CollectionArchive posts={postsWithCounts} />
 
       <div className="container">
         {posts.totalPages > 1 && posts.page && (

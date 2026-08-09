@@ -20,6 +20,8 @@ import { formatAuthors } from '@/utilities/formatAuthors'
 import { formatDateTime } from '@/utilities/formatDateTime'
 import { AuthorLinks } from '@/components/AuthorLinks'
 import { CardPostData } from '@/components/Card'
+import { CommentCountBadge } from '@/components/CommentCountBadge'
+import { appendCommentCounts, type PostWithCommentCount } from '@/utilities/appendCommentCounts'
 
 export const FeaturedArchiveBlock: React.FC<
   FeaturedArchiveBlockProps & {
@@ -39,12 +41,11 @@ export const FeaturedArchiveBlock: React.FC<
 
   const now = new Date()
   const nowISO = now.toISOString()
-  let posts: Post[] = []
+  let posts: PostWithCommentCount<Post>[] = []
   const locale = await getLocale()
+  const payload = await getPayload({ config: configPromise })
 
   if (populateBy === 'collection') {
-    const payload = await getPayload({ config: configPromise })
-
     let allCategoryIds: number[] = []
 
     if (categories && categories.length > 0) {
@@ -103,7 +104,7 @@ export const FeaturedArchiveBlock: React.FC<
       },
     })
 
-    posts = fetchedPosts.docs
+    posts = await appendCommentCounts(payload, fetchedPosts.docs)
   } else {
     if (selectedDocs?.length) {
       const filteredSelectedPosts = selectedDocs
@@ -117,7 +118,7 @@ export const FeaturedArchiveBlock: React.FC<
         })
         .slice(0, 5) as Post[]
 
-      posts = filteredSelectedPosts
+      posts = await appendCommentCounts(payload, filteredSelectedPosts)
     }
   }
 
@@ -146,6 +147,7 @@ export const FeaturedArchiveBlock: React.FC<
     content: (featuredPost?.content as any) || null,
     publishedAt: featuredPost?.publishedAt,
     populatedAuthors: featuredPost?.populatedAuthors,
+    commentsCount: featuredPost?.commentsCount,
   }
 
   return (
@@ -182,6 +184,7 @@ export const FeaturedArchiveBlock: React.FC<
                     content: secondPost.content,
                     publishedAt: secondPost.publishedAt,
                     populatedAuthors: secondPost.populatedAuthors,
+                    commentsCount: secondPost.commentsCount,
                   }}
                 />
               </div>
@@ -199,6 +202,7 @@ export const FeaturedArchiveBlock: React.FC<
                     content: post.content,
                     publishedAt: post.publishedAt,
                     populatedAuthors: post.populatedAuthors,
+                    commentsCount: post.commentsCount,
                   }
                   return <SmallCard key={post.id || index} doc={postData} />
                 })}
@@ -253,6 +257,8 @@ const FeaturedCard: React.FC<{ doc: CardPostData }> = ({ doc }) => {
     populatedAuthors && populatedAuthors.length > 0 && formatAuthors(populatedAuthors) !== ''
   const formattedAuthors = hasAuthors ? formatAuthors(populatedAuthors) : null
   const formattedDate = publishedAt ? formatDateTime(publishedAt) : null
+  const commentCount = doc.commentsCount ?? 0
+  const hasMeta = Boolean(formattedAuthors || formattedDate)
 
   return (
     <article className="relative card flex flex-col h-full">
@@ -301,7 +307,7 @@ const FeaturedCard: React.FC<{ doc: CardPostData }> = ({ doc }) => {
         <div className="flex-grow">
           <div className="group relative">
             {title && (
-              <h2 className="mt-4 text-2xl/7 font-semibold text-gray-900 group-hover:text-gray-600">
+              <h2 className="mt-4 min-h-[4.5rem] line-clamp-2 text-2xl/7 font-semibold text-gray-900 group-hover:text-gray-600">
                 <Link href={href}>
                   <span className="absolute inset-0" />
                   {title}
@@ -310,15 +316,15 @@ const FeaturedCard: React.FC<{ doc: CardPostData }> = ({ doc }) => {
             )}
 
             {previewText && (
-              <p className="mt-3 line-clamp-3 text-base/6 text-gray-600">
+              <p className="mt-3 min-h-[4.5rem] line-clamp-3 text-base/6 text-gray-600">
                 <Link href={href}>{previewText}</Link>
               </p>
             )}
           </div>
         </div>
 
-        {(formattedAuthors || formattedDate) && (
-          <div className="mt-6 flex items-center gap-x-4">
+        <div className="mt-6 flex flex-wrap items-end gap-x-4 gap-y-2">
+          {hasMeta && (
             <div className="text-sm/6 text-gray-500">
               {hasAuthors && populatedAuthors && (
                 <p className="font-semibold text-gray-900">
@@ -327,8 +333,9 @@ const FeaturedCard: React.FC<{ doc: CardPostData }> = ({ doc }) => {
               )}
               {formattedDate && publishedAt && <time dateTime={publishedAt}>{formattedDate}</time>}
             </div>
-          </div>
-        )}
+          )}
+          <CommentCountBadge count={commentCount} className={hasMeta ? 'ml-auto' : undefined} />
+        </div>
       </div>
     </article>
   )
@@ -374,6 +381,8 @@ const MediumCard: React.FC<{ doc: CardPostData }> = ({ doc }) => {
     populatedAuthors && populatedAuthors.length > 0 && formatAuthors(populatedAuthors) !== ''
   const formattedAuthors = hasAuthors ? formatAuthors(populatedAuthors) : null
   const formattedDate = publishedAt ? formatDateTime(publishedAt) : null
+  const commentCount = doc.commentsCount ?? 0
+  const hasMeta = Boolean(formattedAuthors || formattedDate)
 
   return (
     <article className="group relative flex gap-5">
@@ -412,16 +421,21 @@ const MediumCard: React.FC<{ doc: CardPostData }> = ({ doc }) => {
           </p>
         )}
 
-        <div className="mt-4 flex items-center gap-2 text-sm text-gray-500">
-          {formattedAuthors && (
-            <span className="font-medium text-gray-700">{formattedAuthors}</span>
+        <div className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-gray-500">
+          {hasMeta && (
+            <div className="flex items-center gap-2">
+              {formattedAuthors && (
+                <span className="font-medium text-gray-700">{formattedAuthors}</span>
+              )}
+              {formattedDate && publishedAt && (
+                <>
+                  {formattedAuthors && <span>•</span>}
+                  <time dateTime={publishedAt}>{formattedDate}</time>
+                </>
+              )}
+            </div>
           )}
-          {formattedDate && publishedAt && (
-            <>
-              {formattedAuthors && <span>•</span>}
-              <time dateTime={publishedAt}>{formattedDate}</time>
-            </>
-          )}
+          <CommentCountBadge count={commentCount} className={hasMeta ? 'ml-auto' : undefined} />
         </div>
       </div>
     </article>
@@ -468,6 +482,8 @@ const SmallCard: React.FC<{ doc: CardPostData }> = ({ doc }) => {
     populatedAuthors && populatedAuthors.length > 0 && formatAuthors(populatedAuthors) !== ''
   const formattedAuthors = hasAuthors ? formatAuthors(populatedAuthors) : null
   const formattedDate = publishedAt ? formatDateTime(publishedAt) : null
+  const commentCount = doc.commentsCount ?? 0
+  const hasMeta = Boolean(formattedAuthors || formattedDate)
 
   return (
     <article className="group relative flex gap-4">
@@ -506,16 +522,21 @@ const SmallCard: React.FC<{ doc: CardPostData }> = ({ doc }) => {
           </p>
         )}
 
-        <div className="mt-2 flex items-center gap-2 text-xs text-gray-500">
-          {formattedAuthors && (
-            <span className="font-medium text-gray-700">{formattedAuthors}</span>
+        <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-2 text-xs text-gray-500">
+          {hasMeta && (
+            <div className="flex items-center gap-2">
+              {formattedAuthors && (
+                <span className="font-medium text-gray-700">{formattedAuthors}</span>
+              )}
+              {formattedDate && publishedAt && (
+                <>
+                  {formattedAuthors && <span>•</span>}
+                  <time dateTime={publishedAt}>{formattedDate}</time>
+                </>
+              )}
+            </div>
           )}
-          {formattedDate && publishedAt && (
-            <>
-              {formattedAuthors && <span>•</span>}
-              <time dateTime={publishedAt}>{formattedDate}</time>
-            </>
-          )}
+          <CommentCountBadge count={commentCount} className={hasMeta ? 'ml-auto' : undefined} />
         </div>
       </div>
     </article>

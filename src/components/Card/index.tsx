@@ -2,7 +2,8 @@
 import { cn } from '@/utilities/ui'
 import useClickableCard from '@/utilities/useClickableCard'
 import { Link } from '@/i18n/routing'
-import React, { Fragment } from 'react'
+import React from 'react'
+import { CommentCountBadge } from '@/components/CommentCountBadge'
 
 import type { Post } from '@/payload-types'
 
@@ -23,7 +24,9 @@ export type CardPostData = Pick<
   | 'content'
   | 'publishedAt'
   | 'populatedAuthors'
->
+> & {
+  commentsCount?: number
+}
 
 export const Card: React.FC<{
   alignItems?: 'center'
@@ -46,6 +49,7 @@ export const Card: React.FC<{
     content,
     publishedAt,
     populatedAuthors,
+    commentsCount,
   } = doc || {}
   const { image: metaImage } = meta || {}
 
@@ -84,6 +88,8 @@ export const Card: React.FC<{
     populatedAuthors && populatedAuthors.length > 0 && formatAuthors(populatedAuthors) !== ''
   const formattedAuthors = hasAuthors ? formatAuthors(populatedAuthors) : null
   const formattedDate = publishedAt ? formatDateTime(publishedAt) : null
+  const commentCount = commentsCount ?? 0
+  const hasMeta = Boolean(formattedAuthors || formattedDate)
 
   return (
     <article className={cn('relative card flex flex-col h-full', className)} ref={card.ref}>
@@ -132,7 +138,7 @@ export const Card: React.FC<{
         <div className="flex-grow">
           <div className="group relative">
             {titleToUse && (
-              <h3 className="mt-2 text-lg/6 font-semibold text-gray-900 group-hover:text-gray-600">
+              <h3 className="mt-2 min-h-[3rem] line-clamp-2 text-lg/6 font-semibold text-gray-900 group-hover:text-gray-600">
                 <Link href={href}>
                   <span className="absolute inset-0" />
                   {titleToUse}
@@ -148,18 +154,21 @@ export const Card: React.FC<{
           </div>
         </div>
 
-        {(formattedAuthors || formattedDate) && (
-          <div className="mt-5 flex items-center gap-x-4">
-            <div className="text-sm/6 text-gray-500">
+        <div className="mt-5 grid grid-cols-[minmax(0,1fr)_auto] items-end gap-x-4 gap-y-2">
+          {hasMeta ? (
+            <div className="min-w-0 text-sm/6 text-gray-500">
               {hasAuthors && populatedAuthors && (
-                <p className="font-semibold text-gray-900">
+                <p className="break-words font-semibold text-gray-900">
                   <AuthorLinks authors={populatedAuthors} />
                 </p>
               )}
               {formattedDate && publishedAt && <time dateTime={publishedAt}>{formattedDate}</time>}
             </div>
-          </div>
-        )}
+          ) : (
+            <div />
+          )}
+          <CommentCountBadge count={commentCount} />
+        </div>
       </div>
     </article>
   )
