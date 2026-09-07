@@ -2,12 +2,8 @@
   "buildCommand": "pnpm run ci",
   "crons": [
     {
-      "path": "/api/payload-jobs/run",
-      "schedule": "*/10 * * * *"
-    },
-    {
-      "path": "/api/translate-backfill",
-      "schedule": "0 * * * *"
+      "path": "/api/publish-scheduled",
+      "schedule": "*/15 * * * *"
     }
   ]
 }

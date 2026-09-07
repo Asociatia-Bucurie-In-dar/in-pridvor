@@ -73,10 +73,19 @@ const revalidatePostPages = async (
 export async function GET(request: Request) {
   try {
     const payload = await getPayload({ config: configPromise })
+    const { user } = await payload.auth({ headers: request.headers })
+    const cronAuthorized =
+      Boolean(process.env.CRON_SECRET) &&
+      request.headers.get('authorization') === `Bearer ${process.env.CRON_SECRET}`
+
+    if (!user && !cronAuthorized) {
+      return Response.json({ success: false, error: 'Unauthorized' }, { status: 401 })
+    }
+
     const now = new Date()
     const nowISO = now.toISOString()
 
-    const twentyFourHoursAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000).toISOString()
+    const thirtyMinutesAgo = new Date(now.getTime() - 30 * 60 * 1000).toISOString()
 
     const scheduledPosts = await payload.find({
       collection: 'posts',
@@ -135,7 +144,7 @@ export async function GET(request: Request) {
           },
           {
             publishedAt: {
-              greater_than: twentyFourHoursAgo,
+              greater_than: thirtyMinutesAgo,
               less_than_equal: nowISO,
             },
           },

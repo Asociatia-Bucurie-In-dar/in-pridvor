@@ -80,7 +80,7 @@ export const CacheRevalidationWidget: React.FC = () => {
         </p>
         <ul style={{ margin: '0 0 15px 0', paddingLeft: '20px', color: '#666', fontSize: '14px' }}>
           <li>Publish any draft posts with past <code>publishedAt</code> dates</li>
-          <li>Revalidate cache for published posts that became active in the last 24 hours</li>
+          <li>Revalidate cache for published posts that became active in the last 30 minutes</li>
           <li>Update homepage, posts pages, and category pages</li>
         </ul>
         <Button onClick={handleRevalidate} disabled={isRevalidating}>

@@ -19,7 +19,6 @@ import { generatePreviewPath } from '../../utilities/generatePreviewPath'
 import { cleanupPostRelations } from './hooks/cleanupPostRelations'
 import { populateAuthors } from './hooks/populateAuthors'
 import { revalidateDelete, revalidatePost } from './hooks/revalidatePost'
-import { scheduleCacheRevalidation } from './hooks/scheduleCacheRevalidation'
 
 import { MetaImageField, MetaTitleField, PreviewField } from '@payloadcms/plugin-seo/fields'
 import { slugField } from '@/fields/slug'
@@ -346,8 +345,12 @@ export const Posts: CollectionConfig<'posts'> = {
   hooks: {
     beforeChange: [preventStaleTitle, syncHeroImageToMeta],
     beforeDelete: [cleanupPostRelations],
-    afterChange: [revalidatePost, scheduleCacheRevalidation],
-    afterRead: [fillMetaFromHero, populateAuthors, withEnglishFallback(['title', 'content', 'meta.title'])],
+    afterChange: [revalidatePost],
+    afterRead: [
+      fillMetaFromHero,
+      populateAuthors,
+      withEnglishFallback(['title', 'content', 'meta.title']),
+    ],
     afterDelete: [revalidateDelete],
   },
   versions: {
