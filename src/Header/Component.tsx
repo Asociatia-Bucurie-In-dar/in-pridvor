@@ -5,6 +5,7 @@ import { getPayload } from 'payload'
 import configPromise from '@payload-config'
 import { unstable_cache } from 'next/cache'
 import { getLocale } from 'next-intl/server'
+import { headerCategoriesTag } from '@/utilities/revalidate'
 
 import type { Header, Category } from '@/payload-types'
 
@@ -114,8 +115,8 @@ const getCachedCategories = (locale: string) =>
     },
     ['header-categories', locale],
     {
-      revalidate: 300,
-      tags: [`header_categories_${locale}`],
+      // Expired by the categories hooks whenever a category changes.
+      tags: [headerCategoriesTag(locale)],
     },
   )
 

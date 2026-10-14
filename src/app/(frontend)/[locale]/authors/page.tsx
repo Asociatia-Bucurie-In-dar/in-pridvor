@@ -8,14 +8,14 @@ import { getPayload } from 'payload'
 import PageClient from './page.client'
 import { websiteTitle } from '@/utilities/commonInfo'
 import { getPostsCardSelect } from '@/utilities/getPostsCardSelect'
-import { getTranslations } from 'next-intl/server'
+import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { appendCommentCounts } from '@/utilities/appendCommentCounts'
 
 export const dynamic = 'force-static'
-// Re-added time-based revalidation: on-demand hook revalidation doesn't fire for
-// content written with disableRevalidate (the en_* translation backfill), so ISR
-// is needed for translations to surface.
-export const revalidate = 300
+// Content changes revalidate pages on demand (src/utilities/revalidate.ts), so the
+// time-based refresh is only a weekly safety net. A short interval here lets every
+// crawler visit re-render the page and keep the database awake.
+export const revalidate = 604800
 
 type Args = {
   params: Promise<{
@@ -25,6 +25,7 @@ type Args = {
 
 export default async function Page({ params: paramsPromise }: Args) {
   const { locale } = await paramsPromise
+  setRequestLocale(locale)
   const t = await getTranslations('Common')
   const payload = await getPayload({ config: configPromise })
 

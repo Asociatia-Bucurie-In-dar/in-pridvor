@@ -21,6 +21,7 @@ import { EditPostLink } from '@/components/EditPostLink'
 import { ArticleStructuredData } from '@/components/StructuredData/ArticleStructuredData'
 import { routing } from '@/i18n/routing'
 import { appendCommentCounts } from '@/utilities/appendCommentCounts'
+import { setRequestLocale } from 'next-intl/server'
 
 export async function generateStaticParams() {
   const payload = await getPayload({ config: configPromise })
@@ -51,13 +52,10 @@ export async function generateStaticParams() {
 
 export const dynamicParams = true
 
-// ISR: regenerate each post page on this interval. Without it, statically
-// generated pages are cached indefinitely, so content written WITHOUT an
-// on-demand revalidate — e.g. the bulk en_* translation backfill (which runs
-// with disableRevalidate), or the revalidate hook's deliberately-skipped "old
-// post" path — would never surface. 5 minutes keeps English translations and
-// late edits appearing without per-write revalidation.
-export const revalidate = 300
+// Content changes revalidate pages on demand (src/utilities/revalidate.ts), so the
+// time-based refresh is only a weekly safety net. A short interval here lets every
+// crawler visit re-render the page and keep the database awake.
+export const revalidate = 604800
 
 type Args = {
   params: Promise<{
@@ -69,6 +67,7 @@ type Args = {
 export default async function Post({ params: paramsPromise }: Args) {
   const { isEnabled: draft } = await draftMode()
   const { slug = '', locale } = await paramsPromise
+  setRequestLocale(locale)
   const url = '/posts/' + slug
   const post = await queryPostBySlug({ slug, locale })
 

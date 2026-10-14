@@ -69,11 +69,10 @@ const getImageRemotePatterns = () => {
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
   images: {
     remotePatterns: getImageRemotePatterns(),
+    // Next 16 only allows quality 75 by default; ImageMedia requests 100.
+    qualities: [75, 100],
     unoptimized: false,
   },
   reactStrictMode: true,

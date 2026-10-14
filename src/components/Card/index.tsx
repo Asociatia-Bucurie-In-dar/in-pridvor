@@ -2,6 +2,7 @@
 import { cn } from '@/utilities/ui'
 import useClickableCard from '@/utilities/useClickableCard'
 import { Link } from '@/i18n/routing'
+import { useLocale } from 'next-intl'
 import React from 'react'
 import { CommentCountBadge } from '@/components/CommentCountBadge'
 
@@ -38,6 +39,7 @@ export const Card: React.FC<{
 }> = (props) => {
   const { card, link } = useClickableCard({})
   const { className, doc, relationTo, showCategories, title: titleFromProps } = props
+  const locale = useLocale()
 
   const {
     slug,
@@ -85,8 +87,8 @@ export const Card: React.FC<{
   const href = `/${relationTo}/${slug}`
 
   const hasAuthors =
-    populatedAuthors && populatedAuthors.length > 0 && formatAuthors(populatedAuthors) !== ''
-  const formattedAuthors = hasAuthors ? formatAuthors(populatedAuthors) : null
+    populatedAuthors && populatedAuthors.length > 0 && formatAuthors(populatedAuthors, locale) !== ''
+  const formattedAuthors = hasAuthors ? formatAuthors(populatedAuthors, locale) : null
   const formattedDate = publishedAt ? formatDateTime(publishedAt) : null
   const commentCount = commentsCount ?? 0
   const hasMeta = Boolean(formattedAuthors || formattedDate)

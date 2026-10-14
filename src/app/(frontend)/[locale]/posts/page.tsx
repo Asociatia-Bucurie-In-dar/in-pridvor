@@ -10,10 +10,13 @@ import PageClient from './page.client'
 import { websiteTitle } from '@/utilities/commonInfo'
 import { getPostsCardSelect } from '@/utilities/getPostsCardSelect'
 import { appendCommentCounts } from '@/utilities/appendCommentCounts'
+import { getTranslations, setRequestLocale } from 'next-intl/server'
 
 export const dynamic = 'force-static'
-// ISR so newly-translated en_* post titles/cards surface without a rebuild.
-export const revalidate = 300
+// Content changes revalidate pages on demand (src/utilities/revalidate.ts), so the
+// time-based refresh is only a weekly safety net. A short interval here lets every
+// crawler visit re-render the page and keep the database awake.
+export const revalidate = 604800
 
 type Args = {
   params: Promise<{
@@ -23,6 +26,8 @@ type Args = {
 
 export default async function Page({ params: paramsPromise }: Args) {
   const { locale } = await paramsPromise
+  setRequestLocale(locale)
+  const t = await getTranslations('Common')
   const payload = await getPayload({ config: configPromise })
   const now = new Date().toISOString()
 
@@ -45,7 +50,7 @@ export default async function Page({ params: paramsPromise }: Args) {
   return (
     <div className="pb-24">
       <PageClient />
-      <TitleBar title="Toate Articolele" />
+      <TitleBar title={t('allPosts')} />
 
       <div className="container mb-8">
         <PageRange

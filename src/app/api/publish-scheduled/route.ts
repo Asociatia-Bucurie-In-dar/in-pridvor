@@ -1,214 +1,209 @@
-import { getPayload } from 'payload'
+import { getPayload, type Where } from 'payload'
 import configPromise from '@payload-config'
-import { revalidatePath, revalidateTag } from 'next/cache'
-import type { Post, Category } from '@/payload-types'
+import { unstable_cache } from 'next/cache'
 
-const revalidatePostPages = async (
-  post: Post,
-  payload: any,
-  action: 'publish' | 'unpublish' | 'delete',
-) => {
-  const paths: string[] = []
+import {
+  expireTag,
+  PUBLISH_SCHEDULE_TAG,
+  revalidatePost,
+  revalidatePostListings,
+} from '@/utilities/revalidate'
 
-  if (post.slug) {
-    const postPath = `/posts/${post.slug}`
-    paths.push(postPath)
-    payload.logger.info(`[${action}] Revalidating post: ${postPath}`)
-  }
+export const dynamic = 'force-dynamic'
 
-  paths.push('/')
-  payload.logger.info(`[${action}] Revalidating homepage`)
+const HOUR = 60 * 60 * 1000
 
-  paths.push('/posts')
-  payload.logger.info(`[${action}] Revalidating posts index and pagination`)
+// The cron only auto-publishes drafts whose date passed recently. A draft that is
+// still unpublished a week after its date is treated as abandoned (or failing
+// validation) so it can't keep waking the database every 15 minutes forever.
+// The "Force Cache Revalidation" button in the admin still publishes all of them.
+const CRON_DRAFT_WINDOW = 7 * 24 * HOUR
 
-  paths.push('/categories')
-  payload.logger.info(`[${action}] Revalidating categories index`)
+const pendingScheduledJobs: Where = {
+  and: [
+    { taskSlug: { equals: 'schedulePublish' } },
+    { completedAt: { exists: false } },
+    { hasError: { not_equals: true } },
+    { processing: { equals: false } },
+  ],
+}
 
-  if (post.categories && Array.isArray(post.categories) && post.categories.length > 0) {
-    for (const category of post.categories) {
-      let categoryData: Category | null = null
+/**
+ * When the next scheduled thing is due (epoch ms), or null when nothing is scheduled:
+ * - draft posts with a publish date (this route publishes them once it passes),
+ * - published posts dated in the future (hidden from listings until then),
+ * - "Schedule publish" jobs created from the admin panel.
+ *
+ * Kept in the Next.js data cache and expired by the Posts and payload-jobs hooks,
+ * so the cron can answer "nothing to do" without touching (and waking) Neon.
+ */
+const getNextDueAt = unstable_cache(
+  async (): Promise<number | null> => {
+    const payload = await getPayload({ config: configPromise })
+    const now = Date.now()
 
-      if (typeof category === 'object' && category !== null && 'slug' in category) {
-        categoryData = category as Category
-      } else if (typeof category === 'number' || typeof category === 'string') {
-        try {
-          const result = await payload.findByID({
-            collection: 'categories',
-            id: category,
-            depth: 0,
-          })
-          categoryData = result
-        } catch (error) {
-          payload.logger.error(
-            `Failed to fetch category ${category}: ${error instanceof Error ? error.message : 'Unknown error'}`,
-          )
-        }
+    const [posts, jobs] = await Promise.all([
+      payload.find({
+        collection: 'posts',
+        depth: 0,
+        limit: 1,
+        pagination: false,
+        sort: 'publishedAt',
+        select: { publishedAt: true },
+        overrideAccess: true,
+        where: {
+          or: [
+            {
+              and: [
+                { _status: { equals: 'draft' } },
+                { publishedAt: { greater_than: new Date(now - CRON_DRAFT_WINDOW).toISOString() } },
+              ],
+            },
+            {
+              and: [
+                { _status: { equals: 'published' } },
+                { publishedAt: { greater_than: new Date(now).toISOString() } },
+              ],
+            },
+          ],
+        },
+      }),
+      payload.find({
+        collection: 'payload-jobs',
+        depth: 0,
+        limit: 1,
+        pagination: false,
+        sort: 'waitUntil',
+        select: { waitUntil: true },
+        overrideAccess: true,
+        where: pendingScheduledJobs,
+      }),
+    ])
+
+    const dates = [posts.docs[0]?.publishedAt, jobs.docs[0] && (jobs.docs[0].waitUntil ?? now)]
+      .filter((date) => date != null)
+      .map((date) => new Date(date!).getTime())
+
+    return dates.length ? Math.min(...dates) : null
+  },
+  ['publish-schedule'],
+  // Hooks expire the tag on every change; the TTL is only a safety net.
+  { tags: [PUBLISH_SCHEDULE_TAG], revalidate: 12 * 60 * 60 },
+)
+
+const processDueWork = async ({ includeOldDrafts }: { includeOldDrafts: boolean }) => {
+  const payload = await getPayload({ config: configPromise })
+  const now = new Date()
+
+  // 1. Publish drafts whose publish date has passed.
+  const duePublishDate = includeOldDrafts
+    ? { less_than_equal: now.toISOString() }
+    : {
+        less_than_equal: now.toISOString(),
+        greater_than: new Date(now.getTime() - CRON_DRAFT_WINDOW).toISOString(),
       }
 
-      if (categoryData?.slug) {
-        const categoryPath = `/categories/${categoryData.slug}`
-        paths.push(categoryPath)
-        payload.logger.info(`[${action}] Revalidating category: ${categoryPath}`)
-      }
-    }
-  }
+  const dueDrafts = await payload.find({
+    collection: 'posts',
+    depth: 0,
+    limit: 20,
+    pagination: false,
+    overrideAccess: true,
+    select: { title: true },
+    where: { and: [{ _status: { equals: 'draft' } }, { publishedAt: duePublishDate }] },
+  })
 
-  for (const path of paths) {
+  let published = 0
+  for (const post of dueDrafts.docs) {
     try {
-      revalidatePath(path, 'page')
-      if (path === '/posts' || path === '/categories' || path === '/') {
-        revalidatePath(path, 'layout')
-      }
+      // The Posts afterChange hook revalidates the post and every listing.
+      await payload.update({
+        collection: 'posts',
+        id: post.id,
+        data: { _status: 'published' },
+        overrideAccess: true,
+      })
+      published++
+      payload.logger.info(`✅ Auto-published scheduled post: "${post.title}" (ID: ${post.id})`)
     } catch (error) {
       payload.logger.error(
-        `Failed to revalidate ${path}: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        `❌ Failed to auto-publish post ${post.id}: ${error instanceof Error ? error.message : 'Unknown error'}`,
       )
     }
   }
 
-  revalidateTag('posts-sitemap')
+  // 2. Run "Schedule publish" jobs created from the admin panel.
+  const { jobStatus } = await payload.jobs.run({
+    allQueues: true,
+    limit: 20,
+    where: pendingScheduledJobs,
+  })
+  const jobsRun = Object.keys(jobStatus ?? {}).length
+
+  // 3. Posts published earlier with a future date that have now gone live.
+  const wentLive = await payload.find({
+    collection: 'posts',
+    depth: 0,
+    limit: 50,
+    pagination: false,
+    overrideAccess: true,
+    select: { slug: true },
+    where: {
+      and: [
+        { _status: { equals: 'published' } },
+        {
+          publishedAt: {
+            greater_than: new Date(now.getTime() - 24 * HOUR).toISOString(),
+            less_than_equal: now.toISOString(),
+          },
+        },
+      ],
+    },
+  })
+
+  for (const post of wentLive.docs) revalidatePost(post.slug)
+  if (wentLive.docs.length > 0) revalidatePostListings()
+
+  expireTag(PUBLISH_SCHEDULE_TAG)
+
+  return {
+    published,
+    jobsRun,
+    revalidated: wentLive.docs.length,
+    checked: dueDrafts.docs.length + jobsRun + wentLive.docs.length,
+  }
 }
 
 export async function GET(request: Request) {
   try {
-    const payload = await getPayload({ config: configPromise })
-    const { user } = await payload.auth({ headers: request.headers })
-    const cronAuthorized =
+    const isCron =
       Boolean(process.env.CRON_SECRET) &&
       request.headers.get('authorization') === `Bearer ${process.env.CRON_SECRET}`
 
-    if (!user && !cronAuthorized) {
-      return Response.json({ success: false, error: 'Unauthorized' }, { status: 401 })
-    }
-
-    const now = new Date()
-    const nowISO = now.toISOString()
-
-    const thirtyMinutesAgo = new Date(now.getTime() - 30 * 60 * 1000).toISOString()
-
-    const scheduledPosts = await payload.find({
-      collection: 'posts',
-      where: {
-        and: [
-          {
-            _status: {
-              equals: 'draft',
-            },
-          },
-          {
-            publishedAt: {
-              less_than_equal: nowISO,
-            },
-          },
-        ],
-      },
-      limit: 20,
-      depth: 0,
-      overrideAccess: true,
-    })
-
-    let publishedCount = 0
-
-    for (const post of scheduledPosts.docs) {
-      try {
-        await payload.update({
-          collection: 'posts',
-          id: post.id,
-          data: {
-            _status: 'published',
-          },
-          context: {
-            disableRevalidate: false,
-          },
-          overrideAccess: true,
-        })
-
-        payload.logger.info(`✅ Auto-published scheduled post: "${post.title}" (ID: ${post.id})`)
-        publishedCount++
-      } catch (error) {
-        payload.logger.error(
-          `❌ Failed to auto-publish post ${post.id}: ${error instanceof Error ? error.message : 'Unknown error'}`,
-        )
-      }
-    }
-
-    const futurePostsNowActive = await payload.find({
-      collection: 'posts',
-      where: {
-        and: [
-          {
-            _status: {
-              equals: 'published',
-            },
-          },
-          {
-            publishedAt: {
-              greater_than: thirtyMinutesAgo,
-              less_than_equal: nowISO,
-            },
-          },
-        ],
-      },
-      limit: 50,
-      depth: 0,
-      overrideAccess: true,
-    })
-
-    payload.logger.info(
-      `🔍 Checking for posts that became active: found ${futurePostsNowActive.docs.length} posts`,
-    )
-
-    let revalidatedCount = 0
-    const pathsToRevalidate = new Set<string>()
-
-    for (const post of futurePostsNowActive.docs) {
-      if (post.slug) {
-        pathsToRevalidate.add(`/posts/${post.slug}`)
-      }
-      if (post.categories && Array.isArray(post.categories)) {
-        for (const category of post.categories) {
-          if (typeof category === 'object' && category !== null && 'slug' in category) {
-            pathsToRevalidate.add(`/categories/${category.slug}`)
-          }
-        }
-      }
-    }
-
-    if (futurePostsNowActive.docs.length > 0) {
-      pathsToRevalidate.add('/')
-      pathsToRevalidate.add('/posts')
-      pathsToRevalidate.add('/categories')
-
-      for (const path of pathsToRevalidate) {
-        try {
-          revalidatePath(path, 'page')
-          if (path === '/' || path === '/posts' || path === '/categories') {
-            revalidatePath(path, 'layout')
-          }
-        } catch (error) {
-          payload.logger.error(
-            `Failed to revalidate ${path}: ${error instanceof Error ? error.message : 'Unknown error'}`,
-          )
-        }
+    if (!isCron) {
+      // Manual run from the admin dashboard widget: logged-in users only.
+      const payload = await getPayload({ config: configPromise })
+      const { user } = await payload.auth({ headers: request.headers })
+      if (!user) {
+        return Response.json({ success: false, error: 'Unauthorized' }, { status: 401 })
       }
 
-      revalidateTag('posts-sitemap')
-      revalidatedCount = futurePostsNowActive.docs.length
+      return Response.json({ success: true, ...(await processDueWork({ includeOldDrafts: true })) })
     }
 
-    return Response.json({
-      success: true,
-      published: publishedCount,
-      revalidated: revalidatedCount,
-      checked: scheduledPosts.docs.length + futurePostsNowActive.docs.length,
-    })
+    const nextDueAt = await getNextDueAt()
+    if (nextDueAt === null || nextDueAt > Date.now()) {
+      return Response.json({
+        success: true,
+        skipped: true,
+        nextDueAt: nextDueAt === null ? null : new Date(nextDueAt).toISOString(),
+      })
+    }
+
+    return Response.json({ success: true, ...(await processDueWork({ includeOldDrafts: false })) })
   } catch (error) {
     return Response.json(
-      {
-        success: false,
-        error: error instanceof Error ? error.message : 'Unknown error',
-      },
+      { success: false, error: error instanceof Error ? error.message : 'Unknown error' },
       { status: 500 },
     )
   }

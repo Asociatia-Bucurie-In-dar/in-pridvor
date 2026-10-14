@@ -52,7 +52,9 @@ function CommentItem({ comment, depth = 0, postId }: CommentItemProps) {
 
   return (
     <article
-      className={`bg-white rounded-2xl shadow-sm border border-gray-200 p-6 transition-all duration-200 hover:shadow-md hover:border-gray-300 ${
+      // Linked from the homepage "latest comments" section; scroll-mt clears the sticky header.
+      id={`comment-${comment.id}`}
+      className={`scroll-mt-32 bg-white rounded-2xl shadow-sm border border-gray-200 p-6 transition-all duration-200 hover:shadow-md hover:border-gray-300 target:ring-2 target:ring-amber-300 ${
         indentLevel > 0 ? 'ml-8 mt-4' : ''
       }`}
     >

@@ -1,39 +1,9 @@
 import { Link } from '@/i18n/routing'
 import React from 'react'
-import configPromise from '@payload-config'
-import { getPayload } from 'payload'
-import { unstable_cache } from 'next/cache'
+import { getLocale } from 'next-intl/server'
 
 import { formatDateTime } from '@/utilities/formatDateTime'
-
-const fetchLatestComments = async (limit: number) => {
-  const getCachedLatestComments = unstable_cache(
-    async () => {
-      const payload = await getPayload({ config: configPromise })
-
-      const result = await payload.find({
-        collection: 'comments',
-        depth: 1,
-        limit,
-        sort: '-createdAt',
-        where: {
-          status: {
-            equals: 'approved',
-          },
-        },
-      })
-
-      return result.docs || []
-    },
-    ['latest-comments', String(limit)],
-    {
-      revalidate: 300,
-      tags: [`latest_comments_${limit}`],
-    },
-  )
-
-  return getCachedLatestComments()
-}
+import { getLatestComments } from '@/utilities/getLatestComments'
 
 const truncate = (value: string, length: number) => {
   if (!value) return ''
@@ -50,7 +20,7 @@ type LatestCommentsBlockProps = {
 
 export const LatestCommentsBlock: React.FC<LatestCommentsBlockProps> = async (props) => {
   const limit = props.limit || 5
-  const comments = await fetchLatestComments(limit)
+  const comments = await getLatestComments(limit, await getLocale())
 
   return (
     <section className="rounded-3xl bg-gray-50 p-6 shadow-sm ring-1 ring-gray-100">
@@ -69,19 +39,12 @@ export const LatestCommentsBlock: React.FC<LatestCommentsBlockProps> = async (pr
           <li className="text-sm text-gray-500">Nu există comentarii publicate încă.</li>
         )}
         {comments.map((comment) => {
-          const post = comment.post
-          const postSlug =
-            post && typeof post === 'object' && 'slug' in post && post.slug
-              ? String(post.slug)
-              : null
-          const postTitle =
-            post && typeof post === 'object' && 'title' in post && post.title
-              ? String(post.title)
-              : 'Articol necunoscut'
+          const postSlug = comment.post?.slug ?? null
+          const postTitle = comment.post?.title || 'Articol necunoscut'
           const href = postSlug ? `/posts/${postSlug}` : '#'
 
           return (
-            <li key={String(comment.id)}>
+            <li key={comment.id}>
               <div className="flex flex-col gap-1.5">
                 <div className="flex items-center justify-between gap-2">
                   <span className="text-sm font-semibold text-gray-900">

@@ -356,7 +356,9 @@ export const Posts: CollectionConfig<'posts'> = {
   versions: {
     drafts: {
       autosave: {
-        interval: 100, // We set this interval for optimal live preview
+        // Each autosave writes the whole document and re-renders the live preview,
+        // so save once the editor pauses rather than on every keystroke.
+        interval: 2000,
       },
       schedulePublish: true,
     },

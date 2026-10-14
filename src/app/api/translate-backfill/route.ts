@@ -1,6 +1,12 @@
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
 import { translateToEnglish } from '@/utilities/ai/translate'
+import {
+  expireHeaderCategories,
+  revalidateLocalizedPath,
+  revalidatePost,
+  revalidatePostListings,
+} from '@/utilities/revalidate'
 
 /**
  * One-time, self-draining RO -> EN backfill for existing content.
@@ -180,6 +186,9 @@ export async function GET(request: Request) {
       data: { en: enData },
       returning: false,
     })
+    // The low-level write skips the collection hooks, so refresh the cached pages here.
+    if (collection === 'posts') revalidatePost(doc.slug)
+    if (collection === 'pages') revalidateLocalizedPath(doc.slug === 'home' ? '/' : `/${doc.slug}`)
     docsTranslated++
     log.push(
       `${collection}#${doc.id} -> "${enData.title ?? '(partial)'}"${usedSourceFallback ? ' [source-fallback: content blocked]' : ''}`,
@@ -240,6 +249,11 @@ export async function GET(request: Request) {
     }
 
     await Promise.all(Array.from({ length: Math.max(1, CONCURRENCY) }, () => worker()))
+
+    if (docsTranslated > 0) {
+      revalidatePostListings()
+      expireHeaderCategories()
+    }
 
     const remaining = totalToDo - docsTranslated // not-yet-done this run (incl. failures)
 

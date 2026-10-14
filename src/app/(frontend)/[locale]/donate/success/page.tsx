@@ -1,16 +1,21 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { CheckCircleIcon } from '@heroicons/react/24/solid'
-import { getTranslations } from 'next-intl/server'
+import { getTranslations, setRequestLocale } from 'next-intl/server'
 
-export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations('Donate')
+type Args = { params: Promise<{ locale: string }> }
+
+export async function generateMetadata({ params }: Args): Promise<Metadata> {
+  const { locale } = await params
+  const t = await getTranslations({ locale, namespace: 'Donate' })
   return {
     title: t('successMetaTitle'),
   }
 }
 
-export default async function DonateSuccessPage() {
+export default async function DonateSuccessPage({ params }: Args) {
+  const { locale } = await params
+  setRequestLocale(locale)
   const t = await getTranslations('Donate')
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">

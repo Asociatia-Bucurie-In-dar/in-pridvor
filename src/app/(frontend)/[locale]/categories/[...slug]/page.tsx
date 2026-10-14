@@ -8,7 +8,7 @@ import { TitleBar } from '@/components/TitleBar'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import React, { cache } from 'react'
-import { getTranslations } from 'next-intl/server'
+import { getTranslations, setRequestLocale } from 'next-intl/server'
 
 import { generateMeta } from '@/utilities/generateMeta'
 import { getCategoryHierarchyIds } from '@/utilities/getCategoryHierarchy'
@@ -41,8 +41,10 @@ export async function generateStaticParams() {
 }
 
 export const dynamicParams = true
-// ISR so newly-translated en_* content surfaces without a manual rebuild.
-export const revalidate = 300
+// Content changes revalidate pages on demand (src/utilities/revalidate.ts), so the
+// time-based refresh is only a weekly safety net. A short interval here lets every
+// crawler visit re-render the page and keep the database awake.
+export const revalidate = 604800
 
 type Args = {
   params: Promise<{
@@ -53,6 +55,7 @@ type Args = {
 
 export default async function Category({ params: paramsPromise }: Args) {
   const { slug, locale } = await paramsPromise
+  setRequestLocale(locale)
 
   let categorySlug = slug
   let pageNumber = 1

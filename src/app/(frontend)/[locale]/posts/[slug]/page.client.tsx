@@ -1,29 +1,29 @@
 'use client'
 
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect } from 'react'
 
 interface PageClientProps {
   postId: number
 }
 
 const PageClient: React.FC<PageClientProps> = ({ postId }) => {
-  const hasTrackedView = useRef(false)
-
   useEffect(() => {
-    if (hasTrackedView.current) return
+    // Automated browsers aren't readers.
+    if (navigator.webdriver) return
 
-    const trackView = async () => {
-      try {
-        await fetch(`/api/posts/${postId}/view`, {
-          method: 'POST',
-        })
-        hasTrackedView.current = true
-      } catch (error) {
-        console.error('Failed to track view:', error)
-      }
+    // Count a post once per browser session, not on every reload or back-navigation.
+    const key = `viewed-post-${postId}`
+    try {
+      if (sessionStorage.getItem(key)) return
+      sessionStorage.setItem(key, '1')
+    } catch {
+      // Storage blocked (private mode etc.) — still count the view.
     }
 
-    trackView()
+    const url = `/api/posts/${postId}/view`
+    if (!navigator.sendBeacon?.(url)) {
+      fetch(url, { method: 'POST', keepalive: true }).catch(() => {})
+    }
   }, [postId])
 
   return <React.Fragment />

@@ -10,7 +10,7 @@ import { CardPostData } from '@/components/Card'
 import { getPostsCardSelect } from '@/utilities/getPostsCardSelect'
 import { generateSearchVariants } from '@/utilities/romanianSearch'
 import type { Where } from 'payload'
-import { getTranslations } from 'next-intl/server'
+import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { appendCommentCounts } from '@/utilities/appendCommentCounts'
 
 type Args = {
@@ -70,6 +70,7 @@ export default async function Page({
   searchParams: searchParamsPromise,
 }: Args) {
   const { locale } = await paramsPromise
+  setRequestLocale(locale)
   const { q: query } = await searchParamsPromise
   const payload = await getPayload({ config: configPromise })
   const nowISO = new Date().toISOString()

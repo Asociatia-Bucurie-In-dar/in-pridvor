@@ -168,12 +168,13 @@ export const FeaturedArchiveBlock: React.FC<
       <div className={cn(disableInnerContainer ? undefined : 'container')}>
         <div className="grid gap-6 lg:grid-cols-12 lg:gap-8 lg:items-stretch">
           <div className="lg:col-span-7">
-            <FeaturedCard doc={featuredPostData} />
+            <FeaturedCard doc={featuredPostData} locale={locale} />
           </div>
           <div className="lg:col-span-5 flex flex-col">
             {secondPost && (
               <div className="mb-6 flex-shrink-0">
                 <MediumCard
+                  locale={locale}
                   doc={{
                     slug: secondPost.slug,
                     categories: secondPost.categories,
@@ -190,7 +191,7 @@ export const FeaturedArchiveBlock: React.FC<
               </div>
             )}
             {smallerPosts.length > 0 && (
-              <div className="flex flex-col gap-5 mt-auto">
+              <div className="flex flex-col gap-5">
                 {smallerPosts.map((post, index) => {
                   const postData: CardPostData = {
                     slug: post.slug,
@@ -204,7 +205,7 @@ export const FeaturedArchiveBlock: React.FC<
                     populatedAuthors: post.populatedAuthors,
                     commentsCount: post.commentsCount,
                   }
-                  return <SmallCard key={post.id || index} doc={postData} />
+                  return <SmallCard key={post.id || index} doc={postData} locale={locale} />
                 })}
               </div>
             )}
@@ -215,7 +216,7 @@ export const FeaturedArchiveBlock: React.FC<
   )
 }
 
-const FeaturedCard: React.FC<{ doc: CardPostData }> = ({ doc }) => {
+const FeaturedCard: React.FC<{ doc: CardPostData; locale: string }> = ({ doc, locale }) => {
   const {
     slug,
     categories,
@@ -254,8 +255,8 @@ const FeaturedCard: React.FC<{ doc: CardPostData }> = ({ doc }) => {
   const href = `/posts/${slug}`
 
   const hasAuthors =
-    populatedAuthors && populatedAuthors.length > 0 && formatAuthors(populatedAuthors) !== ''
-  const formattedAuthors = hasAuthors ? formatAuthors(populatedAuthors) : null
+    populatedAuthors && populatedAuthors.length > 0 && formatAuthors(populatedAuthors, locale) !== ''
+  const formattedAuthors = hasAuthors ? formatAuthors(populatedAuthors, locale) : null
   const formattedDate = publishedAt ? formatDateTime(publishedAt) : null
   const commentCount = doc.commentsCount ?? 0
   const hasMeta = Boolean(formattedAuthors || formattedDate)
@@ -341,7 +342,7 @@ const FeaturedCard: React.FC<{ doc: CardPostData }> = ({ doc }) => {
   )
 }
 
-const MediumCard: React.FC<{ doc: CardPostData }> = ({ doc }) => {
+const MediumCard: React.FC<{ doc: CardPostData; locale: string }> = ({ doc, locale }) => {
   const {
     slug,
     meta,
@@ -378,8 +379,8 @@ const MediumCard: React.FC<{ doc: CardPostData }> = ({ doc }) => {
   const href = `/posts/${slug}`
 
   const hasAuthors =
-    populatedAuthors && populatedAuthors.length > 0 && formatAuthors(populatedAuthors) !== ''
-  const formattedAuthors = hasAuthors ? formatAuthors(populatedAuthors) : null
+    populatedAuthors && populatedAuthors.length > 0 && formatAuthors(populatedAuthors, locale) !== ''
+  const formattedAuthors = hasAuthors ? formatAuthors(populatedAuthors, locale) : null
   const formattedDate = publishedAt ? formatDateTime(publishedAt) : null
   const commentCount = doc.commentsCount ?? 0
   const hasMeta = Boolean(formattedAuthors || formattedDate)
@@ -442,7 +443,7 @@ const MediumCard: React.FC<{ doc: CardPostData }> = ({ doc }) => {
   )
 }
 
-const SmallCard: React.FC<{ doc: CardPostData }> = ({ doc }) => {
+const SmallCard: React.FC<{ doc: CardPostData; locale: string }> = ({ doc, locale }) => {
   const {
     slug,
     meta,
@@ -479,8 +480,8 @@ const SmallCard: React.FC<{ doc: CardPostData }> = ({ doc }) => {
   const href = `/posts/${slug}`
 
   const hasAuthors =
-    populatedAuthors && populatedAuthors.length > 0 && formatAuthors(populatedAuthors) !== ''
-  const formattedAuthors = hasAuthors ? formatAuthors(populatedAuthors) : null
+    populatedAuthors && populatedAuthors.length > 0 && formatAuthors(populatedAuthors, locale) !== ''
+  const formattedAuthors = hasAuthors ? formatAuthors(populatedAuthors, locale) : null
   const formattedDate = publishedAt ? formatDateTime(publishedAt) : null
   const commentCount = doc.commentsCount ?? 0
   const hasMeta = Boolean(formattedAuthors || formattedDate)

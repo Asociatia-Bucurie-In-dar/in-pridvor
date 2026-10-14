@@ -20,7 +20,9 @@ module.exports = {
     policies: [
       {
         userAgent: '*',
-        disallow: '/admin/*',
+        // Search results and API routes are rendered per request (database hits),
+        // so crawlers shouldn't walk them.
+        disallow: ['/admin/', '/api/', '/next/', '/search', '/en/search'],
       },
     ],
     additionalSitemaps: [`${SITE_URL}/pages-sitemap.xml`, `${SITE_URL}/posts-sitemap.xml`],

@@ -3,6 +3,7 @@ import type { CollectionConfig } from 'payload'
 import { anyone } from '../access/anyone'
 import { authenticated } from '../access/authenticated'
 import { cleanupCommentRelations } from './Comments/hooks/cleanupCommentRelations'
+import { revalidateComment, revalidateCommentDelete } from './Comments/hooks/revalidateComment'
 
 export const Comments: CollectionConfig = {
   slug: 'comments',
@@ -78,6 +79,8 @@ export const Comments: CollectionConfig = {
   ],
   hooks: {
     beforeDelete: [cleanupCommentRelations],
+    afterChange: [revalidateComment],
+    afterDelete: [revalidateCommentDelete],
   },
   timestamps: true,
 }

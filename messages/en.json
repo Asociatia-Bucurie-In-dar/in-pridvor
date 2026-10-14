@@ -22,7 +22,8 @@
     "searchPlaceholder": "Search",
     "publishDate": "Publish Date",
     "allAuthors": "All Authors",
-    "readArticle": "Read the article"
+    "readArticle": "Read the article",
+    "allPosts": "All Posts"
   },
   "Comments": {
     "title": "Comments",
@@ -56,7 +57,8 @@
     "railEmpty": "No published comments yet.",
     "railHeading": "From your comments",
     "unknownArticle": "Unknown article",
-    "anonymousReader": "Anonymous reader"
+    "anonymousReader": "Anonymous reader",
+    "onArticle": "on"
   },
   "Donate": {
     "title": "Support În Pridvor and people in need.",

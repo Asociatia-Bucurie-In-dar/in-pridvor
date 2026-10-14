@@ -44,9 +44,10 @@ export const RenderBlocks: React.FC<RenderBlocksProps> = (props) => {
 
   return (
     <Fragment>
-      {blocks.map((block) => {
+      {blocks.map((block, i) => {
         const blockType = block?.blockType as BlockType | undefined
-        let index = Math.random() * 999999
+        // Stable keys: a random key remounts every block (resetting the carousel) on each refresh.
+        const index = block?.id ?? `${blockType}-${i}`
 
         if (!blockType || !(blockType in blockComponents)) {
           return null

@@ -1,7 +1,7 @@
-@import '~@payloadcms/ui/scss';
-
-.admin-bar {
-  @include small-break {
+// Plain media query instead of importing Payload's admin SCSS (its relative
+// @imports don't resolve under Turbopack). Matches Payload's small-break.
+@media (max-width: 768px) {
+  .admin-bar {
     display: none;
   }
 }

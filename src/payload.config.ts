@@ -1,4 +1,3 @@
-import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
 import { vercelPostgresAdapter } from '@payloadcms/db-vercel-postgres'
 import { s3Storage } from '@payloadcms/storage-s3'
 
@@ -21,6 +20,7 @@ import { Header } from './Header/config'
 import { plugins } from './plugins'
 import { defaultLexical } from '@/fields/defaultLexical'
 import { getServerSideURL } from './utilities/getURL'
+import { expireTag, PUBLISH_SCHEDULE_TAG } from './utilities/revalidate'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -121,6 +121,18 @@ export default buildConfig({
   sharp,
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
+  },
+  onInit: (payload) => {
+    // Posts/Pages use "Schedule publish", which queues jobs that the
+    // /api/publish-scheduled cron runs. The cron only queries the database when
+    // something is due, so a newly queued job must expire its cached "next due"
+    // timestamp. Job writes skip collection hooks, hence wrapping queue() here.
+    const queue = payload.jobs.queue
+    payload.jobs.queue = (async (...args: Parameters<typeof queue>) => {
+      const job = await queue(...args)
+      expireTag(PUBLISH_SCHEDULE_TAG)
+      return job
+    }) as typeof queue
   },
   i18n: {
     supportedLanguages: { en, ro },

@@ -11,7 +11,9 @@ import { RenderHero } from '@/heros/RenderHero'
 import { generateMeta } from '@/utilities/generateMeta'
 import PageClient from './page.client'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
+import { LatestCommentsSection } from '@/components/LatestCommentsSection'
 import { routing } from '@/i18n/routing'
+import { setRequestLocale } from 'next-intl/server'
 
 const queryPageBySlug = cache(async ({ slug, locale }: { slug: string; locale: string }) => {
   const { isEnabled: draft } = await draftMode()
@@ -64,9 +66,10 @@ export async function generateStaticParams() {
 }
 
 export const dynamicParams = true
-// ISR so newly-translated en_* content (written by the backfill without
-// on-demand revalidation) surfaces without a manual rebuild.
-export const revalidate = 300
+// Content changes revalidate pages on demand (src/utilities/revalidate.ts), so the
+// time-based refresh is only a weekly safety net. A short interval here lets every
+// crawler visit re-render the page and keep the database awake.
+export const revalidate = 604800
 
 type Args = {
   params: Promise<{
@@ -78,6 +81,7 @@ type Args = {
 export default async function Page({ params: paramsPromise }: Args) {
   const { isEnabled: draft } = await draftMode()
   const { slug = 'home', locale } = await paramsPromise
+  setRequestLocale(locale)
   const url = '/' + slug
 
   const page = (await queryPageBySlug({
@@ -91,6 +95,17 @@ export default async function Page({ params: paramsPromise }: Args) {
 
   const { hero, layout } = page
 
+  // The homepage opens with the latest reader comments (right after the hero
+  // carousel), unless an editor already placed a comments block in its layout.
+  const showLatestComments =
+    slug === 'home' &&
+    !layout?.some((block) => ['latestComments', 'latestCommentsRail'].includes(block.blockType))
+
+  const leadingHeroBlocks = showLatestComments
+    ? layout.findIndex((block) => !['heroCarousel', 'titleBar'].includes(block.blockType))
+    : -1
+  const splitAt = leadingHeroBlocks === -1 ? layout.length : leadingHeroBlocks
+
   return (
     <article className="pt-16 pb-16">
       <PageClient />
@@ -99,7 +114,15 @@ export default async function Page({ params: paramsPromise }: Args) {
       {draft && <LivePreviewListener />}
 
       <RenderHero {...hero} />
-      <RenderBlocks blocks={layout} />
+      {showLatestComments ? (
+        <>
+          <RenderBlocks blocks={layout.slice(0, splitAt)} />
+          <LatestCommentsSection locale={locale} />
+          <RenderBlocks blocks={layout.slice(splitAt)} />
+        </>
+      ) : (
+        <RenderBlocks blocks={layout} />
+      )}
     </article>
   )
 }
