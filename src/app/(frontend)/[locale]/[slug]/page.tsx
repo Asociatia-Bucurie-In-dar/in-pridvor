@@ -7,6 +7,7 @@ import { draftMode } from 'next/headers'
 import React, { cache } from 'react'
 
 import { RenderBlocks } from '@/blocks/RenderBlocks'
+import { FeaturedArchiveBlock } from '@/blocks/FeaturedArchive/Component'
 import { RenderHero } from '@/heros/RenderHero'
 import { generateMeta } from '@/utilities/generateMeta'
 import PageClient from './page.client'
@@ -95,8 +96,9 @@ export default async function Page({ params: paramsPromise }: Args) {
 
   const { hero, layout } = page
 
-  // The homepage opens with the latest reader comments (right after the hero
-  // carousel), unless an editor already placed a comments block in its layout.
+  // On the homepage the latest reader comments sit in a side column next to the first
+  // section after the hero carousel (the editorial), unless an editor already placed a
+  // comments block in its layout. Below lg the column stacks under that section.
   const showLatestComments =
     slug === 'home' &&
     !layout?.some((block) => ['latestComments', 'latestCommentsRail'].includes(block.blockType))
@@ -105,6 +107,11 @@ export default async function Page({ params: paramsPromise }: Args) {
     ? layout.findIndex((block) => !['heroCarousel', 'titleBar'].includes(block.blockType))
     : -1
   const splitAt = leadingHeroBlocks === -1 ? layout.length : leadingHeroBlocks
+  const leadBlock = layout[splitAt]
+  // On desktop the comments column starts level with the featured post's image, below the
+  // category heading (36px heading row + its 32px bottom margin, see CategoryHeader).
+  const offsetAside =
+    leadBlock?.blockType === 'featuredArchive' && Boolean(leadBlock.useCustomCategoryHeader)
 
   return (
     <article className="pt-16 pb-16">
@@ -117,8 +124,30 @@ export default async function Page({ params: paramsPromise }: Args) {
       {showLatestComments ? (
         <>
           <RenderBlocks blocks={layout.slice(0, splitAt)} />
-          <LatestCommentsSection locale={locale} />
-          <RenderBlocks blocks={layout.slice(splitAt)} />
+          <div className="container my-16 flex flex-col gap-12 lg:flex-row lg:gap-10">
+            {leadBlock && (
+              <div className="min-w-0 flex-1">
+                {leadBlock.blockType === 'featuredArchive' ? (
+                  // Only its featured post: the comments column takes the place of the rest
+                  <FeaturedArchiveBlock
+                    {...leadBlock}
+                    id={leadBlock.id ?? undefined}
+                    disableInnerContainer
+                    featuredOnly
+                  />
+                ) : (
+                  <RenderBlocks blocks={[leadBlock]} disableInnerContainer />
+                )}
+              </div>
+            )}
+            {/* Collapses when there are no comments, giving the lead section the full width */}
+            <aside
+              className={`min-w-0 empty:hidden lg:w-80 lg:shrink-0 xl:w-96 ${offsetAside ? 'lg:pt-17' : ''}`}
+            >
+              <LatestCommentsSection locale={locale} />
+            </aside>
+          </div>
+          <RenderBlocks blocks={layout.slice(splitAt + 1)} />
         </>
       ) : (
         <RenderBlocks blocks={layout} />

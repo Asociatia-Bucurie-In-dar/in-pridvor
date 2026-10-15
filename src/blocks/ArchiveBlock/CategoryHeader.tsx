@@ -7,9 +7,15 @@ import { cn } from '@/utilities/ui'
 interface CategoryHeaderProps {
   categoryTitle: string
   categorySlug?: string | null
+  /** Set when the parent already provides the page container (e.g. a homepage column). */
+  disableContainer?: boolean
 }
 
-export const CategoryHeader: React.FC<CategoryHeaderProps> = ({ categoryTitle, categorySlug }) => {
+export const CategoryHeader: React.FC<CategoryHeaderProps> = ({
+  categoryTitle,
+  categorySlug,
+  disableContainer,
+}) => {
   const hasValidSlug = categorySlug && categorySlug.trim() !== ''
   const [_isVisible, setIsVisible] = useState(false)
   const _observerRef = useRef<IntersectionObserver | null>(null)
@@ -104,14 +110,14 @@ export const CategoryHeader: React.FC<CategoryHeaderProps> = ({ categoryTitle, c
 
   if (hasValidSlug) {
     return (
-      <div className="container" ref={_headerRef}>
+      <div className={cn(!disableContainer && 'container')} ref={_headerRef}>
         <Link href={`/categories/${categorySlug}`}>{content}</Link>
       </div>
     )
   }
 
   return (
-    <div className="container" ref={_headerRef}>
+    <div className={cn(!disableContainer && 'container')} ref={_headerRef}>
       {content}
     </div>
   )

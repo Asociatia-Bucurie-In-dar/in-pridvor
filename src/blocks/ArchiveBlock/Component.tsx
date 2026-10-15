@@ -132,6 +132,7 @@ export const ArchiveBlock: React.FC<
           <CategoryHeader
             categoryTitle={firstCategory.title || 'Untitled'}
             categorySlug={firstCategory.slug || null}
+            disableContainer={disableInnerContainer}
           />
         </div>
       ) : introContent ? (

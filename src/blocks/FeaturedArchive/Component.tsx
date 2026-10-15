@@ -27,6 +27,8 @@ export const FeaturedArchiveBlock: React.FC<
   FeaturedArchiveBlockProps & {
     id?: string
     disableInnerContainer?: boolean
+    /** Show only the featured post (the homepage, where the latest comments sit beside it). */
+    featuredOnly?: boolean
   }
 > = async (props) => {
   const {
@@ -37,6 +39,7 @@ export const FeaturedArchiveBlock: React.FC<
     selectedDocs,
     useCustomCategoryHeader,
     disableInnerContainer,
+    featuredOnly,
   } = props
 
   const now = new Date()
@@ -80,7 +83,7 @@ export const FeaturedArchiveBlock: React.FC<
     const fetchedPosts = await payload.find({
       collection: 'posts',
       depth: 1,
-      limit: 5,
+      limit: featuredOnly ? 1 : 5,
       sort: '-publishedAt',
       overrideAccess: false,
       context: { locale }, // triggers the en fallback hook
@@ -150,20 +153,35 @@ export const FeaturedArchiveBlock: React.FC<
     commentsCount: featuredPost?.commentsCount,
   }
 
+  const header =
+    useCustomCategoryHeader && firstCategory ? (
+      <div className="mb-8">
+        <CategoryHeader
+          categoryTitle={firstCategory.title || 'Untitled'}
+          categorySlug={firstCategory.slug || null}
+          disableContainer={disableInnerContainer}
+        />
+      </div>
+    ) : introContent ? (
+      <div className={cn(disableInnerContainer ? 'mb-16' : 'container mb-16')}>
+        <RichText className="ml-0 max-w-3xl" data={introContent as any} enableGutter={false} />
+      </div>
+    ) : null
+
+  if (featuredOnly) {
+    return (
+      <div id={`block-${id}`}>
+        {header}
+        <div className={cn(disableInnerContainer ? undefined : 'container')}>
+          <FeaturedCard doc={featuredPostData} locale={locale} />
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div id={`block-${id}`}>
-      {useCustomCategoryHeader && firstCategory ? (
-        <div className="mb-8">
-          <CategoryHeader
-            categoryTitle={firstCategory.title || 'Untitled'}
-            categorySlug={firstCategory.slug || null}
-          />
-        </div>
-      ) : introContent ? (
-        <div className={cn(disableInnerContainer ? 'mb-16' : 'container mb-16')}>
-          <RichText className="ml-0 max-w-3xl" data={introContent as any} enableGutter={false} />
-        </div>
-      ) : null}
+      {header}
 
       <div className={cn(disableInnerContainer ? undefined : 'container')}>
         <div className="grid gap-6 lg:grid-cols-12 lg:gap-8 lg:items-stretch">
